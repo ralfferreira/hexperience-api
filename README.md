@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a>
-    <img src="assets/img/DinoGreenColor.png" alt="Logo" width="145" height="75">
+    <img src="assets/img/DinoGreenColor.png" alt="Logo" width="145" height="100">
   </a>
 
   <h3 align="center">Hexperience</h3>
