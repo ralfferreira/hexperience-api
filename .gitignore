@@ -106,3 +106,6 @@ dist
 #TypeORM configuration and Database Migration
 ormconfig.json
 src/shared/infra/typeorm/migrations
+
+#Debbuger configuration
+.vscode/
