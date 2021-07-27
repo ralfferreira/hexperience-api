@@ -11,6 +11,7 @@ import AppError from "../../errors/AppError";
 import routes from './routes';
 
 import '../typeorm';
+import '../mongoose';
 import '../../container';
 
 const app = express();

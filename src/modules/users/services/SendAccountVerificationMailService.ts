@@ -1,18 +1,26 @@
-import { sign } from 'jsonwebtoken';
 import { inject, injectable } from 'tsyringe';
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 
 import AppError from '@shared/errors/AppError';
 
 import ICreateUserDTO from "../dtos/ICreateUserDTO";
 import IUsersRepository from '../repositories/IUsersRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
+import IAccountVerificationRepository from '../repositories/IAccountVerificationRepository';
+import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 @injectable()
-class SendAccountConfirmationMailService {
+class SendAccountVerificationMailService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('AccountVerificationRepository')
+    private accountVerificationRepository: IAccountVerificationRepository,
+
+    @inject('HashProvider')
+    private hashProvider: IHashProvider,
 
     @inject('MailProvider')
     private mailProvider: IMailProvider
@@ -25,9 +33,21 @@ class SendAccountConfirmationMailService {
       throw new AppError('Email is already been used!');
     }
 
-    const token = sign(data, 'Secret', {
-      subject: `${data.email}`,
-      expiresIn: '2h'
+    const checkAccounts = await this.accountVerificationRepository.findByEmail(data.email);
+
+    if (checkAccounts) {
+      throw new AppError('Email is already been used!');
+    }
+
+    const hashedPassword = await this.hashProvider.generateHash(data.password)
+
+    const token = uuidv4();
+
+    const accountVerification = await this.accountVerificationRepository.create({
+      email: data.email,
+      name: data.name,
+      password: hashedPassword,
+      token
     });
 
     const accountConfirmationTemplate = path.resolve(
@@ -47,11 +67,11 @@ class SendAccountConfirmationMailService {
         file: accountConfirmationTemplate,
         variables: {
           name: data.name,
-          link: `http://localhost:3000/account-confirmation?token=${token}`
+          link: `http://localhost:3000/account-confirmation?token=${accountVerification.token}`
         }
       }
     });
   }
 }
 
-export default SendAccountConfirmationMailService;
+export default SendAccountVerificationMailService;

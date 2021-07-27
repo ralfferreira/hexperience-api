@@ -39,6 +39,16 @@ usersRouter.post(
   usersController.create
 );
 
+usersRouter.put(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      token: Joi.string().required().uuid()
+    }
+  }),
+  usersController.update
+)
+
 usersRouter.patch(
   '/avatar', 
   ensureAuthenticated, 
