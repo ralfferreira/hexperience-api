@@ -3,7 +3,8 @@ import { inject, injectable } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 
 import User from '../infra/typeorm/entities/User';
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
   id: number
@@ -13,7 +14,7 @@ interface IRequest {
 export default class ShowProfileService {
   constructor(
     @inject('UsersRepository')
-    private usersRepository: UsersRepository
+    private usersRepository: IUsersRepository
   ) {}
 
   public async execute({ id }: IRequest): Promise<User> {

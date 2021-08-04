@@ -45,7 +45,7 @@ class AccountVerificationRepository implements IAccountVerificationRepository {
   }
 
   public async delete(token: string): Promise<void> {
-    this.model.deleteOne({
+    await this.model.deleteOne({
       token: token
     });
   }

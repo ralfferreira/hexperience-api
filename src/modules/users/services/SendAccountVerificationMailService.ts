@@ -54,7 +54,7 @@ class SendAccountVerificationMailService {
       __dirname,
       '..',
       'views',
-      'account-confirmation.hbs'
+      'account_confirmation.hbs'
     );
 
     await this.mailProvider.sendMail({

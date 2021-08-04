@@ -1,11 +1,10 @@
-import mongoose, { Schema, Document, Date } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
 export type AccountVerification = Document & {
   name: string,
   email: string,
   password: string,
-  token: string,
-  created_at: Date,
+  token: string
 };
 
 const AccountVerificationSchema = new Schema(
@@ -26,8 +25,7 @@ const AccountVerificationSchema = new Schema(
     token: {
       type: String,
       unique: true,
-      required: true,
-      default: 'ola'
+      required: true
     }
   },
   {
