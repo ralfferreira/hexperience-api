@@ -3,9 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToOne
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+
+import Host from './Host';
 
 export enum typeEnum {
   user = 'user',
@@ -52,6 +55,9 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToOne(() => Host, host => host.user)
+  host: Host;
 }
 
 export default User;
