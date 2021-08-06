@@ -32,7 +32,7 @@ class UserTokenRepository implements IUserTokenRepository {
 
   public async delete(token: string): Promise<void> {
     await this.model.deleteOne({
-      token: token
+      token: { $eq: token}
     });
   }
 }

@@ -12,11 +12,11 @@ class HostRequestRepository implements IHostRequestRepository {
     this.model = HostRequest;
   }
 
-  public async create({ 
-    cpf, 
-    cnpj, 
-    user_id, 
-    nickname 
+  public async create({
+    cpf,
+    cnpj,
+    user_id,
+    nickname
   }: ICreateHostRequestDTO): Promise<HostRequestType> {
     const hostRequest = new this.model({
       cpf: cpf,
@@ -54,7 +54,7 @@ class HostRequestRepository implements IHostRequestRepository {
 
   public async delete(user_id: number): Promise<void> {
     await this.model.deleteOne({
-      user_id: user_id
+      user_id: { $eq: user_id}
     });
   }
 }

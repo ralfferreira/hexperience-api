@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 
-import AccountVerification, { 
-  AccountVerification as AccountVerificationType 
+import AccountVerification, {
+  AccountVerification as AccountVerificationType
 } from "../schemas/AccountVerification";
 
 import IAccountVerificationRepository from "@modules/users/repositories/IAccountVerificationRepository";
@@ -10,7 +10,7 @@ import ICreateUserDTO from "@modules/users/dtos/ICreateUserDTO";
 
 class AccountVerificationRepository implements IAccountVerificationRepository {
   private model: Model<AccountVerificationType>;
-  
+
   constructor () {
     this.model = AccountVerification;
   }
@@ -46,7 +46,7 @@ class AccountVerificationRepository implements IAccountVerificationRepository {
 
   public async delete(token: string): Promise<void> {
     await this.model.deleteOne({
-      token: token
+      token: { $eq: token}
     });
   }
 }
