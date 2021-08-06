@@ -56,7 +56,7 @@ class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToOne(() => Host, host => host.user)
+  @OneToOne(type => Host, host => host.user)
   host: Host;
 }
 

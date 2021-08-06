@@ -15,6 +15,9 @@ import UserTokenRepository from '@modules/users/infra/mongoose/repositories/User
 import IHostRequestRepository from '@modules/users/repositories/IHostRequestRepository';
 import HostRequestRepository from '@modules/users/infra/mongoose/repositories/HostRequestRepository';
 
+import IHostsRepository from '@modules/users/repositories/IHostsRepository';
+import HostsRepository from '@modules/users/infra/typeorm/repositories/HostsRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository
@@ -33,4 +36,9 @@ container.registerSingleton<IUserTokenRepository>(
 container.registerSingleton<IHostRequestRepository>(
   'HostRequestRepository',
   HostRequestRepository
+);
+
+container.registerSingleton<IHostsRepository>(
+  'HostsRepository',
+  HostsRepository
 )

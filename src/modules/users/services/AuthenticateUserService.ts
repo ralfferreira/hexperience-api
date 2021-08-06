@@ -4,7 +4,7 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import User from '../infra/typeorm/entities/User';
+import User, { typeEnum } from '../infra/typeorm/entities/User';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
@@ -41,9 +41,22 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
+    if (user.is_blocked) {
+      throw new AppError('User is blocked, so it can not authenticate');
+    }
+
+    let hostId = 0;
+
+    if (user.type === typeEnum.host) {
+      hostId = user.host.id
+    }
+
     const secret = authConfig.jwt.secret;
 
-    const token = sign({}, secret, {
+    const token = sign({
+      hostId,
+      type: user.type
+    }, secret, {
       subject: `${user.id}`,
       expiresIn: '1d'
     })

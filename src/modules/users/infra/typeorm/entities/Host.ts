@@ -29,8 +29,8 @@ class Host {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToOne(() => User, user => user.host)
-  @JoinColumn()
+  @OneToOne(type => User, user => user.host)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: User;
 }
 

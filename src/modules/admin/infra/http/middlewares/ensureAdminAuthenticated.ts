@@ -13,7 +13,7 @@ interface ITokenPayload {
   type: string
 }
 
-export default function ensureAuthenticated(
+export default function ensureAdminAuthenticated(
   request: Request,
   response: Response,
   next: NextFunction
@@ -31,6 +31,10 @@ export default function ensureAuthenticated(
     const decoded = verify(token, authConfig.jwt.secret);
 
     const { sub, type, hostId } = decoded as ITokenPayload
+
+    if (type !== 'admin') {
+      throw new AppError('User is not an Admin');
+    }
 
     request.user = {
       id: Number(sub),
