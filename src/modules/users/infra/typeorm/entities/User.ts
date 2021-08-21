@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne
+  OneToOne,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
