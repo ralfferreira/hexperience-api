@@ -6,15 +6,15 @@ import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
 
 import Host from "@modules/users/infra/typeorm/entities/Host";
 
-import IHostRequestRepository from "@modules/users/repositories/IHostRequestRepository";
+import IHostRequestsRepository from "@modules/users/repositories/IHostRequestsRepository";
 import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 
 @injectable()
 class ApproveHostRequestService {
   constructor (
-    @inject('HostRequestRepository')
-    private hostRequestRepository: IHostRequestRepository,
+    @inject('HostRequestsRepository')
+    private hostRequestsRepository: IHostRequestsRepository,
 
     @inject('HostsRepository')
     private hostsRepository: IHostsRepository,
@@ -24,7 +24,7 @@ class ApproveHostRequestService {
   ) {}
 
   public async execute(user_id: number): Promise<Host> {
-    const hostRequest = await this.hostRequestRepository.findByUserId(user_id);
+    const hostRequest = await this.hostRequestsRepository.findByUserId(user_id);
 
     if (!hostRequest) {
       throw new AppError('Request was not found');

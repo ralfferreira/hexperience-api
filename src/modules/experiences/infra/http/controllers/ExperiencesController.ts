@@ -5,7 +5,7 @@ import CreateExperienceService from '@modules/experiences/services/CreateExperie
 
 export default class ExperiencesController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const hostId = request.user.hostId;
+    const host_id = request.user.hostId;
     const {
       name,
       duration,
@@ -25,7 +25,7 @@ export default class ExperiencesController {
       address,
       description,
       duration,
-      host_id: hostId,
+      host_id,
       is_online,
       latitude,
       longitude,

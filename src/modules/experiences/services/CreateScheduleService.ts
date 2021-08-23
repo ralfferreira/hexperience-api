@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { isBefore, getHours, areIntervalsOverlapping, add, } from 'date-fns';
 
 import AppError from '@shared/errors/AppError';
 
@@ -20,7 +21,12 @@ class CreateScheduleService {
 
   ) {}
 
-  public async execute({ date, max_guests, experience_id, host_id }: IRequestCreateScheduleDTO): Promise<Schedule>{
+  public async execute({
+    date,
+    max_guests,
+    experience_id,
+    host_id
+  }: IRequestCreateScheduleDTO): Promise<Schedule>{
     const experience = await this.experiencesRepository.findById(experience_id);
 
     if (!experience){
@@ -31,7 +37,36 @@ class CreateScheduleService {
       throw new AppError('Host does not own this experience');
     }
 
-    const schedule = await this.schedulesRepository.create({ date, max_guests, experience, availability: max_guests });
+    if (isBefore(date, new Date())) {
+      throw new AppError('Schedule can not be created in a past date');
+    }
+
+    if (getHours(date) < 5 && getHours(date) > 0) {
+      throw new AppError('Schedules can not be created between 12:00 AM and 5:00 AM');
+    }
+
+    const checkIfDateIsAvailable = experience.schedules.filter(scheduledDate => {
+      if (
+        areIntervalsOverlapping(
+          { start: date, end: add(date, { minutes: experience.duration }) },
+          { start: scheduledDate.date, end: add(scheduledDate.date, { minutes: experience.duration }) },
+          { inclusive: true }
+        )
+      ) {
+        return scheduledDate;
+      }
+    });
+
+    if (checkIfDateIsAvailable.length) {
+      throw new AppError('Schedules can not be created between the same time interval');
+    }
+
+    const schedule = await this.schedulesRepository.create({
+      date,
+      max_guests,
+      experience,
+      availability: max_guests
+    });
 
     return schedule;
   }

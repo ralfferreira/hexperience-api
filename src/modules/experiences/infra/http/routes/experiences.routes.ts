@@ -20,7 +20,7 @@ experiencesRouter.post(
       description: Joi.string().required(),
       price: Joi.number().required(),
       requirements: Joi.string(),
-      parental_rating: Joi.number().positive().required(),
+      parental_rating: Joi.number().min(0).required(),
       address: Joi.string(),
       latitude: Joi.number(),
       longitude: Joi.number(),

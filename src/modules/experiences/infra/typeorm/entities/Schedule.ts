@@ -3,6 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import Experience from './Experience';
@@ -22,6 +23,7 @@ class Schedule {
   availability: number;
 
   @ManyToOne(() => Experience, exp => exp.schedules)
+  @JoinColumn({ name: 'exp_id' })
   experience: Experience
 }
 

@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 import Host from '../../../../users/infra/typeorm/entities/Host';
@@ -56,6 +57,7 @@ class Experience {
   updated_at: Date;
 
   @ManyToOne(() => Host)
+  @JoinColumn({ name: 'host_id' })
   host: Host;
 
   @OneToMany(() => Schedule, schedule => schedule.experience)
