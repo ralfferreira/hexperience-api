@@ -7,7 +7,7 @@ import AppError from '@shared/errors/AppError';
 import ICreateUserDTO from "../dtos/ICreateUserDTO";
 import IUsersRepository from '../repositories/IUsersRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
-import IAccountVerificationRepository from '../repositories/IAccountVerificationRepository';
+import IAccountVerificationsRepository from '../repositories/IAccountVerificationsRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 @injectable()
@@ -16,8 +16,8 @@ class SendAccountVerificationMailService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('AccountVerificationRepository')
-    private accountVerificationRepository: IAccountVerificationRepository,
+    @inject('AccountVerificationsRepository')
+    private accountVerificationsRepository: IAccountVerificationsRepository,
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
@@ -33,7 +33,7 @@ class SendAccountVerificationMailService {
       throw new AppError('Email is already been used!');
     }
 
-    const checkAccounts = await this.accountVerificationRepository.findByEmail(data.email);
+    const checkAccounts = await this.accountVerificationsRepository.findByEmail(data.email);
 
     if (checkAccounts) {
       throw new AppError('Email is already been used!');
@@ -43,7 +43,7 @@ class SendAccountVerificationMailService {
 
     const token = uuidv4();
 
-    const accountVerification = await this.accountVerificationRepository.create({
+    const accountVerification = await this.accountVerificationsRepository.create({
       email: data.email,
       name: data.name,
       password: hashedPassword,

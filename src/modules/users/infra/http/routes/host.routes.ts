@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import HostRequestController from '../controllers/HostRequestController';
-
 import ensureAuthenticated from '../middleware/ensureAuthenticated';
+
+import HostsController from '../controllers/HostsController';
+import HostRequestController from '../controllers/HostRequestController';
 
 const hostRouter = Router();
 const hostRequestController = new HostRequestController();
+const hostsController = new HostsController();
 
 hostRouter.post(
   '/request-privilege',
@@ -17,8 +19,19 @@ hostRouter.post(
       cnpj: Joi.string().min(14),
       nickname: Joi.string().required(),
     }
-  }),  
+  }),
   hostRequestController.create
+);
+
+hostRouter.put(
+  '/',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      nickname: Joi.string().required()
+    }
+  }),
+  hostsController.update
 )
 
 export default hostRouter;

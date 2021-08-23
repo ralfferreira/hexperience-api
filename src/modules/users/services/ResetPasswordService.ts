@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import AppError from "@shared/errors/AppError";
 
 import IUsersRepository from "../repositories/IUsersRepository";
-import IUserTokenRepository from "../repositories/IUserTokenRepository";
+import IUserTokensRepository from "../repositories/IUserTokensRepository";
 import IHashProvider from "../providers/HashProvider/models/IHashProvider";
 
 interface IRequest {
@@ -14,8 +14,8 @@ interface IRequest {
 @injectable()
 class ResetPasswordService {
   constructor (
-    @inject('UserTokenRepository')
-    private userTokenRepository: IUserTokenRepository,
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUserTokensRepository,
 
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
@@ -25,7 +25,7 @@ class ResetPasswordService {
   ) {}
 
   public async execute({ token, password }: IRequest): Promise<void> {
-    const checkToken = await this.userTokenRepository.findByToken(token);
+    const checkToken = await this.userTokensRepository.findByToken(token);
 
     if (!checkToken) {
       throw new AppError('Invalid Token');
@@ -41,7 +41,7 @@ class ResetPasswordService {
 
     await this.usersRepository.update(user);
 
-    await this.userTokenRepository.delete(checkToken.token);
+    await this.userTokensRepository.delete(checkToken.token);
   }
 }
 

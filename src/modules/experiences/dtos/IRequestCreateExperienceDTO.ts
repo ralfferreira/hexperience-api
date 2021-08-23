@@ -1,6 +1,4 @@
-import Host from "@modules/users/infra/typeorm/entities/Host";
-
-export default interface ICreateExperienceDTO {
+export default interface IRequestCreateExperienceDTO {
   name: string;
   duration: number;
   description: string;
@@ -11,5 +9,5 @@ export default interface ICreateExperienceDTO {
   latitude: number;
   longitude: number;
   is_online: boolean;
-  host: Host;
+  host_id: number;
 }

@@ -1,13 +1,13 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export type AccountVerification = Document & {
+export type AccountVerifications = Document & {
   name: string,
   email: string,
   password: string,
   token: string
 };
 
-const AccountVerificationSchema = new Schema(
+const AccountVerificationsSchema = new Schema(
   {
     name: {
       type: String,
@@ -16,7 +16,7 @@ const AccountVerificationSchema = new Schema(
     email: {
       type: String,
       unique: true,
-      required: true,      
+      required: true,
     },
     password: {
       type: String,
@@ -33,7 +33,7 @@ const AccountVerificationSchema = new Schema(
   }
 );
 
-export default mongoose.model<AccountVerification>(
-  'Account_verfication', 
-  AccountVerificationSchema
+export default mongoose.model<AccountVerifications>(
+  'Account_verfication',
+  AccountVerificationsSchema
 );

@@ -4,21 +4,21 @@ import AppError from '@shared/errors/AppError';
 
 import User from '../infra/typeorm/entities/User';
 
-import IAccountVerificationRepository from '../repositories/IAccountVerificationRepository';
+import IAccountVerificationsRepository from '../repositories/IAccountVerificationsRepository';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 @injectable()
 class AccountVerificationService {
   constructor (
-    @inject('AccountVerificationRepository')
-    private accountVerificationRepository: IAccountVerificationRepository,
+    @inject('AccountVerificationsRepository')
+    private accountVerificationsRepository: IAccountVerificationsRepository,
 
     @inject('UsersRepository')
     private usersRepository: IUsersRepository
   ) {}
 
   public async execute(token: string): Promise<User> {
-    const userData = await this.accountVerificationRepository.findByToken(token);
+    const userData = await this.accountVerificationsRepository.findByToken(token);
 
     if (!userData) {
       throw new AppError('Token does not exists or is expired')
@@ -30,7 +30,7 @@ class AccountVerificationService {
       password: userData.password
     });
 
-    await this.accountVerificationRepository.delete(token);
+    await this.accountVerificationsRepository.delete(token);
 
     return user;
   }

@@ -27,13 +27,30 @@ class HostsRepository implements IHostsRepository {
     return host;
   }
 
-  public async findByNickname(nickname: string): Promise<Host | undefined> {
+  public async findById(id: number): Promise<Host | undefined> {
     const host = await this.ormRepository.findOne({
-      where: { nickname },
-      relations: ['User']
+      relations: ['user'],
+      where: {
+        id: id,
+      }
     });
 
     return host;
+  }
+
+  public async findByNickname(nickname: string): Promise<Host | undefined> {
+    const host = await this.ormRepository.findOne({
+      relations: ['user'],
+      where: {
+        nickname: nickname
+      }
+    });
+
+    return host;
+  }
+
+  public async update(host: Host): Promise<Host> {
+    return this.ormRepository.save(host);
   }
 }
 

@@ -1,13 +1,13 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export type HostRequest = Document & {
+export type HostRequests = Document & {
   cpf?: string;
   cnpj?: string;
   nickname: string;
   user_id: number;
 }
 
-const HostRequestSchema = new Schema(
+const HostRequestsSchema = new Schema(
   {
     cpf: {
       type: String,
@@ -33,7 +33,7 @@ const HostRequestSchema = new Schema(
   }
 );
 
-export default mongoose.model<HostRequest>(
+export default mongoose.model<HostRequests>(
   'Host_request',
-  HostRequestSchema
+  HostRequestsSchema
 );

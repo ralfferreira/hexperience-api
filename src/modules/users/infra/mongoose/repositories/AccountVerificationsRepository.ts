@@ -1,21 +1,21 @@
 import { Model } from "mongoose";
 
-import AccountVerification, {
-  AccountVerification as AccountVerificationType
-} from "../schemas/AccountVerification";
+import AccountVerifications, {
+  AccountVerifications as AccountVerificationsType
+} from "../schemas/AccountVerifications";
 
-import IAccountVerificationRepository from "@modules/users/repositories/IAccountVerificationRepository";
+import IAccountVerificationsRepository from "@modules/users/repositories/IAccountVerificationsRepository";
 
 import ICreateUserDTO from "@modules/users/dtos/ICreateUserDTO";
 
-class AccountVerificationRepository implements IAccountVerificationRepository {
-  private model: Model<AccountVerificationType>;
+class AccountVerificationsRepository implements IAccountVerificationsRepository {
+  private model: Model<AccountVerificationsType>;
 
   constructor () {
-    this.model = AccountVerification;
+    this.model = AccountVerifications;
   }
 
-  public async create(data: ICreateUserDTO): Promise<AccountVerificationType> {
+  public async create(data: ICreateUserDTO): Promise<AccountVerificationsType> {
     const accountVerification = new this.model({
       name: data.name,
       email: data.email,
@@ -28,7 +28,7 @@ class AccountVerificationRepository implements IAccountVerificationRepository {
     return accountVerification;
   }
 
-  public async findByEmail(email: string): Promise<AccountVerificationType | null> {
+  public async findByEmail(email: string): Promise<AccountVerificationsType | null> {
     const accountVerification = await this.model.findOne({
       email: email
     }).exec();
@@ -36,7 +36,7 @@ class AccountVerificationRepository implements IAccountVerificationRepository {
     return accountVerification;
   }
 
-  public async findByToken(token: string): Promise<AccountVerificationType | null> {
+  public async findByToken(token: string): Promise<AccountVerificationsType | null> {
     const accountVerification = await this.model.findOne({
       token: token
     }).exec();
@@ -51,4 +51,4 @@ class AccountVerificationRepository implements IAccountVerificationRepository {
   }
 }
 
-export default AccountVerificationRepository;
+export default AccountVerificationsRepository;

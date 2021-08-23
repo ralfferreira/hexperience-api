@@ -6,7 +6,7 @@ import ICreateUserDTO from "../dtos/ICreateUserDTO";
 import IUsersRepository from "../repositories/IUsersRepository";
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import User from "../infra/typeorm/entities/User";
-import IAccountVerificationRepository from '../repositories/IAccountVerificationRepository';
+import IAccountVerificationsRepository from '../repositories/IAccountVerificationsRepository';
 
 @injectable()
 class CreateUserService {
@@ -14,8 +14,8 @@ class CreateUserService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('AccountVerificationRepository')
-    private accountVerificationRepository: IAccountVerificationRepository,
+    @inject('AccountVerificationsRepository')
+    private accountVerificationsRepository: IAccountVerificationsRepository,
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
@@ -28,7 +28,7 @@ class CreateUserService {
       throw new AppError('Email address already used!');
     }
 
-    const checkAccounts = await this.accountVerificationRepository.findByEmail(email);
+    const checkAccounts = await this.accountVerificationsRepository.findByEmail(email);
 
     if (checkAccounts) {
       throw new AppError('Email is already been used!');

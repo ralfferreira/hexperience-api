@@ -1,15 +1,15 @@
 import { Model } from 'mongoose';
 
-import HostRequest, { HostRequest as HostRequestType } from '../schemas/HostRequest';
+import HostRequests, { HostRequests as HostRequestsType } from '../schemas/HostRequests';
 
-import IHostRequestRepository from '@modules/users/repositories/IHostRequestRepository';
+import IHostRequestsRepository from '@modules/users/repositories/IHostRequestsRepository';
 import ICreateHostRequestDTO from '@modules/users/dtos/ICreateHostRequestDTO';
 
-class HostRequestRepository implements IHostRequestRepository {
-  private model: Model<HostRequestType>;
+class HostRequestsRepository implements IHostRequestsRepository {
+  private model: Model<HostRequestsType>;
 
   constructor () {
-    this.model = HostRequest;
+    this.model = HostRequests;
   }
 
   public async create({
@@ -17,7 +17,7 @@ class HostRequestRepository implements IHostRequestRepository {
     cnpj,
     user_id,
     nickname
-  }: ICreateHostRequestDTO): Promise<HostRequestType> {
+  }: ICreateHostRequestDTO): Promise<HostRequestsType> {
     const hostRequest = new this.model({
       cpf: cpf,
       cnpj: cnpj,
@@ -30,13 +30,13 @@ class HostRequestRepository implements IHostRequestRepository {
     return hostRequest;
   }
 
-  public async getAll(): Promise<HostRequestType[]> {
+  public async getAll(): Promise<HostRequestsType[]> {
     const hostRequests = await this.model.find({});
 
     return hostRequests;
   }
 
-  public async findByUserId(user_id: number): Promise<HostRequestType | null> {
+  public async findByUserId(user_id: number): Promise<HostRequestsType | null> {
     const hostRequest = await this.model.findOne({
       user_id: user_id
     }).exec();
@@ -44,7 +44,7 @@ class HostRequestRepository implements IHostRequestRepository {
     return hostRequest;
   }
 
-  public async findByNickname(nickname: string): Promise<HostRequestType | null> {
+  public async findByNickname(nickname: string): Promise<HostRequestsType | null> {
     const hostRequest = await this.model.findOne({
       nickname: nickname
     }).exec();
@@ -59,4 +59,4 @@ class HostRequestRepository implements IHostRequestRepository {
   }
 }
 
-export default HostRequestRepository;
+export default HostRequestsRepository;

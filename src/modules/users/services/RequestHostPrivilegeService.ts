@@ -2,20 +2,20 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import { HostRequest as HostRequestType } from '../infra/mongoose/schemas/HostRequest';
+import { HostRequests as HostRequestsType } from '../infra/mongoose/schemas/HostRequests';
 
 import { typeEnum } from '../infra/typeorm/entities/User';
 
 import ICreateHostRequestDTO from '../dtos/ICreateHostRequestDTO';
-import IHostRequestRepository from '../repositories/IHostRequestRepository';
+import IHostRequestsRepository from '../repositories/IHostRequestsRepository';
 import IHostsRepository from '../repositories/IHostsRepository';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 @injectable()
 class RequestHostPrivilegeService {
   constructor (
-    @inject('HostRequestRepository')
-    private hostRequestRepository: IHostRequestRepository,
+    @inject('HostRequestsRepository')
+    private hostRequestsRepository: IHostRequestsRepository,
 
     @inject('HostsRepository')
     private hostsRepository: IHostsRepository,
@@ -24,8 +24,8 @@ class RequestHostPrivilegeService {
     private usersRepository: IUsersRepository
   ) {}
 
-  public async execute(data: ICreateHostRequestDTO): Promise<HostRequestType> {
-    const checkIfAlreadyRequested = await this.hostRequestRepository.findByUserId(data.user_id);
+  public async execute(data: ICreateHostRequestDTO): Promise<HostRequestsType> {
+    const checkIfAlreadyRequested = await this.hostRequestsRepository.findByUserId(data.user_id);
 
     if (checkIfAlreadyRequested) {
       throw new AppError('User had already requested Host privilege');
@@ -37,7 +37,7 @@ class RequestHostPrivilegeService {
       throw new AppError('User is already a Host');
     }
 
-    const checkNickname = await this.hostRequestRepository.findByNickname(data.nickname);
+    const checkNickname = await this.hostRequestsRepository.findByNickname(data.nickname);
 
     if (checkNickname) {
       throw new AppError('Nickname already been used!');
@@ -53,7 +53,7 @@ class RequestHostPrivilegeService {
       throw new AppError('CPF and CNPJ were not informed. At least, one of them is required')
     }
 
-    const hostRequest = await this.hostRequestRepository.create(data);
+    const hostRequest = await this.hostRequestsRepository.create(data);
 
     return hostRequest;
   }
