@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import Host from '../../../../users/infra/typeorm/entities/Host';
-import Schedule from './Schedule';
+import Schedule from './Schedule'
 
 @Entity('Experience')
 class Experience {
