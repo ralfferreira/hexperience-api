@@ -13,7 +13,7 @@ interface ITokenPayload {
   type: string
 }
 
-export default function ensureAuthenticated(
+export default function ensureHostPrivilege(
   request: Request,
   response: Response,
   next: NextFunction

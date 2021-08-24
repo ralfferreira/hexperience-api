@@ -37,6 +37,10 @@ class CreateScheduleService {
       throw new AppError('Host does not own this experience');
     }
 
+    if (experience.is_blocked) {
+      throw new AppError('You can not create schedules for blocked experiences');
+    }
+
     if (isBefore(date, new Date())) {
       throw new AppError('Schedule can not be created in a past date');
     }

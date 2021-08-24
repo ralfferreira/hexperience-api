@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import CreateExperienceService from '@modules/experiences/services/CreateExperienceService';
+import ShowExperienceService from '@modules/experiences/services/ShowExperienceService';
 
 export default class ExperiencesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -34,6 +35,16 @@ export default class ExperiencesController {
       price,
       requirements
     });
+
+    return response.json(experience);
+  }
+
+  public async show(request: Request, response: Response): Promise<Response> {
+    const { exp_id } = request.params;
+
+    const showExperience = container.resolve(ShowExperienceService);
+
+    const experience = await showExperience.execute(Number(exp_id));
 
     return response.json(experience);
   }

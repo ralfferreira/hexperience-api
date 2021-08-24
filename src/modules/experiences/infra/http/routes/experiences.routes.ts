@@ -3,16 +3,16 @@ import { celebrate, Segments, Joi } from 'celebrate';
 
 import ExperiencesController from '@modules/experiences/infra/http/controllers/ExperiencesController';
 
-import ensureHostPrivilige from '../middlewares/ensureHostPrivilige';
+import ensureHostPrivilege from '../middlewares/ensureHostPrivilege';
 import schedulesRouter from './schedules.routes';
+import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuthenticated';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
 
-experiencesRouter.use(ensureHostPrivilige)
-
 experiencesRouter.post(
   '/',
+  ensureHostPrivilege,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -29,6 +29,12 @@ experiencesRouter.post(
   }),
   experiencesController.create
 );
+
+experiencesRouter.get(
+  '/:exp_id/show',
+  ensureAuthenticated,
+  experiencesController.show
+)
 
 experiencesRouter.use('/schedules', schedulesRouter)
 
