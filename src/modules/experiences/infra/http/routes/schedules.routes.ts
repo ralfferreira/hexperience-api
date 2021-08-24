@@ -14,8 +14,7 @@ schedulesRouter.post(
   celebrate({
     [Segments.BODY]: {
       date: Joi.date().required(),
-      max_guests: Joi.number().integer().required(),
-      experience_id: Joi.number().integer().required()
+      max_guests: Joi.number().integer().required()
     }
   }),
   schedulesController.create

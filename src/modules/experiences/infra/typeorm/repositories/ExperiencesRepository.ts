@@ -56,6 +56,10 @@ class ExperiencesRepository implements IExperiencesRepository {
 
     return experience;
   }
+
+  public async update(experience: Experience): Promise<Experience> {
+    return this.ormRepository.save(experience);
+  }
 }
 
 export default ExperiencesRepository;

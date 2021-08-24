@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 
 import CreateExperienceService from '@modules/experiences/services/CreateExperienceService';
 import ShowExperienceService from '@modules/experiences/services/ShowExperienceService';
+import UpdateExperienceService from '@modules/experiences/services/UpdateExperienceService';
 
 export default class ExperiencesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -45,6 +46,43 @@ export default class ExperiencesController {
     const showExperience = container.resolve(ShowExperienceService);
 
     const experience = await showExperience.execute(Number(exp_id));
+
+    return response.json(experience);
+  }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    const hostId = request.user.hostId;
+
+    const {
+      address,
+      description,
+      duration,
+      is_online,
+      latitude,
+      longitude,
+      name,
+      parental_rating,
+      price,
+      requirements,
+      experience_id
+    } = request.body
+
+    const updateExperience = container.resolve(UpdateExperienceService);
+
+    const experience = await updateExperience.execute({
+      host_id: hostId,
+      id: experience_id,
+      address,
+      description,
+      duration,
+      is_online,
+      latitude,
+      longitude,
+      name,
+      parental_rating,
+      price,
+      requirements
+    });
 
     return response.json(experience);
   }

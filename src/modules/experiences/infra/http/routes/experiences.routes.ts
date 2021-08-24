@@ -36,6 +36,27 @@ experiencesRouter.get(
   experiencesController.show
 )
 
+experiencesRouter.put(
+  '/',
+  ensureHostPrivilege,
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      duration: Joi.number().required().max(360),
+      description: Joi.string().required(),
+      price: Joi.number().required(),
+      requirements: Joi.string(),
+      parental_rating: Joi.number().min(0).required(),
+      address: Joi.string(),
+      latitude: Joi.number(),
+      longitude: Joi.number(),
+      is_online:Joi.boolean(),
+      experience_id: Joi.number().integer().required()
+    }
+  }),
+  experiencesController.update
+)
+
 experiencesRouter.use('/schedules', schedulesRouter)
 
 export default experiencesRouter;
