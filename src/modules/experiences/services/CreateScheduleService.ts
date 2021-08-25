@@ -8,7 +8,13 @@ import ISchedulesRepository from '../repositories/ISchedulesRepository';
 
 import Schedule from '../infra/typeorm/entities/Schedule';
 
-import IRequestCreateScheduleDTO from '../dtos/IRequestCreateScheduleDTO';
+interface IRequest {
+  host_id: number;
+  date: Date;
+  max_guests: number;
+  availability: number;
+  experience_id: number;
+}
 
 @injectable()
 class CreateScheduleService {
@@ -26,7 +32,7 @@ class CreateScheduleService {
     max_guests,
     experience_id,
     host_id
-  }: IRequestCreateScheduleDTO): Promise<Schedule>{
+  }: IRequest): Promise<Schedule>{
     const experience = await this.experiencesRepository.findById(experience_id);
 
     if (!experience){

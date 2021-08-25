@@ -27,6 +27,22 @@ class SchedulesRepository implements ISchedulesRepository {
     return schedule;
   }
 
+  public async findById(id: number): Promise<Schedule | undefined> {
+    const schedule = await this.ormRepository.findOne({
+      relations: ['experience', 'experience.host'],
+      where: {
+        id: id
+      }
+    });
+
+    return schedule;
+  }
+
+  public async update(schedule: Schedule): Promise<Schedule> {
+    const updatedSchedule = await this.ormRepository.save(schedule);
+
+    return updatedSchedule;
+  }
 }
 
 export default SchedulesRepository;

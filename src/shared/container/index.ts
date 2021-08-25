@@ -24,6 +24,9 @@ import ExperiencesRepository from '@modules/experiences/infra/typeorm/repositori
 import ISchedulesRepository from '@modules/experiences/repositories/ISchedulesRepository';
 import SchedulesRepository from '@modules/experiences/infra/typeorm/repositories/SchedulesRepository';
 
+import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository
@@ -57,4 +60,9 @@ container.registerSingleton<IExperiencesRepository>(
 container.registerSingleton<ISchedulesRepository>(
   'SchedulesRepository',
   SchedulesRepository
+)
+
+container.registerSingleton<IAppointmentsRepository>(
+  'AppointmentsRepository',
+  AppointmentsRepository
 )

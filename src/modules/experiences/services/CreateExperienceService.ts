@@ -7,7 +7,19 @@ import IHostsRepository from '@modules/users/repositories/IHostsRepository';
 
 import Experience from '../infra/typeorm/entities/Experience';
 
-import IRequestCreateExperienceDTO from '../dtos/IRequestCreateExperienceDTO';
+interface IRequest {
+  name: string;
+  duration: number;
+  description: string;
+  price: number;
+  requirements: string;
+  parental_rating: number;
+  address: string;
+  latitude: number;
+  longitude: number;
+  is_online: boolean;
+  host_id: number;
+}
 
 @injectable()
 class CreateExperienceService {
@@ -31,7 +43,7 @@ class CreateExperienceService {
     requirements,
     host_id,
     is_online
-  }: IRequestCreateExperienceDTO): Promise<Experience>{
+  }: IRequest): Promise<Experience>{
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
