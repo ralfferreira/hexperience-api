@@ -22,4 +22,9 @@ appointmentsRouter.post(
   appointmentsController.create
 );
 
+appointmentsRouter.get(
+  '/:appointment_id',
+  appointmentsController.show
+);
+
 export default appointmentsRouter;

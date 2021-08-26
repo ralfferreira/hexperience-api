@@ -47,6 +47,17 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
     return appointments
   }
+
+  public async findById(id: number): Promise<Appointment | undefined> {
+    const appointment = await this.ormRepository.findOne({
+      relations: ['user', 'schedule', 'schedule.experience'],
+      where: {
+        id: id
+      }
+    });
+
+    return appointment;
+  }
 }
 
 export default AppointmentsRepository;
