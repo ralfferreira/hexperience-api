@@ -32,6 +32,21 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
     return appointment;
   }
+
+  public async findByExperienceId(exp_id: number): Promise<Appointment[]> {
+    const appointments = await this.ormRepository.find({
+      relations: ['user', 'schedule', 'schedule.experience'],
+      where: {
+        schedule: {
+          experience: {
+            id: exp_id
+          }
+        }
+      }
+    });
+
+    return appointments
+  }
 }
 
 export default AppointmentsRepository;

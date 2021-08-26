@@ -8,6 +8,7 @@ import ISchedulesRepository from "@modules/experiences/repositories/ISchedulesRe
 import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IHostsRepository from "@modules/users/repositories/IHostsRepository";
+import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 
 interface IRequest {
   guests: number;
@@ -29,7 +30,10 @@ class CreateAppointmentService {
     private hotstsRepository: IHostsRepository,
 
     @inject('AppointmentsRepository')
-    private appointmentsRepository: IAppointmentsRepository
+    private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository
   ) {}
 
   public async execute({
@@ -82,7 +86,16 @@ class CreateAppointmentService {
       user: user
     });
 
-    // Still need to notify the host that an appointment has been made
+    await this.notificationsRepository.create({
+      title: 'Novo agendamento',
+      message:
+        `Um novo agendamento foi feito na experiência: "${schedule.experience.name}". ` +
+        `O agendamento foi marcado para ${schedule.date}.`,
+      receiver_id: host.id,
+      appointment_id: appointment.id,
+      exp_id: schedule.experience.id,
+      schedule_id: schedule.id
+    })
 
     return appointment;
   }

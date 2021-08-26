@@ -2,7 +2,7 @@ import { getRepository, Repository } from "typeorm";
 
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 
-import User from '../entities/User';
+import User, { typeEnum } from '../entities/User';
 import ICreateUserDTO from "@modules/users/dtos/ICreateUserDTO";
 
 class UsersRepository implements IUsersRepository {
@@ -44,6 +44,16 @@ class UsersRepository implements IUsersRepository {
 
   public async update(user: User): Promise<User> {
     return this.ormRepository.save(user);
+  }
+
+  public async findAllAdmins(): Promise<User[]> {
+    const admins = await this.ormRepository.find({
+      where: {
+        type: typeEnum.admin
+      }
+    });
+
+    return admins
   }
 }
 

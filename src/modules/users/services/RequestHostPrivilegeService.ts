@@ -10,6 +10,7 @@ import ICreateHostRequestDTO from '../dtos/ICreateHostRequestDTO';
 import IHostRequestsRepository from '../repositories/IHostRequestsRepository';
 import IHostsRepository from '../repositories/IHostsRepository';
 import IUsersRepository from '../repositories/IUsersRepository';
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 
 @injectable()
 class RequestHostPrivilegeService {
@@ -21,7 +22,10 @@ class RequestHostPrivilegeService {
     private hostsRepository: IHostsRepository,
 
     @inject('UsersRepository')
-    private usersRepository: IUsersRepository
+    private usersRepository: IUsersRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository
   ) {}
 
   public async execute(data: ICreateHostRequestDTO): Promise<HostRequestsType> {
@@ -54,6 +58,18 @@ class RequestHostPrivilegeService {
     }
 
     const hostRequest = await this.hostRequestsRepository.create(data);
+
+    const admins = await this.usersRepository.findAllAdmins();
+
+    for (const admin of admins) {
+      await this.notificationsRepository.create({
+        title: 'Nova solicitação de anfitrião',
+        message:
+          'Um usuário solicitou o privilégio de anfitrião. Verifique ' +
+          'se ele cumpre os requisitos para se tornar um anfitrião.',
+        receiver_id: admin.id,
+      });
+    }
 
     return hostRequest;
   }

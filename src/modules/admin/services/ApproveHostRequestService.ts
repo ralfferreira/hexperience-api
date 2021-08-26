@@ -9,6 +9,7 @@ import Host from "@modules/users/infra/typeorm/entities/Host";
 import IHostRequestsRepository from "@modules/users/repositories/IHostRequestsRepository";
 import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
+import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 
 @injectable()
 class ApproveHostRequestService {
@@ -21,6 +22,9 @@ class ApproveHostRequestService {
 
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository
   ) {}
 
   public async execute(user_id: number): Promise<Host> {
@@ -49,6 +53,17 @@ class ApproveHostRequestService {
       cnpj: hostRequest?.cnpj,
       nickname: hostRequest.nickname,
       user: updatedUser
+    });
+
+    await this.hostRequestsRepository.delete(updatedUser.id);
+
+    await this.notificationsRepository.create({
+      title: 'Parabéns, solicitação aceita!',
+      message:
+        'Sua solicitação para se tornar um anfitrião foi revisada pela nossa equipe, ' +
+        'e você foi aprovado! Você pode oferecer experiências agora',
+      receiver_id: updatedUser.id,
+      host_id: host.id,
     });
 
     return host;

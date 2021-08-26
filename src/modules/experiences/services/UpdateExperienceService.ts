@@ -5,6 +5,8 @@ import AppError from "@shared/errors/AppError";
 import Experience from "../infra/typeorm/entities/Experience";
 
 import IExperiencesRepository from "../repositories/IExperiencesRepository";
+import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
+import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
 
 interface IRequest {
   id: number;
@@ -25,7 +27,13 @@ interface IRequest {
 class UpdateExperienceService {
   constructor (
     @inject('ExperiencesRepository')
-    private experiencesRepository: IExperiencesRepository
+    private experiencesRepository: IExperiencesRepository,
+
+    @inject('NotificationsRepository')
+    private notificationsRepository: INotificationsRepository,
+
+    @inject('AppointmentsRepository')
+    private appointmentsRepository: IAppointmentsRepository
   ) {}
 
   public async execute({
@@ -60,9 +68,23 @@ class UpdateExperienceService {
       throw new AppError('Experience can not last more than 6 hours');
     }
 
-    // still need to implement notification, so when an experience is updated,
-    // we need to inform users who have scheduled a time that there have been
-    // changes in the experience.
+    const appointments = await this.appointmentsRepository.findByExperienceId(experience.id);
+
+    if (appointments.length) {
+      for (const appointment of appointments) {
+        await this.notificationsRepository.create({
+          title: 'Alterações em Experiência agendada',
+          message:
+            'Houve alterações nos detalhes de uma experiência que você agendou. ' +
+            'Verifique o que foi alterado e se ainda tem interesse na experiência após as mudanças',
+          receiver_id: appointment.user.id,
+          schedule_id: appointment.schedule.id,
+          appointment_id: appointment.id,
+          exp_id: experience.id,
+          host_id: host_id
+        });
+      }
+    }
 
     experience.name = name;
     experience.duration = duration;
