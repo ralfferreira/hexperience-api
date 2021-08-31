@@ -12,7 +12,6 @@ class SchedulesRepository implements ISchedulesRepository {
     this.ormRepository = getRepository(Schedule);
   }
 
-
   public async create({ date, availability, experience, max_guests }: ICreateScheduleDTO): Promise<Schedule> {
     const schedule = await this.ormRepository.create({
       date,
@@ -42,6 +41,12 @@ class SchedulesRepository implements ISchedulesRepository {
     const updatedSchedule = await this.ormRepository.save(schedule);
 
     return updatedSchedule;
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.ormRepository.delete({
+      id: id
+    });
   }
 }
 

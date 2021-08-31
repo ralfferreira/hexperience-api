@@ -6,4 +6,6 @@ export default interface IAppointmentsRepository {
   findByExperienceId(exp_id: number): Promise<Appointment[]>;
   findById(id: number): Promise<Appointment | undefined>;
   findByUserId(user_id: number): Promise<Appointment[]>;
+  findByScheduleId(schedule_id: number): Promise<Appointment[]>;
+  delete(id: number): Promise<void>;
 }

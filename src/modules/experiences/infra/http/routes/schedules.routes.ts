@@ -8,9 +8,10 @@ import ensureHostPrivilege from '../middlewares/ensureHostPrivilege';
 const schedulesRouter = Router();
 const schedulesController = new SchedulesController();
 
+schedulesRouter.use(ensureHostPrivilege);
+
 schedulesRouter.post(
   '/',
-  ensureHostPrivilege,
   celebrate({
     [Segments.BODY]: {
       date: Joi.date().required(),
@@ -18,6 +19,17 @@ schedulesRouter.post(
     }
   }),
   schedulesController.create
+);
+
+schedulesRouter.delete(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      schedule_id: Joi.number().integer().required(),
+      reason: Joi.string().required()
+    }
+  }),
+  schedulesController.delete
 );
 
 export default schedulesRouter;

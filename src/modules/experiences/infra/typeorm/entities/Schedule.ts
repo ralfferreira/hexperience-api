@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany
 } from 'typeorm';
 
 import Experience from './Experience';
+import Appointment from '../../../../appointments/infra/typeorm/entities/Appointment';
 
 @Entity('Schedule')
 class Schedule {
@@ -24,7 +26,7 @@ class Schedule {
 
   @ManyToOne(() => Experience, exp => exp.schedules)
   @JoinColumn({ name: 'exp_id' })
-  experience: Experience
+  experience: Experience;
 }
 
 export default Schedule;

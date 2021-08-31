@@ -38,12 +38,16 @@ export default function ensureHostPrivilege(
       hostId,
     }
 
-    if(hostId === 0){
-      throw new AppError('Only a host can create an experience.', 401)
+    if (hostId === 0){
+      throw new AppError('Only a host can do this action.', 401)
     }
 
     return next();
-  } catch {
-    throw new AppError('Invalid JWT token', 401);
+  } catch (e) {
+    if (e instanceof AppError) {
+      throw e;
+    } else {
+      throw new AppError('Invalid JWT token', 401);
+    }
   }
 }
