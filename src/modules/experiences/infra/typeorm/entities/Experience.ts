@@ -36,13 +36,13 @@ class Experience {
   @Column()
   parental_rating: number;
 
-  @Column()
+  @Column({ nullable: true })
   address: string;
 
-  @Column({ type: 'float', precision: 8, scale: 5 })
+  @Column({ type: 'float', precision: 8, scale: 5, nullable: true })
   latitude: number;
 
-  @Column({ type: 'float', precision: 8, scale: 5 })
+  @Column({ type: 'float', precision: 8, scale: 5, nullable: true })
   longitude: number;
 
   @Column({ type: 'boolean' })

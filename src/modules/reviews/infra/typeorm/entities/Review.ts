@@ -20,16 +20,16 @@ class Review {
   @Column()
   comment: string;
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   is_resolved: boolean;
 
   @Column()
   rating: number
 
-  @Column({ type: 'boolean' })
+  @Column({ type: 'boolean', default: false })
   is_complaint: boolean;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   reason: string;
 
   @CreateDateColumn()

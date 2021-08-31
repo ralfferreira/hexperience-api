@@ -31,11 +31,11 @@ class Appointment {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => Schedule)
+  @ManyToOne(() => Schedule, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'schedule_id' })
   schedule: Schedule;
 }
