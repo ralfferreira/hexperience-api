@@ -48,7 +48,7 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findById(id: number): Promise<Experience | undefined> {
     const experience = await this.ormRepository.findOne({
-      relations: ['host', 'schedules'],
+      relations: ['host', 'schedules', 'reviews'],
       where: {
         id: id
       }

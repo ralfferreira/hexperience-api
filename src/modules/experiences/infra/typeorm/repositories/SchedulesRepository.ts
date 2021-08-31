@@ -29,7 +29,7 @@ class SchedulesRepository implements ISchedulesRepository {
 
   public async findById(id: number): Promise<Schedule | undefined> {
     const schedule = await this.ormRepository.findOne({
-      relations: ['experience', 'experience.host'],
+      relations: ['experience', 'experience.host', 'experience.reviews'],
       where: {
         id: id
       }

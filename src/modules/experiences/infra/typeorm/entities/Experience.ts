@@ -11,6 +11,7 @@ import {
 
 import Host from '../../../../users/infra/typeorm/entities/Host';
 import Schedule from './Schedule'
+import Review from '../../../../reviews/infra/typeorm/entities/Review';
 
 @Entity('Experience')
 class Experience {
@@ -62,6 +63,9 @@ class Experience {
 
   @OneToMany(() => Schedule, schedule => schedule.experience)
   schedules: Schedule[];
+
+  @OneToMany(() => Review, review => review.experience)
+  reviews: Review[];
 }
 
 export default Experience;
