@@ -34,4 +34,14 @@ appointmentsRouter.get(
   userAppointmentsController.index
 );
 
+appointmentsRouter.delete(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      appointment_id: Joi.number().integer().required()
+    }
+  }),
+  userAppointmentsController.delete
+);
+
 export default appointmentsRouter;

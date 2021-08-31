@@ -6,6 +6,7 @@ import IHostsRepository from '@modules/users/repositories/IHostsRepository';
 import ISchedulesRepository from '@modules/experiences/repositories/ISchedulesRepository';
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
+import isBefore from "date-fns/isBefore";
 
 interface IRequest {
   schedule_id: number;
@@ -40,6 +41,10 @@ class CancelScheduleService {
 
     if (!schedule) {
       throw new AppError('Schedule does not exists');
+    }
+
+    if (isBefore(schedule.date, new Date())) {
+      throw new AppError('You can not cancel a schedule that already happened');
     }
 
     if (schedule.experience.host.id !== host.id) {
