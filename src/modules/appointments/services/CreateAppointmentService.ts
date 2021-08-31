@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import { format } from 'date-fns';
 
 import AppError from "@shared/errors/AppError";
 
@@ -86,11 +87,13 @@ class CreateAppointmentService {
       user: user
     });
 
+    const formattedDate = format(schedule.date, "dd/MM/yyyy 'às' HH:mm'h'");
+
     await this.notificationsRepository.create({
       title: 'Novo agendamento',
       message:
         `Um novo agendamento foi feito na experiência: "${schedule.experience.name}". ` +
-        `O agendamento foi marcado para ${schedule.date}.`,
+        `O agendamento foi marcado para ${formattedDate}.`,
       receiver_id: host.id,
       appointment_id: appointment.id,
       exp_id: schedule.experience.id,

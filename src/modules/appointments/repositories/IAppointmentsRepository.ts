@@ -5,4 +5,5 @@ export default interface IAppointmentsRepository {
   create(data: ICreateAppointmentDTO): Promise<Appointment>;
   findByExperienceId(exp_id: number): Promise<Appointment[]>;
   findById(id: number): Promise<Appointment | undefined>;
+  findByUserId(user_id: number): Promise<Appointment[]>;
 }
