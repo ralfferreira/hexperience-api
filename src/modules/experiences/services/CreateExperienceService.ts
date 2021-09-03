@@ -14,6 +14,7 @@ interface IRequest {
   price: number;
   requirements: string;
   parental_rating: number;
+  max_guests: number;
   address: string;
   latitude: number;
   longitude: number;
@@ -38,6 +39,7 @@ class CreateExperienceService {
     description,
     latitude,
     longitude,
+    max_guests,
     parental_rating,
     price,
     requirements,
@@ -62,6 +64,7 @@ class CreateExperienceService {
       is_online,
       latitude,
       longitude,
+      max_guests,
       name,
       parental_rating,
       price,

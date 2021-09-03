@@ -36,6 +36,9 @@ class Experience {
   @Column()
   parental_rating: number;
 
+  @Column()
+  max_guests: number;
+
   @Column({ nullable: true })
   address: string;
 

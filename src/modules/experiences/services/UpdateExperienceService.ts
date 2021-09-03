@@ -16,6 +16,7 @@ interface IRequest {
   price: number;
   requirements: string;
   parental_rating: number;
+  max_guests: number;
   address: string;
   latitude: number;
   longitude: number;
@@ -46,6 +47,7 @@ class UpdateExperienceService {
     latitude,
     longitude,
     name,
+    max_guests,
     parental_rating,
     price,
     requirements
@@ -96,6 +98,7 @@ class UpdateExperienceService {
     experience.latitude = latitude;
     experience.longitude = longitude;
     experience.is_online = is_online;
+    experience.max_guests = max_guests;
 
     const updatedExperience = await this.experiencesRepository.update(experience);
 

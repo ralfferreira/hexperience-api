@@ -12,11 +12,10 @@ class SchedulesRepository implements ISchedulesRepository {
     this.ormRepository = getRepository(Schedule);
   }
 
-  public async create({ date, availability, experience, max_guests }: ICreateScheduleDTO): Promise<Schedule> {
+  public async create({ date, availability, experience }: ICreateScheduleDTO): Promise<Schedule> {
     const schedule = await this.ormRepository.create({
       date,
-      availability,
-      max_guests,
+      availability
     });
 
     schedule.experience = experience;

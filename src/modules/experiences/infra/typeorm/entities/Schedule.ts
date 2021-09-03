@@ -4,11 +4,9 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany
 } from 'typeorm';
 
 import Experience from './Experience';
-import Appointment from '../../../../appointments/infra/typeorm/entities/Appointment';
 
 @Entity('Schedule')
 class Schedule {
@@ -17,9 +15,6 @@ class Schedule {
 
   @Column({ type: 'timestamp' })
   date: Date;
-
-  @Column()
-  max_guests: number;
 
   @Column()
   availability: number;

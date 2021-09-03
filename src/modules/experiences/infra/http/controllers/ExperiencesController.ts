@@ -18,7 +18,8 @@ export default class ExperiencesController {
       parental_rating,
       price,
       requirements,
-      is_online
+      is_online,
+      max_guests
     } = request.body;
 
     const createExperience = container.resolve(CreateExperienceService);
@@ -34,7 +35,8 @@ export default class ExperiencesController {
       name,
       parental_rating,
       price,
-      requirements
+      requirements,
+      max_guests
     });
 
     return response.json(experience);
@@ -64,7 +66,8 @@ export default class ExperiencesController {
       parental_rating,
       price,
       requirements,
-      experience_id
+      experience_id,
+      max_guests
     } = request.body
 
     const updateExperience = container.resolve(UpdateExperienceService);
@@ -81,7 +84,8 @@ export default class ExperiencesController {
       name,
       parental_rating,
       price,
-      requirements
+      requirements,
+      max_guests
     });
 
     return response.json(experience);

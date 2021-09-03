@@ -9,10 +9,8 @@ import ISchedulesRepository from '../repositories/ISchedulesRepository';
 import Schedule from '../infra/typeorm/entities/Schedule';
 
 interface IRequest {
-  host_id: number;
   date: Date;
-  max_guests: number;
-  availability: number;
+  host_id: number;
   experience_id: number;
 }
 
@@ -29,7 +27,6 @@ class CreateScheduleService {
 
   public async execute({
     date,
-    max_guests,
     experience_id,
     host_id
   }: IRequest): Promise<Schedule>{
@@ -73,9 +70,8 @@ class CreateScheduleService {
 
     const schedule = await this.schedulesRepository.create({
       date,
-      max_guests,
       experience,
-      availability: max_guests
+      availability: experience.max_guests
     });
 
     return schedule;

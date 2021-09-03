@@ -7,6 +7,7 @@ export default interface ICreateExperienceDTO {
   price: number;
   requirements: string;
   parental_rating: number;
+  max_guests: number;
   address: string;
   latitude: number;
   longitude: number;
