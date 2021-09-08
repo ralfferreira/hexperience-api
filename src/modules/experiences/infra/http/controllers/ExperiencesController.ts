@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 import CreateExperienceService from '@modules/experiences/services/CreateExperienceService';
 import ShowExperienceService from '@modules/experiences/services/ShowExperienceService';
 import UpdateExperienceService from '@modules/experiences/services/UpdateExperienceService';
+import ListAllAvailableExperiencesService from '@modules/experiences/services/ListAllAvailableExperiencesService';
 
 export default class ExperiencesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -89,5 +90,15 @@ export default class ExperiencesController {
     });
 
     return response.json(experience);
+  }
+
+  public async index(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+
+    const listAllAvailableExperiences = container.resolve(ListAllAvailableExperiencesService);
+
+    const result = await listAllAvailableExperiences.execute(userId);
+
+    return response.json(result);
   }
 }

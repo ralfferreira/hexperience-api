@@ -59,6 +59,12 @@ experiencesRouter.put(
   experiencesController.update
 )
 
+experiencesRouter.get(
+  '/',
+  ensureAuthenticated,
+  experiencesController.index
+)
+
 experiencesRouter.use('/schedules', schedulesRouter)
 
 export default experiencesRouter;

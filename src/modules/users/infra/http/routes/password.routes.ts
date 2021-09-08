@@ -21,7 +21,7 @@ passwordRouter.put(
   celebrate({
     [Segments.BODY]: {
       token: Joi.string().required().uuid(),
-      password: Joi.string().required().min(6)
+      password: Joi.string().required().min(8)
     }
   }),
   forgotPasswordController.update

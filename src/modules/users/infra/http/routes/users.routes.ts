@@ -21,7 +21,7 @@ usersRouter.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Joi.string().required().min(6)
+      password: Joi.string().required().min(8)
     }
   }),
   usersController.signUp
@@ -33,7 +33,7 @@ usersRouter.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
-      password: Joi.string().required().min(6)
+      password: Joi.string().required().min(8)
     }
   }),
   usersController.create
@@ -50,9 +50,9 @@ usersRouter.put(
 )
 
 usersRouter.patch(
-  '/avatar', 
-  ensureAuthenticated, 
-  upload.single('avatar'), 
+  '/avatar',
+  ensureAuthenticated,
+  upload.single('avatar'),
   userAvatarController.update
 );
 

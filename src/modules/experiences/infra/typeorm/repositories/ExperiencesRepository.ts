@@ -62,6 +62,17 @@ class ExperiencesRepository implements IExperiencesRepository {
   public async update(experience: Experience): Promise<Experience> {
     return this.ormRepository.save(experience);
   }
+
+  public async findAllAvailable(): Promise<Experience[]> {
+    const experiences = await this.ormRepository.find({
+      relations: ['host', 'schedules', 'reviews'],
+      where: {
+        is_blocked: false,
+      }
+    });
+
+    return experiences;
+  }
 }
 
 export default ExperiencesRepository;
