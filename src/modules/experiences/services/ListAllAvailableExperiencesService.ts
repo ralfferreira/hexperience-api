@@ -34,18 +34,18 @@ class ListAllAvailableExperiencesService {
     }
 
     experiences = experiences.filter(experience => {
-      if (experience.schedules.length > 0) {
-        return experience;
+      if (experience.schedules.length === 0) {
+        return;
       }
-    })
 
-    if (user.type === typeEnum.host) {
-      experiences = experiences.filter(experience => {
-        if (experience.host.id !== user.host.id) {
-          return experience;
+      if (user.type === typeEnum.host) {
+        if (experience.host.id === user.host.id) {
+          return;
         }
-      });
-    }
+      }
+
+      return experience;
+    })
 
     const result = experiences.map(experience => {
       let isAvailable = false;
