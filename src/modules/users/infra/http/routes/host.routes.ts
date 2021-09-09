@@ -34,4 +34,15 @@ hostRouter.put(
   hostsController.update
 )
 
+hostRouter.get(
+  '/',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      nickname: Joi.string().optional()
+    }
+  }),
+  hostsController.index
+)
+
 export default hostRouter;

@@ -1,4 +1,5 @@
 import ICreateHostDTO from "../dtos/ICreateHostDTO";
+import ISearchForHostsDTO from "../dtos/ISearchForHostsDTO";
 import Host from "../infra/typeorm/entities/Host";
 
 export default interface IHostsRepository {
@@ -7,4 +8,5 @@ export default interface IHostsRepository {
   findByNickname(nickname: string): Promise<Host | undefined>;
   update(host: Host): Promise<Host>;
   findByUserId(user_id: number): Promise<Host | undefined>;
+  findAll(options: ISearchForHostsDTO): Promise<Host[]>;
 }

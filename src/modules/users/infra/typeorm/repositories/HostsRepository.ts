@@ -5,6 +5,7 @@ import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 import Host from "../entities/Host";
 
 import ICreateHostDTO from "@modules/users/dtos/ICreateHostDTO";
+import ISearchForHostsDTO from "@modules/users/dtos/ISearchForHostsDTO";
 
 class HostsRepository implements IHostsRepository {
   private ormRepository: Repository<Host>;
@@ -64,6 +65,24 @@ class HostsRepository implements IHostsRepository {
     });
 
     return host;
+  }
+
+  public async findAll({ nickname, user_id }: ISearchForHostsDTO): Promise<Host[]> {
+    const query = await this.ormRepository.createQueryBuilder('h')
+      .leftJoinAndSelect('h.user', 'u')
+      .where('u.is_blocked = :isBlocked', { isBlocked: false })
+
+    if (nickname) {
+      await query.andWhere('h.nickname LIKE :findNickname', { findNickname: `%${nickname}%` });
+    }
+
+    if (user_id) {
+      await query.andWhere('u.id != :userId', { userId: user_id })
+    }
+
+    const hosts = await query.printSql().getMany();
+
+    return hosts;
   }
 }
 
