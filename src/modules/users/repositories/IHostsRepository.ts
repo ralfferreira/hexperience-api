@@ -6,4 +6,5 @@ export default interface IHostsRepository {
   findById(id: number): Promise<Host | undefined>;
   findByNickname(nickname: string): Promise<Host | undefined>;
   update(host: Host): Promise<Host>;
+  findByUserId(user_id: number): Promise<Host | undefined>;
 }

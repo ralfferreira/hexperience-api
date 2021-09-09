@@ -62,6 +62,17 @@ experiencesRouter.put(
 experiencesRouter.get(
   '/',
   ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().optional(),
+      min_duration: Joi.number().integer().min(1).optional(),
+      max_duration: Joi.number().integer().max(360).optional(),
+      min_price: Joi.number().min(0).optional(),
+      max_price: Joi.number().optional(),
+      parental_rating: Joi.number().min(0).optional(),
+      is_online: Joi.boolean().optional()
+    }
+  }),
   experiencesController.index
 )
 

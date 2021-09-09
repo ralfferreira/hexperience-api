@@ -52,6 +52,19 @@ class HostsRepository implements IHostsRepository {
   public async update(host: Host): Promise<Host> {
     return this.ormRepository.save(host);
   }
+
+  public async findByUserId(user_id: number): Promise<Host | undefined> {
+    const host = await this.ormRepository.findOne({
+      relations: ['user'],
+      where: {
+        user: {
+          id: user_id
+        }
+      }
+    });
+
+    return host;
+  }
 }
 
 export default HostsRepository;

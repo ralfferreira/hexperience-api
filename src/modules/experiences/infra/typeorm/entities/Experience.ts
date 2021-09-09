@@ -8,6 +8,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
+import { Expose } from 'class-transformer';
 
 import Host from '../../../../users/infra/typeorm/entities/Host';
 import Schedule from './Schedule'
@@ -69,6 +70,27 @@ class Experience {
 
   @OneToMany(() => Review, review => review.experience)
   reviews: Review[];
+
+  @Expose({ name: 'rating' })
+  getRating(): number {
+    let score = 0;
+    let rating = 0;
+
+    if (this.reviews.length) {
+      let nReviews = 0;
+
+      for (const review of this.reviews) {
+        if (!review.is_complaint) {
+          nReviews++;
+          score += review.rating;
+        }
+      }
+
+      rating = score / nReviews;
+    }
+
+    return rating;
+  }
 }
 
 export default Experience;

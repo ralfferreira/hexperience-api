@@ -1,13 +1,16 @@
 import { inject, injectable } from "tsyringe";
 import { isAfter } from "date-fns";
-
-import AppError from "@shared/errors/AppError";
+import { classToClass } from "class-transformer";
 
 import Experience from "../infra/typeorm/entities/Experience";
 import IExperiencesRepository from "../repositories/IExperiencesRepository";
-import IUsersRepository from "@modules/users/repositories/IUsersRepository";
+import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 
-import { typeEnum } from '@modules/users/infra/typeorm/entities/User';
+import ISearchForExperienceDTO from "../dtos/ISearchForExperienceDTO";
+
+interface IRequest extends ISearchForExperienceDTO {
+  user_id: number;
+}
 
 interface IResponse {
   available: boolean;
@@ -20,32 +23,39 @@ class ListAllAvailableExperiencesService {
     @inject('ExperiencesRepository')
     private experiencesRepository: IExperiencesRepository,
 
-    @inject('UsersRepository')
-    private usersRepository: IUsersRepository,
+    @inject('HostsRepository')
+    private hostsRepository: IHostsRepository,
   ) {}
 
-  public async execute(user_id: number): Promise<IResponse[]> {
-    let experiences = await this.experiencesRepository.findAllAvailable();
+  public async execute({
+    user_id,
+    name,
+    is_online,
+    max_duration,
+    max_price,
+    min_duration,
+    min_price,
+    parental_rating
+  }: IRequest): Promise<IResponse[]> {
+    const host = await this.hostsRepository.findByUserId(user_id);
 
-    const user = await this.usersRepository.findById(user_id);
+    const options = {} as ISearchForExperienceDTO;
 
-    if (!user) {
-      throw new AppError('User does not exists');
+    if (host) {
+      options.host_id = host.id;
     }
 
-    experiences = experiences.filter(experience => {
-      if (experience.schedules.length === 0) {
-        return;
-      }
+    Object.assign(options, {
+      is_online,
+      max_duration,
+      max_price,
+      min_duration,
+      min_price,
+      parental_rating,
+      name
+    } as ISearchForExperienceDTO)
 
-      if (user.type === typeEnum.host) {
-        if (experience.host.id === user.host.id) {
-          return;
-        }
-      }
-
-      return experience;
-    })
+    let experiences = await this.experiencesRepository.findAllAvailable(options);
 
     const result = experiences.map(experience => {
       let isAvailable = false;
@@ -60,8 +70,19 @@ class ListAllAvailableExperiencesService {
 
       return {
         available: isAvailable,
-        experience: experience
+        experience: classToClass(experience)
       } as IResponse;
+    });
+
+    result.sort((a, b) => {
+      const aRating = a.experience.getRating();
+      const bRating = b.experience.getRating();
+
+      if (aRating > bRating) {
+        return -1;
+      }
+
+      return 1;
     });
 
     return result;

@@ -94,10 +94,28 @@ export default class ExperiencesController {
 
   public async index(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
+    const {
+      is_online,
+      max_duration,
+      max_price,
+      min_duration,
+      min_price,
+      name,
+      parental_rating
+    } = request.body;
 
     const listAllAvailableExperiences = container.resolve(ListAllAvailableExperiencesService);
 
-    const result = await listAllAvailableExperiences.execute(userId);
+    const result = await listAllAvailableExperiences.execute({
+      user_id: userId,
+      is_online,
+      max_duration,
+      max_price,
+      min_duration,
+      min_price,
+      name,
+      parental_rating
+    });
 
     return response.json(result);
   }
