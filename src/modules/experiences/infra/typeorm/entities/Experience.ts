@@ -13,6 +13,7 @@ import { Expose } from 'class-transformer';
 import Host from '../../../../users/infra/typeorm/entities/Host';
 import Schedule from './Schedule'
 import Review from '../../../../reviews/infra/typeorm/entities/Review';
+import Category from './Category';
 
 @Entity('Experience')
 class Experience {
@@ -70,6 +71,10 @@ class Experience {
 
   @OneToMany(() => Review, review => review.experience)
   reviews: Review[];
+
+  @ManyToOne(() => Category)
+  @JoinColumn({ name: 'category_id' })
+  category: Category
 
   @Expose({ name: 'rating' })
   getRating(): number {
