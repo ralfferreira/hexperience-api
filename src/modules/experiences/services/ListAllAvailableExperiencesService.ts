@@ -35,7 +35,8 @@ class ListAllAvailableExperiencesService {
     max_price,
     min_duration,
     min_price,
-    parental_rating
+    parental_rating,
+    categories
   }: IRequest): Promise<IResponse[]> {
     const host = await this.hostsRepository.findByUserId(user_id);
 
@@ -52,7 +53,8 @@ class ListAllAvailableExperiencesService {
       min_duration,
       min_price,
       parental_rating,
-      name
+      name,
+      categories
     } as ISearchForExperienceDTO)
 
     let experiences = await this.experiencesRepository.findAllAvailable(options);

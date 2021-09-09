@@ -51,7 +51,7 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findById(id: number): Promise<Experience | undefined> {
     const experience = await this.ormRepository.findOne({
-      relations: ['host', 'schedules', 'reviews'],
+      relations: ['host', 'schedules', 'reviews', 'category'],
       where: {
         id: id
       }
@@ -73,11 +73,13 @@ class ExperiencesRepository implements IExperiencesRepository {
     max_price,
     min_price,
     parental_rating,
+    categories
   }: ISearchForExperienceDTO): Promise<Experience[]> {
     const query = await this.ormRepository.createQueryBuilder('e')
       .leftJoinAndSelect('e.host', 'h')
       .leftJoinAndSelect('e.schedules', 's')
       .leftJoinAndSelect('e.reviews', 'r')
+      .leftJoinAndSelect('e.category', 'c')
       .where('e.is_blocked = :isNotBlocked', { isNotBlocked: false })
       .andWhere('s.exp_id IS NOT NULL');
 
@@ -111,6 +113,10 @@ class ExperiencesRepository implements IExperiencesRepository {
 
     if (parental_rating) {
       await query.andWhere('e.parental_rating <= :parentalRating', { parentalRating: parental_rating });
+    }
+
+    if (categories?.length) {
+      await query.andWhere('e.category_id IN (:...categoryIds)', { categoryIds: categories });
     }
 
     const experiences = await query.printSql().getMany();

@@ -4,6 +4,7 @@ import AppError from '@shared/errors/AppError';
 
 import IExperiencesRepository from '../repositories/IExperiencesRepository';
 import IHostsRepository from '@modules/users/repositories/IHostsRepository';
+import ICategoriesRepository from '../repositories/ICategoriesRepository';
 
 import Experience from '../infra/typeorm/entities/Experience';
 
@@ -20,6 +21,7 @@ interface IRequest {
   longitude: number;
   is_online: boolean;
   host_id: number;
+  category_id: number;
 }
 
 @injectable()
@@ -29,7 +31,10 @@ class CreateExperienceService {
     private experiencesRepository: IExperiencesRepository,
 
     @inject('HostsRepository')
-    private hostsRepository: IHostsRepository
+    private hostsRepository: IHostsRepository,
+
+    @inject('CategoriesRepository')
+    private categoriesRepository: ICategoriesRepository
   ) {}
 
   public async execute({
@@ -44,12 +49,19 @@ class CreateExperienceService {
     price,
     requirements,
     host_id,
-    is_online
+    is_online,
+    category_id
   }: IRequest): Promise<Experience>{
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
       throw new AppError('Host does not exists');
+    }
+
+    const category = await this.categoriesRepository.findById(category_id);
+
+    if (!category) {
+      throw new AppError('Category does not exists');
     }
 
     if (duration > 360) {
@@ -68,7 +80,8 @@ class CreateExperienceService {
       name,
       parental_rating,
       price,
-      requirements
+      requirements,
+      category
     });
 
     return experience;

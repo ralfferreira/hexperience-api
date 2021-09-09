@@ -7,4 +7,5 @@ export default interface ISearchForExperienceDTO {
   parental_rating?: number;
   is_online?: boolean;
   host_id?: number;
+  categories?: number[];
 }

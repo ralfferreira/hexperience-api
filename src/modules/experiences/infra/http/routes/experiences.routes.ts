@@ -25,7 +25,8 @@ experiencesRouter.post(
       address: Joi.string(),
       latitude: Joi.number(),
       longitude: Joi.number(),
-      is_online:Joi.boolean()
+      is_online: Joi.boolean(),
+      category_id: Joi.number().integer().required().min(1)
     }
   }),
   experiencesController.create
@@ -70,7 +71,11 @@ experiencesRouter.get(
       min_price: Joi.number().min(0).optional(),
       max_price: Joi.number().optional(),
       parental_rating: Joi.number().min(0).optional(),
-      is_online: Joi.boolean().optional()
+      is_online: Joi.boolean().optional(),
+      categories:
+        Joi.array().items(
+          Joi.number().integer().min(1)
+        ).optional(),
     }
   }),
   experiencesController.index

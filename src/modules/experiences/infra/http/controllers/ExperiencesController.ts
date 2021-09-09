@@ -20,7 +20,8 @@ export default class ExperiencesController {
       price,
       requirements,
       is_online,
-      max_guests
+      max_guests,
+      category_id
     } = request.body;
 
     const createExperience = container.resolve(CreateExperienceService);
@@ -37,7 +38,8 @@ export default class ExperiencesController {
       parental_rating,
       price,
       requirements,
-      max_guests
+      max_guests,
+      category_id
     });
 
     return response.json(experience);
@@ -101,7 +103,8 @@ export default class ExperiencesController {
       min_duration,
       min_price,
       name,
-      parental_rating
+      parental_rating,
+      categories
     } = request.body;
 
     const listAllAvailableExperiences = container.resolve(ListAllAvailableExperiencesService);
@@ -114,7 +117,8 @@ export default class ExperiencesController {
       min_duration,
       min_price,
       name,
-      parental_rating
+      parental_rating,
+      categories
     });
 
     return response.json(result);
