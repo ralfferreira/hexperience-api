@@ -18,13 +18,11 @@ export default class HostsController {
 
   public async index(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
-    const { nickname } = request.body;
 
     const listAllAvailableHosts = container.resolve(ListAllAvailableHostsService);
 
     const hosts = await listAllAvailableHosts.execute({
-      user_id: userId,
-      nickname,
+      user_id: userId
     });
 
     return response.json(hosts);

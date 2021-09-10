@@ -10,12 +10,13 @@ import IUsersRepository from "../repositories/IUsersRepository";
 import { typeEnum } from "../infra/typeorm/entities/User";
 import ISearchForHostsDTO from "../dtos/ISearchForHostsDTO";
 
-interface IRequest {
+interface IRequest extends ISearchForHostsDTO {
   user_id: number;
+  nickname?: string;
 }
 
 @injectable()
-class ListAllAvailableHostsService {
+class SearchForHostsService {
   constructor (
     @inject('HostsRepository')
     private hostsRepository: IHostsRepository,
@@ -24,7 +25,7 @@ class ListAllAvailableHostsService {
     private usersRepository: IUsersRepository
   ) {}
 
-  public async execute({ user_id }: IRequest): Promise<Host[]> {
+  public async execute({ user_id, nickname }: IRequest): Promise<Host[]> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -37,10 +38,14 @@ class ListAllAvailableHostsService {
       options.user_id = user.id;
     }
 
+    Object.assign(options, {
+      nickname
+    } as ISearchForHostsDTO);
+
     let hosts = await this.hostsRepository.findAll(options);
 
     return hosts;
   }
 }
 
-export default ListAllAvailableHostsService;
+export default SearchForHostsService;

@@ -3,13 +3,12 @@ import { isAfter } from "date-fns";
 import { classToClass } from "class-transformer";
 
 import Experience from "../infra/typeorm/entities/Experience";
-
 import IExperiencesRepository from "../repositories/IExperiencesRepository";
 import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 
 import ISearchForExperienceDTO from "../dtos/ISearchForExperienceDTO";
 
-interface IRequest {
+interface IRequest extends ISearchForExperienceDTO {
   user_id: number;
 }
 
@@ -19,7 +18,7 @@ interface IResponse {
 }
 
 @injectable()
-class ListAllAvailableExperiencesService {
+class SearchForExperiencesService {
   constructor (
     @inject('ExperiencesRepository')
     private experiencesRepository: IExperiencesRepository,
@@ -28,7 +27,17 @@ class ListAllAvailableExperiencesService {
     private hostsRepository: IHostsRepository,
   ) {}
 
-  public async execute({ user_id }: IRequest): Promise<IResponse[]> {
+  public async execute({
+    user_id,
+    name,
+    is_online,
+    max_duration,
+    max_price,
+    min_duration,
+    min_price,
+    parental_rating,
+    categories
+  }: IRequest): Promise<IResponse[]> {
     const host = await this.hostsRepository.findByUserId(user_id);
 
     const options = {} as ISearchForExperienceDTO;
@@ -36,6 +45,17 @@ class ListAllAvailableExperiencesService {
     if (host) {
       options.host_id = host.id;
     }
+
+    Object.assign(options, {
+      is_online,
+      max_duration,
+      max_price,
+      min_duration,
+      min_price,
+      parental_rating,
+      name,
+      categories
+    } as ISearchForExperienceDTO)
 
     let experiences = await this.experiencesRepository.findAllAvailable(options);
 
@@ -71,4 +91,4 @@ class ListAllAvailableExperiencesService {
   }
 }
 
-export default ListAllAvailableExperiencesService;
+export default SearchForExperiencesService;

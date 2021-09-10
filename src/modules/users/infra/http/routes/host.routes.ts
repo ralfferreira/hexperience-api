@@ -5,10 +5,12 @@ import ensureAuthenticated from '../middleware/ensureAuthenticated';
 
 import HostsController from '../controllers/HostsController';
 import HostRequestController from '../controllers/HostRequestController';
+import SearchForHostsController from '../controllers/SearchForHostsController';
 
 const hostRouter = Router();
 const hostRequestController = new HostRequestController();
 const hostsController = new HostsController();
+const searchForHostsController = new SearchForHostsController();
 
 hostRouter.post(
   '/request-privilege',
@@ -37,12 +39,18 @@ hostRouter.put(
 hostRouter.get(
   '/',
   ensureAuthenticated,
+  hostsController.index
+);
+
+hostRouter.get(
+  '/search',
+  ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
       nickname: Joi.string().optional()
     }
   }),
-  hostsController.index
-)
+  searchForHostsController.index
+);
 
 export default hostRouter;

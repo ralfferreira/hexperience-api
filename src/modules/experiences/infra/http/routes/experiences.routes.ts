@@ -1,14 +1,17 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import ExperiencesController from '@modules/experiences/infra/http/controllers/ExperiencesController';
-
 import ensureHostPrivilege from '../middlewares/ensureHostPrivilege';
-import schedulesRouter from './schedules.routes';
 import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuthenticated';
+
+import ExperiencesController from '@modules/experiences/infra/http/controllers/ExperiencesController';
+import SearchForExperiencesController from '../controllers/SearchForExperiencesController';
+
+import schedulesRouter from './schedules.routes';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
+const searchForExperiencesController = new SearchForExperiencesController();
 
 experiencesRouter.post(
   '/',
@@ -63,6 +66,12 @@ experiencesRouter.put(
 experiencesRouter.get(
   '/',
   ensureAuthenticated,
+  experiencesController.index
+)
+
+experiencesRouter.get(
+  '/search',
+  ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().optional(),
@@ -78,7 +87,7 @@ experiencesRouter.get(
         ).optional(),
     }
   }),
-  experiencesController.index
+  searchForExperiencesController.index
 )
 
 experiencesRouter.use('/schedules', schedulesRouter)
