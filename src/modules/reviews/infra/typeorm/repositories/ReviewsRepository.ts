@@ -56,6 +56,7 @@ class ReviewsRepository implements IReviewsRepository {
 
   public async findById(id: number): Promise<Review | undefined> {
     const review = await this.ormRepository.findOne({
+      relations: ['user', 'experience', 'host'],
       where: {
         id: id
       }

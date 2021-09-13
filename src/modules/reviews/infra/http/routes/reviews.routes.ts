@@ -22,4 +22,16 @@ reviewsRouter.post(
   reviewsController.create
 );
 
+reviewsRouter.put(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      comment: Joi.string().required(),
+      rating: Joi.number().integer().min(1).required(),
+      review_id: Joi.number().integer().required()
+    }
+  }),
+  reviewsController.update
+);
+
 export default reviewsRouter;
