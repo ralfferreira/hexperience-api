@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import ReportExperienceService from '@modules/reviews/services/ReportExperienceService';
+import ResolveReportService from '@modules/admin/services/ResolveReportService';
 
 export default class ReportsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -18,5 +19,15 @@ export default class ReportsController {
     });
 
     return response.json(report);
+  }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    const { report_id } = request.params;
+
+    const resolveReport = container.resolve(ResolveReportService);
+
+    const resolvedReport = await resolveReport.execute(Number(report_id));
+
+    return response.json(resolvedReport);
   }
 }

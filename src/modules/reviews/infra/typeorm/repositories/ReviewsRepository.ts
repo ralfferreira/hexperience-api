@@ -53,6 +53,20 @@ class ReviewsRepository implements IReviewsRepository {
 
     return report;
   }
+
+  public async findById(id: number): Promise<Review | undefined> {
+    const review = await this.ormRepository.findOne({
+      where: {
+        id: id
+      }
+    });
+
+    return review;
+  }
+
+  public async update(review: Review): Promise<Review> {
+    return this.ormRepository.save(review);
+  }
 }
 
 export default ReviewsRepository;
