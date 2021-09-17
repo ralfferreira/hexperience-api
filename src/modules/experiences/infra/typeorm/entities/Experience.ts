@@ -14,6 +14,7 @@ import Host from '../../../../users/infra/typeorm/entities/Host';
 import Schedule from './Schedule'
 import Review from '../../../../reviews/infra/typeorm/entities/Review';
 import Category from './Category';
+import ExpPhoto from './ExpPhoto';
 
 @Entity('Experience')
 class Experience {
@@ -71,6 +72,9 @@ class Experience {
 
   @OneToMany(() => Review, review => review.experience)
   reviews: Review[];
+
+  @OneToMany(() => ExpPhoto, photo => photo.experience)
+  photos: ExpPhoto[];
 
   @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
