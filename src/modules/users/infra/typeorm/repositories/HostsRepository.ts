@@ -70,7 +70,7 @@ class HostsRepository implements IHostsRepository {
   public async findAll({ nickname, user_id }: ISearchForHostsDTO): Promise<Host[]> {
     const query = await this.ormRepository.createQueryBuilder('h')
       .leftJoinAndSelect('h.user', 'u')
-      .where('u.is_blocked = :isBlocked', { isBlocked: false })
+      .where('u.status = :isOkay', { isOkay: 'ok' })
 
     if (nickname) {
       await query.andWhere('h.nickname LIKE :findNickname', { findNickname: `%${nickname}%` });

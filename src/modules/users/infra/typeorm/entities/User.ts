@@ -16,6 +16,12 @@ export enum typeEnum {
   admin = 'admin'
 }
 
+export enum statusEnum {
+  ok = 'ok',
+  analyzing = 'analyzing',
+  blocked = 'blocked'
+}
+
 @Entity('User')
 class User {
   @PrimaryGeneratedColumn('increment')
@@ -40,8 +46,12 @@ class User {
   @Column()
   bio: string;
 
-  @Column({ type: 'boolean' })
-  is_blocked: boolean;
+  @Column({
+    type: 'enum',
+    enum: statusEnum,
+    default: statusEnum.ok
+  })
+  status: statusEnum;
 
   @Column({
     type: 'enum',

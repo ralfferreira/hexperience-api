@@ -4,7 +4,7 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import User, { typeEnum } from '../infra/typeorm/entities/User';
+import User, { statusEnum, typeEnum } from '../infra/typeorm/entities/User';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
@@ -41,7 +41,7 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
-    if (user.is_blocked) {
+    if (user.status === statusEnum.blocked) {
       throw new AppError('User is blocked, so it can not authenticate');
     }
 
