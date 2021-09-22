@@ -1,11 +1,11 @@
 import { getRepository, Repository } from "typeorm";
 
-import IExpPhotoRepository from "@modules/experiences/repositories/IExpPhotoRepository";
+import IExpPhotosRepository from "@modules/experiences/repositories/IExpPhotosRepository";
 import ICreateExpPhotoDTO from "@modules/experiences/dtos/ICreateExpPhotoDTO";
 
 import ExpPhoto from "../entities/ExpPhoto";
 
-class ExpPhotoRepository implements IExpPhotoRepository {
+class ExpPhotosRepository implements IExpPhotosRepository {
   private ormRepository: Repository<ExpPhoto>;
 
   constructor () {
@@ -40,6 +40,21 @@ class ExpPhotoRepository implements IExpPhotoRepository {
   public async update(photo: ExpPhoto): Promise<ExpPhoto> {
     return this.ormRepository.save(photo);
   }
+
+  public async findById(id: number): Promise<ExpPhoto | undefined> {
+    const photo = await this.ormRepository.findOne({
+      relations: ['experience'],
+      where: {
+        id: id
+      }
+    });
+
+    return photo;
+  }
+
+  public async delete(photo: ExpPhoto): Promise<void> {
+    await this.ormRepository.remove(photo);
+  }
 }
 
-export default ExpPhotoRepository
+export default ExpPhotosRepository

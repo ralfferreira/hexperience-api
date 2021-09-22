@@ -9,6 +9,9 @@ import SchedulesRepository from '@modules/experiences/infra/typeorm/repositories
 import ICategoriesRepository from '@modules/experiences/repositories/ICategoriesRepository';
 import CategoriesRepository from '@modules/experiences/infra/typeorm/repositories/CategoriesRepository';
 
+import IExpPhotosRepository from "@modules/experiences/repositories/IExpPhotosRepository";
+import ExpPhotosRepository from "../typeorm/repositories/ExpPhotosRepository";
+
 container.registerSingleton<IExperiencesRepository>(
   'ExperiencesRepository',
   ExperiencesRepository
@@ -22,4 +25,9 @@ container.registerSingleton<ISchedulesRepository>(
 container.registerSingleton<ICategoriesRepository>(
   'CategoriesRepository',
   CategoriesRepository
+);
+
+container.registerSingleton<IExpPhotosRepository>(
+  'ExpPhotosRepository',
+  ExpPhotosRepository
 );

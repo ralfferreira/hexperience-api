@@ -1,17 +1,24 @@
 import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
+import multer from "multer";
+
+import uploadConfig from "@config/upload";
 
 import ensureHostPrivilege from '../middlewares/ensureHostPrivilege';
 import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuthenticated';
 
 import ExperiencesController from '@modules/experiences/infra/http/controllers/ExperiencesController';
 import SearchForExperiencesController from '../controllers/SearchForExperiencesController';
+import ExpPhotosController from "../controllers/ExpPhotosController";
 
 import schedulesRouter from './schedules.routes';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
 const searchForExperiencesController = new SearchForExperiencesController();
+const expPhotosController = new ExpPhotosController();
+
+const upload = multer(uploadConfig.multer);
 
 experiencesRouter.post(
   '/',
@@ -88,6 +95,26 @@ experiencesRouter.get(
     }
   }),
   searchForExperiencesController.index
+);
+
+experiencesRouter.post(
+  '/:exp_id/photos',
+  ensureHostPrivilege,
+  upload.single('photo'),
+  expPhotosController.create
+);
+
+experiencesRouter.put(
+  '/:exp_id/photos/:photo_id',
+  ensureHostPrivilege,
+  upload.single('photo'),
+  expPhotosController.update
+);
+
+experiencesRouter.delete(
+  '/:exp_id/photos/:photo_id',
+  ensureHostPrivilege,
+  expPhotosController.delete
 )
 
 experiencesRouter.use('/schedules', schedulesRouter)

@@ -51,7 +51,7 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findById(id: number): Promise<Experience | undefined> {
     const experience = await this.ormRepository.findOne({
-      relations: ['host', 'schedules', 'reviews', 'category'],
+      relations: ['host', 'schedules', 'reviews', 'category', 'photos'],
       where: {
         id: id
       }
@@ -80,6 +80,7 @@ class ExperiencesRepository implements IExperiencesRepository {
       .leftJoinAndSelect('e.schedules', 's')
       .leftJoinAndSelect('e.reviews', 'r')
       .leftJoinAndSelect('e.category', 'c')
+      .leftJoinAndSelect('e.photos', 'p')
       .where('e.is_blocked = :isNotBlocked', { isNotBlocked: false })
       .andWhere('s.exp_id IS NOT NULL');
 
