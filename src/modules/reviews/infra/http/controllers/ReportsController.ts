@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 
 import ReportExperienceService from '@modules/reviews/services/ReportExperienceService';
 import ResolveReportService from '@modules/admin/services/ResolveReportService';
+import ManageReportsService from '@modules/admin/services/ManageReportsService';
 
 export default class ReportsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -10,12 +11,18 @@ export default class ReportsController {
     const { comment, reason, exp_id } = request.body;
 
     const reportExperience = container.resolve(ReportExperienceService);
+    const manageReports = container.resolve(ManageReportsService);
 
     const report = await reportExperience.execute({
       comment,
       reason,
       exp_id,
       user_id: userId
+    });
+
+    await manageReports.execute({
+      reported_id: exp_id,
+      type: 'exp'
     });
 
     return response.json(report);

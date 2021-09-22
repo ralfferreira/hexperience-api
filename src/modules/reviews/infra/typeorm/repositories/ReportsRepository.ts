@@ -43,6 +43,32 @@ class ReportsRepository implements IReportsRepository {
     return report;
   }
 
+  public async findAllByHostId(host_id: number): Promise<Report[]> {
+    const reports = await this.ormRepository.find({
+      relations: ['experience', 'host'],
+      where: {
+        host: {
+          id: host_id
+        }
+      }
+    });
+
+    return reports;
+  }
+
+  public async findAllByExperienceId(exp_id: number): Promise<Report[]> {
+    const reports = await this.ormRepository.find({
+      relations: ['experience', 'host'],
+      where: {
+        experience: {
+          id: exp_id
+        }
+      }
+    });
+
+    return reports;
+  }
+
   public async update(report: Report): Promise<Report> {
     return this.ormRepository.save(report);
   }

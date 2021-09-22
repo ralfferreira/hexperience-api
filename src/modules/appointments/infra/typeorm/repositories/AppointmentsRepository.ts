@@ -85,6 +85,23 @@ class AppointmentsRepository implements IAppointmentsRepository {
     return appointments;
   }
 
+  public async findByHostId(host_id: number): Promise<Appointment[]> {
+    const appointments = await this.ormRepository.find({
+      relations: ['user', 'schedule', 'schedule.experience', 'schedule.experience.host'],
+      where: {
+        schedule: {
+          experience: {
+            host: {
+              id: host_id
+            }
+          }
+        }
+      }
+    });
+
+    return appointments;
+  }
+
   public async delete(id: number): Promise<void> {
     await this.ormRepository.delete({
       id: id

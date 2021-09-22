@@ -23,6 +23,19 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
+  public async findByHostId(host_id: number): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({
+      relations: ['host'],
+      where: {
+        host: {
+          id: host_id
+        }
+      }
+    });
+
+    return user;
+  }
+
   public async findByEmail(email: string): Promise<User | undefined> {
     const user = await this.ormRepository.findOne({
       relations: ['host'],
