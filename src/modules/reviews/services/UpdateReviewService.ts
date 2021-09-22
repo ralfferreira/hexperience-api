@@ -36,10 +36,6 @@ class UpdateReviewService {
       throw new AppError('Review does not exists');
     }
 
-    if (review.is_complaint) {
-      throw new AppError('Review does not exists');
-    }
-
     if (review.user.id !== user.id) {
       throw new AppError('User can not update an review that he did not make');
     }

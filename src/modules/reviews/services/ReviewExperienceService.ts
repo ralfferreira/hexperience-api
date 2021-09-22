@@ -61,7 +61,7 @@ class ReviewExperienceService {
       throw new AppError('User can not review an experience that he never scheduled');
     }
 
-    const review = await this.reviewsRepository.createReview({
+    const review = await this.reviewsRepository.create({
       comment,
       rating,
       user: user,

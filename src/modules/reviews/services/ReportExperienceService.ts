@@ -6,8 +6,8 @@ import IExperiencesRepository from "@modules/experiences/repositories/IExperienc
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 
-import Review from "../infra/typeorm/entities/Review";
-import IReviewsRepository from "../repositories/IReviewsRepository";
+import Report from "../infra/typeorm/entities/Report";
+import IReportsRepository from "../repositories/IReportsRepository";
 
 interface IRequest {
   comment: string;
@@ -25,14 +25,14 @@ class ReportExperienceService {
     @inject('ExperiencesRepository')
     private experiencesRepository: IExperiencesRepository,
 
-    @inject('ReviewsRepository')
-    private reviewsRepository: IReviewsRepository,
+    @inject('ReportsRepository')
+    private reportsRepository: IReportsRepository,
 
     @inject('NotificationsRepository')
     private notificationsRepository: INotificationsRepository
   ) {}
 
-  public async execute({ comment, reason, user_id, exp_id }: IRequest): Promise<Review> {
+  public async execute({ comment, reason, user_id, exp_id }: IRequest): Promise<Report> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -45,7 +45,7 @@ class ReportExperienceService {
       throw new AppError('Experience does not exists');
     }
 
-    const report = await this.reviewsRepository.createReport({
+    const report = await this.reportsRepository.create({
       comment,
       reason,
       host: experience.host,

@@ -1,19 +1,18 @@
 import {
+  Entity,
+  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
 
-import User from "../../../../users/infra/typeorm/entities/User";
 import Host from "../../../../users/infra/typeorm/entities/Host";
 import Experience from "../../../../experiences/infra/typeorm/entities/Experience";
 
-@Entity('Review')
-class Review {
+@Entity('Report')
+class Report {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
@@ -21,17 +20,16 @@ class Review {
   comment: string;
 
   @Column()
-  rating: number
+  reason: string;
+
+  @Column({ type: 'boolean', default: false })
+  is_resolved: boolean;
 
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
 
   @ManyToOne(() => Host)
   @JoinColumn({ name: 'host_id' })
@@ -42,4 +40,4 @@ class Review {
   experience: Experience;
 }
 
-export default Review;
+export default Report;

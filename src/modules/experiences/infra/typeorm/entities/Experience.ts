@@ -11,8 +11,9 @@ import {
 import { Expose } from 'class-transformer';
 
 import Host from '../../../../users/infra/typeorm/entities/Host';
-import Schedule from './Schedule'
 import Review from '../../../../reviews/infra/typeorm/entities/Review';
+import Report from '../../../../reviews/infra/typeorm/entities/Report';
+import Schedule from './Schedule'
 import Category from './Category';
 import ExpPhoto from './ExpPhoto';
 
@@ -73,6 +74,9 @@ class Experience {
   @OneToMany(() => Review, review => review.experience)
   reviews: Review[];
 
+  @OneToMany(() => Report, report => report.experience)
+  reports: Report[];
+
   @OneToMany(() => ExpPhoto, photo => photo.experience)
   photos: ExpPhoto[];
 
@@ -89,10 +93,8 @@ class Experience {
       let nReviews = 0;
 
       for (const review of this.reviews) {
-        if (!review.is_complaint) {
-          nReviews++;
-          score += review.rating;
-        }
+        nReviews++;
+        score += review.rating;
       }
 
       rating = score / nReviews;

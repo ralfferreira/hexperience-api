@@ -1,4 +1,4 @@
-import { getRepository, Like, Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 
 import Experience from "../entities/Experience";
 
@@ -51,7 +51,7 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findById(id: number): Promise<Experience | undefined> {
     const experience = await this.ormRepository.findOne({
-      relations: ['host', 'schedules', 'reviews', 'category', 'photos'],
+      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
       where: {
         id: id
       }
@@ -78,7 +78,8 @@ class ExperiencesRepository implements IExperiencesRepository {
     const query = await this.ormRepository.createQueryBuilder('e')
       .leftJoinAndSelect('e.host', 'h')
       .leftJoinAndSelect('e.schedules', 's')
-      .leftJoinAndSelect('e.reviews', 'r')
+      .leftJoinAndSelect('e.reviews', 'rw')
+      .leftJoinAndSelect('e.reports', 'rp')
       .leftJoinAndSelect('e.category', 'c')
       .leftJoinAndSelect('e.photos', 'p')
       .where('e.is_blocked = :isNotBlocked', { isNotBlocked: false })

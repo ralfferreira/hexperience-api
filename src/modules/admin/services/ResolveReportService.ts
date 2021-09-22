@@ -2,25 +2,21 @@ import { inject, injectable } from "tsyringe";
 
 import AppError from "@shared/errors/AppError";
 
-import Review from "@modules/reviews/infra/typeorm/entities/Review";
+import Report from "@modules/reviews/infra/typeorm/entities/Report";
 
-import IReviewsRepository from "@modules/reviews/repositories/IReviewsRepository";
+import IReportsRepository from "@modules/reviews/repositories/IReportsRepository";
 
 @injectable()
 class ResolveReportService {
   constructor (
-    @inject('ReviewsRepository')
-    private reviewsRepository: IReviewsRepository
+    @inject('ReportsRepository')
+    private reportsRepository: IReportsRepository
   ) {}
 
-  public async execute(id: number): Promise<Review> {
-    const report = await this.reviewsRepository.findById(id);
+  public async execute(id: number): Promise<Report> {
+    const report = await this.reportsRepository.findById(id);
 
     if (!report) {
-      throw new AppError('Report does not exists');
-    }
-
-    if (!report.is_complaint) {
       throw new AppError('Report does not exists');
     }
 
@@ -30,7 +26,7 @@ class ResolveReportService {
 
     report.is_resolved = true;
 
-    const resolvedReport = await this.reviewsRepository.update(report);
+    const resolvedReport = await this.reportsRepository.update(report);
 
     return resolvedReport;
   }
