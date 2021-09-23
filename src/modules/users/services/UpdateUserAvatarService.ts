@@ -2,7 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import User from '../infra/typeorm/entities/User';
+import User, { statusEnum } from '../infra/typeorm/entities/User';
 
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
@@ -27,6 +27,10 @@ class UpdateUserAvatarService {
 
     if (!user) {
       throw new AppError('Only authenticated users can change avatars.', 401);
+    }
+
+    if (user.status === statusEnum.blocked) {
+      throw new AppError('User is blocked');
     }
 
     if (user.avatar) {

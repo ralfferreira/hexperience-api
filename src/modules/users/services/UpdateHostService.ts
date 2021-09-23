@@ -2,6 +2,7 @@ import AppError from "@shared/errors/AppError";
 import { inject, injectable } from "tsyringe";
 
 import Host from "../infra/typeorm/entities/Host";
+import { statusEnum } from "../infra/typeorm/entities/User";
 import IHostRequestsRepository from "../repositories/IHostRequestsRepository";
 
 import IHostsRepository from "../repositories/IHostsRepository";
@@ -26,6 +27,10 @@ class UpdateHostService {
 
     if (!host) {
       throw new AppError('Host does not exists');
+    }
+
+    if (host.user.status === statusEnum.blocked) {
+      throw new AppError('Host is blocked');
     }
 
     const checkIfNicknameIsBeingUsed = await this.hostsRepository.findByNickname(nickname);

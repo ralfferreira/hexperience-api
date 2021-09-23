@@ -4,7 +4,7 @@ import AppError from '@shared/errors/AppError';
 
 import { HostRequests as HostRequestsType } from '../infra/mongoose/schemas/HostRequests';
 
-import { typeEnum } from '../infra/typeorm/entities/User';
+import { statusEnum, typeEnum } from '../infra/typeorm/entities/User';
 
 import ICreateHostRequestDTO from '../dtos/ICreateHostRequestDTO';
 import IHostRequestsRepository from '../repositories/IHostRequestsRepository';
@@ -39,6 +39,10 @@ class RequestHostPrivilegeService {
 
     if (checkIfAlreadyIsHost?.type === typeEnum.host) {
       throw new AppError('User is already a Host');
+    }
+
+    if (checkIfAlreadyIsHost?.status !== statusEnum.ok) {
+      throw new AppError('Only users that are not under analysis or blocked can request host privilege');
     }
 
     const checkNickname = await this.hostRequestsRepository.findByNickname(data.nickname);

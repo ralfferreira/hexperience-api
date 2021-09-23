@@ -5,7 +5,7 @@ import AppError from "@shared/errors/AppError";
 import IReportsRepository from "@modules/reviews/repositories/IReportsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IExperiencesRepository from "@modules/experiences/repositories/IExperiencesRepository";
-import IAdminConfigureRepository from "../repositories/IAdminConfigureRepository";
+import IAdminConfigureRepository from "@modules/admin/repositories/IAdminConfigureRepository";
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 

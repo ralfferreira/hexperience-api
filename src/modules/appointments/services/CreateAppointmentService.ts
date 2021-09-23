@@ -10,6 +10,7 @@ import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
+import { statusEnum } from "@modules/users/infra/typeorm/entities/User";
 
 interface IRequest {
   guests: number;
@@ -57,6 +58,10 @@ class CreateAppointmentService {
 
     if (!user) {
       throw new AppError('User does not exists');
+    }
+
+    if (user.status === statusEnum.blocked) {
+      throw new AppError('Blocked users can not make appointments');
     }
 
     const host = await this.hotstsRepository.findById(schedule.experience.host.id);

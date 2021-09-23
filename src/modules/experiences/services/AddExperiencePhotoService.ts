@@ -41,13 +41,17 @@ class AddExperiencePhotoService {
     }
 
     if (user.type !== typeEnum.host) {
-      throw new AppError('User is not a host');
+      throw new AppError('User is not authorized to do this action');
     }
 
     const experience = await this.experiencesRepository.findById(experience_id);
 
     if (!experience) {
       throw new AppError('Experience does not exists');
+    }
+
+    if (experience.is_blocked) {
+      throw new AppError('Experience is blocked')
     }
 
     if (experience.host.id !== user.host.id) {

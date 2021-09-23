@@ -7,6 +7,7 @@ import IHostsRepository from '@modules/users/repositories/IHostsRepository';
 import ICategoriesRepository from '../repositories/ICategoriesRepository';
 
 import Experience from '../infra/typeorm/entities/Experience';
+import { statusEnum } from '@modules/users/infra/typeorm/entities/User';
 
 interface IRequest {
   name: string;
@@ -56,6 +57,10 @@ class CreateExperienceService {
 
     if (!host) {
       throw new AppError('Host does not exists');
+    }
+
+    if (host.user.status !== statusEnum.ok) {
+      throw new AppError('Only hosts that are not under analysis or blocked can do this action');
     }
 
     const category = await this.categoriesRepository.findById(category_id);
