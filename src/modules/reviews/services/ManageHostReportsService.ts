@@ -8,6 +8,7 @@ import IReportsRepository from "../repositories/IReportsRepository";
 import IAdminConfigureRepository from "@modules/admin/repositories/IAdminConfigureRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
+import isAfter from "date-fns/isAfter";
 
 @injectable()
 class ManageHostReportsService {
@@ -86,9 +87,15 @@ class ManageHostReportsService {
       receiver_id: host.id
     })
 
-    const allHostAppointments = await this.appointmentsRepository.findByHostId(host.host.id);
+    const allAppointments = await this.appointmentsRepository.findByHostId(host.host.id);
 
-    for (const appointment of allHostAppointments) {
+    const allFutureAppointments = allAppointments.filter(a => {
+      if (isAfter(a.schedule.date, new Date())) {
+        return a;
+      }
+    })
+
+    for (const appointment of allFutureAppointments) {
       await this.notificationsRepository.create({
         title: 'Anfitrião em análise',
         message:

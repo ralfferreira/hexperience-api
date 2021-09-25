@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { format } from "date-fns";
+import { format, isAfter } from "date-fns";
 
 import AppError from "@shared/errors/AppError";
 
@@ -38,7 +38,13 @@ class ManageBlockedUserService {
 
     const allUserAppointments = await this.appointmentsRepository.findByUserId(user.id);
 
-    for (const userAppointment of allUserAppointments) {
+    const allFutureUserAppointments = allUserAppointments.filter(a => {
+      if (isAfter(a.schedule.date, new Date())) {
+        return a;
+      }
+    })
+
+    for (const userAppointment of allFutureUserAppointments) {
       const experience = await this.experiencesRepository.findById(userAppointment.schedule.experience.id);
 
       if (!experience) {
@@ -75,7 +81,13 @@ class ManageBlockedUserService {
 
       const allAppointments = await this.appointmentsRepository.findByExperienceId(experience.id);
 
-      for (const appointment of allAppointments) {
+      const allFutureAppointments = allAppointments.filter(a => {
+        if (isAfter(a.schedule.date, new Date())) {
+          return a;
+        }
+      })
+
+      for (const appointment of allFutureAppointments) {
         await this.appointmentsRepository.delete(appointment.id);
 
         await this.notificationsRepository.create({

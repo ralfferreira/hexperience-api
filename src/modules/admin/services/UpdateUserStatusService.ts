@@ -11,6 +11,7 @@ import INotificationsRepository from "@modules/notifications/repositories/INotif
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
 import IMailProvider from "@shared/container/providers/MailProvider/models/IMailProvider";
 import IAdminConfigureRepository from "../repositories/IAdminConfigureRepository";
+import isAfter from "date-fns/isAfter";
 
 interface IRequest {
   user_id: number;
@@ -76,9 +77,15 @@ class UpdateUserStatusService {
         });
 
         if (user.type === typeEnum.host) {
-          const allHostAppointments = await this.appointmentsRepository.findByHostId(user.host.id);
+          const allAppointments = await this.appointmentsRepository.findByHostId(user.host.id);
 
-          for (const appointment of allHostAppointments) {
+          const allFutureAppointments = allAppointments.filter(a => {
+            if (isAfter(a.schedule.date, new Date())) {
+              return a;
+            }
+          })
+
+          for (const appointment of allFutureAppointments) {
             await this.notificationsRepository.create({
               title: 'Anfitrião em análise',
               message:

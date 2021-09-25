@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { format } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 
 import AppError from "@shared/errors/AppError";
 
@@ -52,6 +52,10 @@ class CreateAppointmentService {
 
     if (schedule.experience.is_blocked) {
       throw new AppError('Blocked experiences can not receive new appointments')
+    }
+
+    if (isBefore(schedule.date, new Date())) {
+      throw new AppError('You can not make an appointment in past date');
     }
 
     const user = await this.usersRepository.findById(user_id);

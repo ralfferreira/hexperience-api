@@ -7,6 +7,7 @@ import IExperiencesRepository from "@modules/experiences/repositories/IExperienc
 import IAdminConfigureRepository from "@modules/admin/repositories/IAdminConfigureRepository";
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
+import isAfter from "date-fns/isAfter";
 
 @injectable()
 class ManageExperienceReportsService {
@@ -89,7 +90,13 @@ class ManageExperienceReportsService {
 
     const appointments = await this.appointmentsRepository.findByExperienceId(experience.id);
 
-    for (const appointment of appointments) {
+    const futureAppointments = appointments.filter(a => {
+      if (isAfter(a.schedule.date, new Date())) {
+        return a;
+      }
+    })
+
+    for (const appointment of futureAppointments) {
       await this.notificationsRepository.create({
         title: 'Experiência agendada foi bloqueada',
         message:

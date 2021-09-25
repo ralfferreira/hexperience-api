@@ -8,6 +8,7 @@ import IReviewsRepository from "../repositories/IReviewsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IExperiencesRepository from "@modules/experiences/repositories/IExperiencesRepository";
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
+import { isBefore } from "date-fns";
 
 interface IRequest {
   comment: string;
@@ -52,7 +53,10 @@ class ReviewExperienceService {
     }
 
     const filteredUserAppointments = userAppointments.filter(appointment => {
-      if (appointment.schedule.experience.id === experience.id) {
+      if (
+        appointment.schedule.experience.id === experience.id &&
+        isBefore(appointment.schedule.date, new Date())
+      ) {
         return appointment;
       }
     });
