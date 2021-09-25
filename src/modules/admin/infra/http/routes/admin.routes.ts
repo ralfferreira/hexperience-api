@@ -2,12 +2,13 @@ import { Router } from "express";
 import { celebrate, Segments, Joi } from "celebrate";
 
 import DecideHostRequestController from "../controllers/DecideHostRequestController";
+import ResolveReportsController from "../controllers/ResolveReportsController";
+
 import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
-import ReportsController from "@modules/reviews/infra/http/controllers/ReportsController";
 
 const adminRouter = Router();
 const decideHostRequestController = new DecideHostRequestController();
-const reportsController = new ReportsController();
+const resolveReportsController = new ResolveReportsController();
 
 adminRouter.use(ensureAdminAuthenticated)
 
@@ -34,7 +35,7 @@ adminRouter.delete(
 
 adminRouter.put(
   '/resolve-report/:report_id',
-  reportsController.update
+  resolveReportsController.update
 )
 
 export default adminRouter;

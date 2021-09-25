@@ -62,6 +62,12 @@ class CancelAppointmentService {
 
     await this.schedulesRepository.update(schedule);
 
+    const receiver = await this.usersRepository.findByHostId(schedule.experience.host.id);
+
+    if (!receiver) {
+      throw new AppError('Host does not exists');
+    }
+
     await this.appointmentsRepository.delete(appointment.id);
 
     await this.notificationsRepository.create({
@@ -69,7 +75,7 @@ class CancelAppointmentService {
       message:
         `Um agendamento na sua experiência "${appointment.schedule.experience.name}", ` +
         `no dia ${formattedDate}, foi cancelado.`,
-      receiver_id: schedule.experience.host.id,
+      receiver_id: receiver.id,
       appointment_id: appointment.id,
       exp_id: schedule.experience.id,
       host_id: schedule.experience.host.id,

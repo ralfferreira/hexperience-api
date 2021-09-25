@@ -24,8 +24,11 @@ class ReportsRepository implements IReportsRepository {
       reason
     });
 
-    report.experience = experience;
-    report.host = host
+    report.host = host;
+
+    if (experience) {
+      report.experience = experience;
+    }
 
     await this.ormRepository.save(report);
 

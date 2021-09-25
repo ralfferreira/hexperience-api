@@ -99,7 +99,7 @@ class CreateAppointmentService {
       message:
         `Um novo agendamento foi feito na experiência: "${schedule.experience.name}". ` +
         `O agendamento foi marcado para ${formattedDate}.`,
-      receiver_id: host.id,
+      receiver_id: host.user.id,
       appointment_id: appointment.id,
       exp_id: schedule.experience.id,
       schedule_id: schedule.id

@@ -61,6 +61,8 @@ class ReportExperienceService {
           `A experiência ${experience.name} do anfitrião ${experience.host.nickname} ` +
           `recebeu uma nova denúnica. Verifique a denúncia e avalie o caso.`,
         receiver_id: admin.id,
+        exp_id: experience.id,
+        host_id: experience.host.id
       });
     }
 
@@ -69,7 +71,7 @@ class ReportExperienceService {
       message:
         `Sua experiência ${experience.name} foi reportada. ` +
         `Verifique qual foi denúncia.`,
-      receiver_id: experience.host.id,
+      receiver_id: experience.host.user.id,
       exp_id: experience.id,
       host_id: experience.host.id
     })

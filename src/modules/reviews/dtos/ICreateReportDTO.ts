@@ -4,6 +4,6 @@ import Host from "@modules/users/infra/typeorm/entities/Host";
 export default interface ICreateReportDTO {
   comment: string;
   reason: string;
-  experience: Experience;
+  experience?: Experience;
   host: Host;
 }
