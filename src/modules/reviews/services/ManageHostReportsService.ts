@@ -79,7 +79,7 @@ class ManageHostReportsService {
     }
 
     await this.notificationsRepository.create({
-      title: 'Aviso de conduta suspeita',
+      title: 'Aviso de processo de análise',
       message:
         `Você foi colocado em análise por excesso de denúncias que recebeu. ` +
         `Verifique sua conduta.`,

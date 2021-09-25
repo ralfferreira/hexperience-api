@@ -53,13 +53,13 @@ class AuthenticateUserService {
         throw new AppError('AdminConfigure was not found');
       }
 
-      if (differenceInDays(user.updated_at, new Date()) >= adminConfigure.days_blocked) {
-        user.status = statusEnum.ok;
-
-        await this.usersRepository.update(user);
-      } else {
+      if (differenceInDays(user.updated_at, new Date()) < adminConfigure.days_blocked) {
         throw new AppError('User is blocked, so it can not authenticate');
       }
+
+      user.status = statusEnum.ok;
+
+      await this.usersRepository.update(user);
     }
 
     let hostId = 0;

@@ -125,6 +125,19 @@ class ExperiencesRepository implements IExperiencesRepository {
 
     return experiences;
   }
+
+  public async findByHostId(host_id: number): Promise<Experience[]> {
+    const experience = await this.ormRepository.find({
+      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
+      where: {
+        host: {
+          id: host_id
+        }
+      }
+    });
+
+    return experience;
+  }
 }
 
 export default ExperiencesRepository;
