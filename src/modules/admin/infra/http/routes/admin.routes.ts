@@ -4,6 +4,7 @@ import { celebrate, Segments, Joi } from "celebrate";
 import DecideHostRequestController from "../controllers/DecideHostRequestController";
 import ResolveReportsController from "../controllers/ResolveReportsController";
 import UserStatusController from "../controllers/UserStatusController";
+import BlockedExperiencesController from "../controllers/BlockedExperiencesController";
 
 import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
 
@@ -11,6 +12,7 @@ const adminRouter = Router();
 const decideHostRequestController = new DecideHostRequestController();
 const resolveReportsController = new ResolveReportsController();
 const userStatusController = new UserStatusController();
+const blockedExperiencesController = new BlockedExperiencesController();
 
 adminRouter.use(ensureAdminAuthenticated)
 
@@ -49,6 +51,16 @@ adminRouter.put(
     }
   }),
   userStatusController.update
-)
+);
+
+adminRouter.put(
+  '/blocked-experiences/',
+  celebrate({
+    [Segments.BODY]: {
+      exp_id: Joi.number().integer().min(1).required(),
+    }
+  }),
+  blockedExperiencesController.update
+);
 
 export default adminRouter;
