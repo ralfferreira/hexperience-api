@@ -11,6 +11,8 @@ import CategoriesRepository from '@modules/experiences/infra/typeorm/repositorie
 
 import IExpPhotosRepository from "@modules/experiences/repositories/IExpPhotosRepository";
 import ExpPhotosRepository from "../typeorm/repositories/ExpPhotosRepository";
+import IFavoritesRepository from "@modules/experiences/repositories/IFavoritesRepository";
+import FavoritesRepository from "../typeorm/repositories/FavoritesRepository";
 
 container.registerSingleton<IExperiencesRepository>(
   'ExperiencesRepository',
@@ -31,3 +33,8 @@ container.registerSingleton<IExpPhotosRepository>(
   'ExpPhotosRepository',
   ExpPhotosRepository
 );
+
+container.registerSingleton<IFavoritesRepository>(
+  'FavoritesRepository',
+  FavoritesRepository
+)

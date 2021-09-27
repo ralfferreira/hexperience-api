@@ -12,6 +12,7 @@ import SearchForExperiencesController from '../controllers/SearchForExperiencesC
 import ExpPhotosController from "../controllers/ExpPhotosController";
 
 import schedulesRouter from './schedules.routes';
+import favoritesRouter from './favorites.routes';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
@@ -118,5 +119,6 @@ experiencesRouter.delete(
 )
 
 experiencesRouter.use('/schedules', schedulesRouter)
+experiencesRouter.use('/favorites', favoritesRouter)
 
 export default experiencesRouter;
