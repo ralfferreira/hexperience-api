@@ -16,6 +16,7 @@ import Report from '../../../../reviews/infra/typeorm/entities/Report';
 import Schedule from './Schedule'
 import Category from './Category';
 import ExpPhoto from './ExpPhoto';
+import Favorite from './Favorite';
 
 @Entity('Experience')
 class Experience {
@@ -79,6 +80,9 @@ class Experience {
 
   @OneToMany(() => ExpPhoto, photo => photo.experience)
   photos: ExpPhoto[];
+
+  @OneToMany(() => Favorite, favorite => favorite.experience)
+  favorites: Favorite[];
 
   @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })

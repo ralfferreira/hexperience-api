@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 import Host from './Host';
+import Favorite from '../../../../experiences/infra/typeorm/entities/Favorite';
 
 export enum typeEnum {
   user = 'user',
@@ -68,6 +70,9 @@ class User {
 
   @OneToOne(type => Host, host => host.user)
   host: Host;
+
+  @OneToMany(() => Favorite, favorite => favorite.user)
+  favorites: Favorite[];
 }
 
 export default User;
