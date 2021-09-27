@@ -25,7 +25,7 @@ class FavoritesRepository implements IFavoritesRepository {
     return favorite;
   }
 
-  public async checkIfAlreadyIsFavorite(user_id: number, exp_id: number): Promise<Favorite | undefined> {
+  public async findOne(user_id: number, exp_id: number): Promise<Favorite | undefined> {
     const favorite = await this.ormRepository.findOne({
       relations: ['user', 'experience'],
       where: {
@@ -39,6 +39,10 @@ class FavoritesRepository implements IFavoritesRepository {
     });
 
     return favorite;
+  }
+
+  public async delete(favorite: Favorite): Promise<void> {
+    await this.ormRepository.remove(favorite);
   }
 }
 

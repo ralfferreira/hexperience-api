@@ -20,4 +20,10 @@ favoritesRouter.post(
   favoritesController.create
 );
 
+favoritesRouter.delete(
+  '/:exp_id',
+  ensureAuthenticated,
+  favoritesController.delete
+);
+
 export default favoritesRouter;
