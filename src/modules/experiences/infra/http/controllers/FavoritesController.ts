@@ -3,6 +3,7 @@ import { container } from "tsyringe";
 
 import AddExperienceToFavoritesService from "@modules/experiences/services/AddExperienceToFavoritesService";
 import RemoveExperienceFromFavorites from "@modules/experiences/services/RemoveExperienceFromFavorites";
+import UpdateFavoriteService from "@modules/experiences/services/UpdateFavoriteService";
 
 export default class FavoritesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -32,5 +33,21 @@ export default class FavoritesController {
     });
 
     return response.status(204).json({});
+  }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+    const { exp_id } = request.params;
+    const { folder } = request.body;
+
+    const updateFavorite = container.resolve(UpdateFavoriteService);
+
+    const favorite = await updateFavorite.execute({
+      folder,
+      exp_id: Number(exp_id),
+      user_id: userId
+    });
+
+    return response.json(favorite);
   }
 }

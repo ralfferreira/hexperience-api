@@ -26,4 +26,15 @@ favoritesRouter.delete(
   favoritesController.delete
 );
 
+favoritesRouter.put(
+  '/:exp_id',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      folder: Joi.string().optional()
+    }
+  }),
+  favoritesController.update
+);
+
 export default favoritesRouter;
