@@ -21,6 +21,8 @@ class AdminConfigureRepository implements IAdminConfigureRepository {
       reports_to_block
     });
 
+    await this.ormRepository.save(adminConfigure);
+
     return adminConfigure;
   }
 

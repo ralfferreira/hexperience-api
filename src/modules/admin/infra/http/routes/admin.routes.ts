@@ -5,6 +5,7 @@ import DecideHostRequestController from "../controllers/DecideHostRequestControl
 import ResolveReportsController from "../controllers/ResolveReportsController";
 import UserStatusController from "../controllers/UserStatusController";
 import BlockedExperiencesController from "../controllers/BlockedExperiencesController";
+import AdminConfigureController from "../controllers/AdminConfigureController";
 
 import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
 
@@ -13,6 +14,7 @@ const decideHostRequestController = new DecideHostRequestController();
 const resolveReportsController = new ResolveReportsController();
 const userStatusController = new UserStatusController();
 const blockedExperiencesController = new BlockedExperiencesController();
+const adminConfigureController = new AdminConfigureController();
 
 adminRouter.use(ensureAdminAuthenticated)
 
@@ -61,6 +63,17 @@ adminRouter.put(
     }
   }),
   blockedExperiencesController.update
+);
+
+adminRouter.put(
+  '/configure',
+  celebrate({
+    [Segments.BODY]: {
+      days_blocked: Joi.number().integer().min(1).required(),
+      reports_to_block: Joi.number().integer().min(1).required()
+    }
+  }),
+  adminConfigureController.update
 );
 
 export default adminRouter;
