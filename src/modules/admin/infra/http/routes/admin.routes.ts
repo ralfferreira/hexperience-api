@@ -44,6 +44,11 @@ adminRouter.delete(
   manageHostRequestController.delete
 );
 
+adminRouter.get(
+  '/reports/:report_id',
+  resolveReportsController.show
+);
+
 adminRouter.put(
   '/reports/:report_id',
   resolveReportsController.update
