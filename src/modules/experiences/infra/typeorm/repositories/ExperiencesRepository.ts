@@ -138,6 +138,24 @@ class ExperiencesRepository implements IExperiencesRepository {
 
     return experience;
   }
+
+  public async findAllReported(): Promise<Experience[]> {
+    const query = await this.ormRepository.createQueryBuilder('e')
+      .leftJoinAndSelect('e.host', 'h')
+      .leftJoinAndSelect('e.schedules', 's')
+      .leftJoinAndSelect('e.reviews', 'rw')
+      .innerJoinAndSelect('e.reports', 'rp')
+      .leftJoinAndSelect('e.category', 'c')
+      .leftJoinAndSelect('e.photos', 'p')
+
+    const sql = await query.getSql();
+
+    console.log(sql);
+
+    const experiences = await query.getMany();
+
+    return experiences;
+  }
 }
 
 export default ExperiencesRepository;

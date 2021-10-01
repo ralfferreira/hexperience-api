@@ -8,4 +8,5 @@ export default interface IExperiencesRepository {
   findAllAvailable(options: ISearchForExperienceDTO): Promise<Experience[]>;
   findByHostId(host_id: number): Promise<Experience[]>
   update(experience: Experience): Promise<Experience>;
+  findAllReported(): Promise<Experience[]>;
 }

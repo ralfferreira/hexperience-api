@@ -4,7 +4,7 @@ import { celebrate, Segments, Joi } from "celebrate";
 import DecideHostRequestController from "../controllers/DecideHostRequestController";
 import ResolveReportsController from "../controllers/ResolveReportsController";
 import ReportedHostsController from "../controllers/ReportedHostsController";
-import BlockedExperiencesController from "../controllers/BlockedExperiencesController";
+import ReportedExperiencesController from "../controllers/ReportedExperiencesController";
 import AdminConfigureController from "../controllers/AdminConfigureController";
 
 import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
@@ -13,7 +13,7 @@ const adminRouter = Router();
 const decideHostRequestController = new DecideHostRequestController();
 const resolveReportsController = new ResolveReportsController();
 const reportedHostsController = new ReportedHostsController();
-const blockedExperiencesController = new BlockedExperiencesController();
+const reportedExperiencesController = new ReportedExperiencesController();
 const adminConfigureController = new AdminConfigureController();
 
 adminRouter.use(ensureAdminAuthenticated)
@@ -60,14 +60,19 @@ adminRouter.put(
   reportedHostsController.update
 );
 
+adminRouter.get(
+  '/reports/experiences',
+  reportedExperiencesController.index
+)
+
 adminRouter.put(
-  '/blocked-experiences/',
+  '/reports/experiences',
   celebrate({
     [Segments.BODY]: {
       exp_id: Joi.number().integer().min(1).required(),
     }
   }),
-  blockedExperiencesController.update
+  reportedExperiencesController.update
 );
 
 adminRouter.put(
