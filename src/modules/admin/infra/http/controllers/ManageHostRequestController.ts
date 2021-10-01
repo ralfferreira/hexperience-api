@@ -3,8 +3,9 @@ import { container } from 'tsyringe';
 
 import ApproveHostRequestService from '@modules/admin/services/ApproveHostRequestService';
 import DenyHostRequestService from '@modules/admin/services/DenyHostRequestService';
+import ListAllHostRequestsService from '@modules/admin/services/ListAllHostRequestsService';
 
-export default class DecideHostRequestController {
+export default class ManageHostRequestsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { user_id } = request.body;
 
@@ -26,5 +27,15 @@ export default class DecideHostRequestController {
     });
 
     return response.status(204).json({});
+  }
+
+  public async index(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+
+    const listAllHostRequests = container.resolve(ListAllHostRequestsService);
+
+    const hostRequests = await listAllHostRequests.execute(userId);
+
+    return response.json(hostRequests);
   }
 }

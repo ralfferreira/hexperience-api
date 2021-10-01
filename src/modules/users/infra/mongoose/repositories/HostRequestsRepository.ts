@@ -30,7 +30,7 @@ class HostRequestsRepository implements IHostRequestsRepository {
     return hostRequest;
   }
 
-  public async getAll(): Promise<HostRequestsType[]> {
+  public async findAll(): Promise<HostRequestsType[]> {
     const hostRequests = await this.model.find({});
 
     return hostRequests;

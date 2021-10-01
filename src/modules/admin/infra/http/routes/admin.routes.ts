@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { celebrate, Segments, Joi } from "celebrate";
 
-import DecideHostRequestController from "../controllers/DecideHostRequestController";
+import ManageHostRequestController from "../controllers/ManageHostRequestController";
 import ResolveReportsController from "../controllers/ResolveReportsController";
 import ReportedHostsController from "../controllers/ReportedHostsController";
 import ReportedExperiencesController from "../controllers/ReportedExperiencesController";
@@ -10,7 +10,7 @@ import AdminConfigureController from "../controllers/AdminConfigureController";
 import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
 
 const adminRouter = Router();
-const decideHostRequestController = new DecideHostRequestController();
+const manageHostRequestController = new ManageHostRequestController();
 const resolveReportsController = new ResolveReportsController();
 const reportedHostsController = new ReportedHostsController();
 const reportedExperiencesController = new ReportedExperiencesController();
@@ -18,25 +18,30 @@ const adminConfigureController = new AdminConfigureController();
 
 adminRouter.use(ensureAdminAuthenticated)
 
+adminRouter.get(
+  '/host-requests',
+  manageHostRequestController.index
+)
+
 adminRouter.post(
-  '/approve-host',
+  '/host-requests',
   celebrate({
     [Segments.BODY]: {
       user_id: Joi.number().integer().min(2).required()
     }
   }),
-  decideHostRequestController.create
+  manageHostRequestController.create
 );
 
 adminRouter.delete(
-  '/deny-host',
+  '/host-requests',
   celebrate({
     [Segments.BODY]: {
       user_id: Joi.number().integer().min(2).required(),
       reason: Joi.string().required()
     }
   }),
-  decideHostRequestController.delete
+  manageHostRequestController.delete
 );
 
 adminRouter.put(

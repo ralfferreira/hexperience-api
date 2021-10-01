@@ -148,10 +148,6 @@ class ExperiencesRepository implements IExperiencesRepository {
       .leftJoinAndSelect('e.category', 'c')
       .leftJoinAndSelect('e.photos', 'p')
 
-    const sql = await query.getSql();
-
-    console.log(sql);
-
     const experiences = await query.getMany();
 
     return experiences;
