@@ -3,7 +3,7 @@ import { celebrate, Segments, Joi } from "celebrate";
 
 import DecideHostRequestController from "../controllers/DecideHostRequestController";
 import ResolveReportsController from "../controllers/ResolveReportsController";
-import UserStatusController from "../controllers/UserStatusController";
+import ReportedHostsController from "../controllers/ReportedHostsController";
 import BlockedExperiencesController from "../controllers/BlockedExperiencesController";
 import AdminConfigureController from "../controllers/AdminConfigureController";
 
@@ -12,7 +12,7 @@ import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
 const adminRouter = Router();
 const decideHostRequestController = new DecideHostRequestController();
 const resolveReportsController = new ResolveReportsController();
-const userStatusController = new UserStatusController();
+const reportedHostsController = new ReportedHostsController();
 const blockedExperiencesController = new BlockedExperiencesController();
 const adminConfigureController = new AdminConfigureController();
 
@@ -40,19 +40,24 @@ adminRouter.delete(
 );
 
 adminRouter.put(
-  '/resolve-report/:report_id',
+  '/reports/:report_id',
   resolveReportsController.update
 );
 
+adminRouter.get(
+  '/reports/hosts',
+  reportedHostsController.index
+)
+
 adminRouter.put(
-  '/user-status/',
+  '/reports/hosts',
   celebrate({
     [Segments.BODY]: {
       user_id: Joi.number().integer().min(2).required(),
       status: Joi.string().required().valid('ok', 'analyzing', 'blocked')
     }
   }),
-  userStatusController.update
+  reportedHostsController.update
 );
 
 adminRouter.put(

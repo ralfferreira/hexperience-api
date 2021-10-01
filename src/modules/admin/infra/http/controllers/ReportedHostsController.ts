@@ -3,8 +3,9 @@ import { container } from 'tsyringe';
 
 import UpdateUserStatusService from '@modules/admin/services/UpdateUserStatusService';
 import ManageBlockedUserService from '@modules/admin/services/ManageBlockedUserService';
+import ListAllReportedHostsService from '@modules/admin/services/ListAllReportedHostsService';
 
-export default class UserStatusController {
+export default class ReportedHostsController {
   public async update(request: Request, response: Response): Promise<Response> {
     const { user_id, status } = request.body;
 
@@ -19,5 +20,15 @@ export default class UserStatusController {
     await manageBlockedUser.execute(user.id);
 
     return response.json(user);
+  }
+
+  public async index(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+
+    const listAllReportedHosts = container.resolve(ListAllReportedHostsService);
+
+    const reportedHosts = await listAllReportedHosts.execute(userId);
+
+    return response.json(reportedHosts);
   }
 }

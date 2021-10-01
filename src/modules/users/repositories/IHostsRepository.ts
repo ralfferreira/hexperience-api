@@ -9,4 +9,5 @@ export default interface IHostsRepository {
   update(host: Host): Promise<Host>;
   findByUserId(user_id: number): Promise<Host | undefined>;
   findAll(options: ISearchForHostsDTO): Promise<Host[]>;
+  findAllReported(): Promise<Host[]>;
 }

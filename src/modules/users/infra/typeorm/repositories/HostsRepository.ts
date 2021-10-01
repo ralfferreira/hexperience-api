@@ -84,6 +84,16 @@ class HostsRepository implements IHostsRepository {
 
     return hosts;
   }
+
+  public async findAllReported(): Promise<Host[]> {
+    const query = await this.ormRepository.createQueryBuilder('h')
+      .leftJoinAndSelect('h.user', 'u')
+      .innerJoinAndSelect('Report', 'r', 'r.host_id = h.id');
+
+    const hosts = await query.printSql().getMany();
+
+    return hosts;
+  }
 }
 
 export default HostsRepository;
