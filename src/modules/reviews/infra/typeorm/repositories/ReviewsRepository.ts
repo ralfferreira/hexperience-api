@@ -47,6 +47,19 @@ class ReviewsRepository implements IReviewsRepository {
   public async update(review: Review): Promise<Review> {
     return this.ormRepository.save(review);
   }
+
+  public async findByHostId(host_id: number): Promise<Review[]> {
+    const reviews = await this.ormRepository.find({
+      relations: ['user', 'experience', 'host'],
+      where: {
+        host: {
+          id: host_id
+        }
+      }
+    });
+
+    return reviews;
+  }
 }
 
 export default ReviewsRepository;

@@ -4,9 +4,11 @@ import { celebrate, Segments, Joi } from "celebrate";
 import ensureAuthenticated from "@modules/users/infra/http/middleware/ensureAuthenticated";
 
 import ReviewsController from "../controllers/ReviewsController";
+import HostReviewsController from "../controllers/HostReviewsController";
 
 const reviewsRouter = Router();
 const reviewsController = new ReviewsController();
+const hostReviewsController = new HostReviewsController();
 
 reviewsRouter.use(ensureAuthenticated);
 
@@ -32,6 +34,11 @@ reviewsRouter.put(
     }
   }),
   reviewsController.update
+);
+
+reviewsRouter.get(
+  '/hosts/:host_id',
+  hostReviewsController.index
 );
 
 export default reviewsRouter;
