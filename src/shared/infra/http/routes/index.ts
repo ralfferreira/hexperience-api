@@ -10,6 +10,7 @@ import experiencesRouter from "@modules/experiences/infra/http/routes/experience
 import appointmentsRouter from "@modules/appointments/infra/http/routes/appointments.routes";
 import reviewsRouter from "@modules/reviews/infra/http/routes/reviews.routes";
 import reportsRouter from "@modules/reviews/infra/http/routes/reports.routes";
+import notificationsRouter from "@modules/notifications/infra/http/routes/notifications.routes";
 
 const routes = Router();
 
@@ -23,5 +24,6 @@ routes.use('/experiences', experiencesRouter);
 routes.use('/appointments', appointmentsRouter);
 routes.use('/reviews', reviewsRouter);
 routes.use('/reports', reportsRouter);
+routes.use('/notifications', notificationsRouter);
 
 export default routes;

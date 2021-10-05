@@ -30,6 +30,14 @@ class NotificationsRepository implements INotificationsRepository {
 
     return notification;
   }
+
+  public async findAllByReceiverId(receiver_id: number): Promise<NotificationsType[]> {
+    const notifications = await this.model.find({
+      receiver_id: receiver_id
+    }).exec();
+
+    return notifications;
+  }
 }
 
 export default NotificationsRepository;
