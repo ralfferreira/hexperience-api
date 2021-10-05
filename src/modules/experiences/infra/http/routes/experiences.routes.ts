@@ -14,12 +14,14 @@ import ExpPhotosController from "../controllers/ExpPhotosController";
 import schedulesRouter from './schedules.routes';
 import favoritesRouter from './favorites.routes';
 import NearExperiencesController from '../controllers/NearExperiencesController';
+import ExpCoverController from '../controllers/ExpCoverController';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
 const searchForExperiencesController = new SearchForExperiencesController();
 const expPhotosController = new ExpPhotosController();
 const nearExperiencesController = new NearExperiencesController();
+const expCoverController = new ExpCoverController();
 
 const upload = multer(uploadConfig.multer);
 
@@ -130,6 +132,13 @@ experiencesRouter.delete(
   '/:exp_id/photos/:photo_id',
   ensureHostPrivilege,
   expPhotosController.delete
+);
+
+experiencesRouter.patch(
+  '/:exp_id/cover',
+  ensureHostPrivilege,
+  upload.single('photo'),
+  expCoverController.update
 )
 
 experiencesRouter.use('/schedules', schedulesRouter)

@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 
-import User from "@modules/users/infra/typeorm/entities/User";
+import User from "../../../../users/infra/typeorm/entities/User";
 import Experience from "./Experience";
 
 @Entity('Favorite')

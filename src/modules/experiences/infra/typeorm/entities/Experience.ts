@@ -27,6 +27,9 @@ class Experience {
   name: string;
 
   @Column()
+  cover: string;
+
+  @Column()
   duration: number;
 
   @Column()
@@ -58,6 +61,9 @@ class Experience {
 
   @Column({ type: 'boolean' })
   is_blocked: boolean;
+
+  @Column({ type: 'boolean' })
+  hidden: boolean;
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,14 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
-import AppError from "@shared/errors/AppError";
-
-import ExpPhoto from "../infra/typeorm/entities/ExpPhoto";
-
-import IExpPhotosRepository from "../repositories/IExpPhotosRepository";
+import IStorageProvider from "@shared/container/providers/StorageProvider/models/IStorageProvider";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IExperiencesRepository from "../repositories/IExperiencesRepository";
-import IStorageProvider from "@shared/container/providers/StorageProvider/models/IStorageProvider";
 
+import Experience from "../infra/typeorm/entities/Experience";
+import AppError from "@shared/errors/AppError";
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
 
 interface IRequest {
@@ -18,7 +15,7 @@ interface IRequest {
 }
 
 @injectable()
-class AddExperiencePhotoService {
+class UpdateExperienceCoverService {
   constructor (
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
@@ -28,12 +25,9 @@ class AddExperiencePhotoService {
 
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
-
-    @inject('ExpPhotosRepository')
-    private expPhotosRepository: IExpPhotosRepository
   ) {}
 
-  public async execute({ photo, user_id, experience_id }: IRequest): Promise<ExpPhoto> {
+  public async execute({ photo, user_id, experience_id }: IRequest): Promise<Experience> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -58,19 +52,18 @@ class AddExperiencePhotoService {
       throw new AppError('Host does not own this experience');
     }
 
-    if (experience.photos.length >= 4) {
-      throw new AppError('Max of photos has been reached. Chage one of the photos');
+    if (experience.cover) {
+      await this.storageProvider.deleteFile(experience.cover);
     }
 
     const filename = await this.storageProvider.saveFile(photo);
 
-    const expPhoto = await this.expPhotosRepository.create({
-      photo: filename,
-      experience: experience
-    });
+    experience.cover = filename;
 
-    return expPhoto;
+    await this.experiencesRepository.update(experience);
+
+    return experience;
   }
 }
 
-export default AddExperiencePhotoService;
+export default UpdateExperienceCoverService;
