@@ -1,16 +1,19 @@
 import { inject, injectable } from "tsyringe";
-import { isAfter } from "date-fns";
 import { classToClass } from "class-transformer";
+import { isAfter } from "date-fns";
+
+import IPointDTO from "../dtos/IPointDTO";
+
+import IHostsRepository from "@modules/users/repositories/IHostsRepository";
+import IExperiencesRepository from "../repositories/IExperiencesRepository";
+import ISearchForExperienceDTO from "../dtos/ISearchForExperienceDTO";
 
 import Experience from "../infra/typeorm/entities/Experience";
-
-import IExperiencesRepository from "../repositories/IExperiencesRepository";
-import IHostsRepository from "@modules/users/repositories/IHostsRepository";
-
-import ISearchForExperienceDTO from "../dtos/ISearchForExperienceDTO";
+import IGeolocationProvider from "../providers/GeolocationProvider/models/IGeolocationProvider";
 
 interface IRequest {
   user_id: number;
+  currentLocation: IPointDTO;
 }
 
 interface IResponse {
@@ -19,16 +22,19 @@ interface IResponse {
 }
 
 @injectable()
-class ListAllAvailableExperiencesService {
+class ListNearExperiencesService {
   constructor (
     @inject('ExperiencesRepository')
     private experiencesRepository: IExperiencesRepository,
 
     @inject('HostsRepository')
     private hostsRepository: IHostsRepository,
+
+    @inject('GeolocationProvider')
+    private geolocationProvider: IGeolocationProvider
   ) {}
 
-  public async execute({ user_id }: IRequest): Promise<IResponse[]> {
+  public async execute({ user_id, currentLocation }: IRequest): Promise<IResponse[]> {
     const host = await this.hostsRepository.findByUserId(user_id);
 
     const options = {} as ISearchForExperienceDTO;
@@ -39,7 +45,23 @@ class ListAllAvailableExperiencesService {
 
     const experiences = await this.experiencesRepository.findAllAvailable(options);
 
-    const result = experiences.map(experience => {
+    const nearExperiences = experiences.filter(experience => {
+      if (experience.is_online) {
+        return;
+      }
+
+      const distanceInMeters = this.geolocationProvider.distanceTo(currentLocation, {
+        lat: experience.latitude,
+        lon: experience.longitude
+      });
+
+      if (distanceInMeters > 10000) {
+        return;
+      }
+      return experience;
+    })
+
+    const result = nearExperiences.map(experience => {
       let isAvailable = false;
 
       for (const schedule of experience.schedules) {
@@ -71,4 +93,4 @@ class ListAllAvailableExperiencesService {
   }
 }
 
-export default ListAllAvailableExperiencesService;
+export default ListNearExperiencesService;

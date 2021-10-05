@@ -1,4 +1,3 @@
-import '@modules/users/providers';
 import './providers';
 
 import '@modules/users/infra/container/index';

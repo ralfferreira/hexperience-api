@@ -1,5 +1,7 @@
 import { container } from "tsyringe";
 
+import '@modules/experiences/providers';
+
 import IExperiencesRepository from '@modules/experiences/repositories/IExperiencesRepository';
 import ExperiencesRepository from '@modules/experiences/infra/typeorm/repositories/ExperiencesRepository';
 

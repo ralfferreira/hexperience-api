@@ -13,11 +13,13 @@ import ExpPhotosController from "../controllers/ExpPhotosController";
 
 import schedulesRouter from './schedules.routes';
 import favoritesRouter from './favorites.routes';
+import NearExperiencesController from '../controllers/NearExperiencesController';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
 const searchForExperiencesController = new SearchForExperiencesController();
 const expPhotosController = new ExpPhotosController();
+const nearExperiencesController = new NearExperiencesController();
 
 const upload = multer(uploadConfig.multer);
 
@@ -75,6 +77,18 @@ experiencesRouter.get(
   '/',
   ensureAuthenticated,
   experiencesController.index
+)
+
+experiencesRouter.get(
+  '/near',
+  ensureAuthenticated,
+  celebrate({
+    [Segments.BODY]: {
+      lat: Joi.number(),
+      lon: Joi.number(),
+    }
+  }),
+  nearExperiencesController.index
 )
 
 experiencesRouter.get(
