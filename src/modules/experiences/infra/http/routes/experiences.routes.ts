@@ -10,11 +10,12 @@ import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuth
 import ExperiencesController from '@modules/experiences/infra/http/controllers/ExperiencesController';
 import SearchForExperiencesController from '../controllers/SearchForExperiencesController';
 import ExpPhotosController from "../controllers/ExpPhotosController";
+import NearExperiencesController from '../controllers/NearExperiencesController';
+import ExpCoverController from '../controllers/ExpCoverController';
 
 import schedulesRouter from './schedules.routes';
 import favoritesRouter from './favorites.routes';
-import NearExperiencesController from '../controllers/NearExperiencesController';
-import ExpCoverController from '../controllers/ExpCoverController';
+import categoriesRouter from './categories.routes';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
@@ -144,5 +145,6 @@ experiencesRouter.patch(
 
 experiencesRouter.use('/schedules', schedulesRouter)
 experiencesRouter.use('/favorites', favoritesRouter)
+experiencesRouter.use('/categories', categoriesRouter)
 
 export default experiencesRouter;
