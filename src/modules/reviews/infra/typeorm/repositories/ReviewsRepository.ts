@@ -60,6 +60,19 @@ class ReviewsRepository implements IReviewsRepository {
 
     return reviews;
   }
+
+  public async findByExpId(exp_id: number): Promise<Review[]> {
+    const reviews = await this.ormRepository.find({
+      relations: ['user', 'experience', 'host'],
+      where: {
+        experience: {
+          id: exp_id
+        }
+      }
+    });
+
+    return reviews;
+  }
 }
 
 export default ReviewsRepository;

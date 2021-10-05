@@ -5,10 +5,12 @@ import ensureAuthenticated from "@modules/users/infra/http/middleware/ensureAuth
 
 import ReviewsController from "../controllers/ReviewsController";
 import HostReviewsController from "../controllers/HostReviewsController";
+import ExperiencesReviewsController from "../controllers/ExperiencesReviewsController";
 
 const reviewsRouter = Router();
 const reviewsController = new ReviewsController();
 const hostReviewsController = new HostReviewsController();
+const experiencesReviewsController = new ExperiencesReviewsController();
 
 reviewsRouter.use(ensureAuthenticated);
 
@@ -39,6 +41,11 @@ reviewsRouter.put(
 reviewsRouter.get(
   '/hosts/:host_id',
   hostReviewsController.index
+);
+
+reviewsRouter.get(
+  '/experiences/:exp_id',
+  experiencesReviewsController.index
 );
 
 export default reviewsRouter;

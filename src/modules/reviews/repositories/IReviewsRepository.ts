@@ -6,4 +6,5 @@ export default interface IReviewsRepository {
   findById(id: number): Promise<Review | undefined>;
   update(review: Review): Promise<Review>;
   findByHostId(host_id: number): Promise<Review[]>;
+  findByExpId(exp_id: number): Promise<Review[]>;
 }
