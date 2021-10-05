@@ -22,6 +22,7 @@ interface IRequest {
   latitude: number;
   longitude: number;
   is_online: boolean;
+  hidden: boolean;
   host_id: number;
 }
 
@@ -51,7 +52,8 @@ class UpdateExperienceService {
     max_guests,
     parental_rating,
     price,
-    requirements
+    requirements,
+    hidden
   }: IRequest): Promise<Experience> {
     const experience = await this.experiencesRepository.findById(id);
 
@@ -104,6 +106,7 @@ class UpdateExperienceService {
     experience.longitude = longitude;
     experience.is_online = is_online;
     experience.max_guests = max_guests;
+    experience.hidden = hidden;
 
     const updatedExperience = await this.experiencesRepository.update(experience);
 

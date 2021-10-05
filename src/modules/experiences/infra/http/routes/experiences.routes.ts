@@ -68,7 +68,8 @@ experiencesRouter.put(
       address: Joi.string(),
       latitude: Joi.number(),
       longitude: Joi.number(),
-      is_online:Joi.boolean(),
+      is_online: Joi.boolean(),
+      hidden: Joi.boolean(),
       experience_id: Joi.number().integer().required()
     }
   }),

@@ -70,7 +70,8 @@ export default class ExperiencesController {
       price,
       requirements,
       experience_id,
-      max_guests
+      max_guests,
+      hidden
     } = request.body
 
     const updateExperience = container.resolve(UpdateExperienceService);
@@ -88,7 +89,8 @@ export default class ExperiencesController {
       parental_rating,
       price,
       requirements,
-      max_guests
+      max_guests,
+      hidden
     });
 
     return response.json(experience);

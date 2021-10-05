@@ -83,6 +83,7 @@ class ExperiencesRepository implements IExperiencesRepository {
       .leftJoinAndSelect('e.category', 'c')
       .leftJoinAndSelect('e.photos', 'p')
       .where('e.is_blocked = :isNotBlocked', { isNotBlocked: false })
+      .andWhere('e.hidden = :isNotHidden', { isNotHidden: false })
       .andWhere('s.exp_id IS NOT NULL');
 
     if (host_id) {
