@@ -4,11 +4,9 @@ import { celebrate, Segments, Joi } from 'celebrate';
 import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuthenticated';
 
 import AppointmentsController from '../controllers/AppointmentsController';
-import UserAppointmentsController from '../controllers/UserAppointmentsController';
 
 const appointmentsRouter = Router();
 const appointmentsController = new AppointmentsController();
-const userAppointmentsController = new UserAppointmentsController();
 
 appointmentsRouter.use(ensureAuthenticated);
 
@@ -31,7 +29,7 @@ appointmentsRouter.get(
 
 appointmentsRouter.get(
   '/user/:user_id',
-  userAppointmentsController.index
+  appointmentsController.index
 );
 
 appointmentsRouter.delete(
@@ -41,7 +39,7 @@ appointmentsRouter.delete(
       appointment_id: Joi.number().integer().required()
     }
   }),
-  userAppointmentsController.delete
+  appointmentsController.delete
 );
 
 export default appointmentsRouter;

@@ -3,6 +3,8 @@ import { container } from 'tsyringe';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 import ShowAppointmentService from '@modules/appointments/services/ShowAppointmentService';
+import ListUserAppointmentsService from '@modules/appointments/services/ListUserAppointmentsService';
+import CancelAppointmentService from '@modules/appointments/services/CancelAppointmentService';
 
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -21,6 +23,17 @@ export default class AppointmentsController {
     return response.json(appointment);
   }
 
+  public async index(request: Request, response: Response): Promise<Response> {
+    const { user_id } = request.params;
+    // const userId = request.user.id;
+
+    const listUserAppointments = container.resolve(ListUserAppointmentsService);
+
+    const appointments = await listUserAppointments.execute(Number(user_id));
+
+    return response.json(appointments);
+  }
+
   public async show(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
     const hostId = request.user.hostId;
@@ -36,5 +49,19 @@ export default class AppointmentsController {
     });
 
     return response.json(appointment);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+    const { appointment_id } = request.body;
+
+    const cancelAppointment = container.resolve(CancelAppointmentService);
+
+    await cancelAppointment.execute({
+      user_id: userId,
+      appointment_id
+    });
+
+    return response.status(204).json({});
   }
 }
