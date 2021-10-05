@@ -41,10 +41,10 @@ class ListUserAppointmentsService {
 
     appointments.sort((a, b) => {
       if (isBefore(a.schedule.date, b.schedule.date)) {
-        return -1;
+        return 1;
       }
 
-      return 1;
+      return -1;
     });
 
     const result = appointments.map(appointment => {
