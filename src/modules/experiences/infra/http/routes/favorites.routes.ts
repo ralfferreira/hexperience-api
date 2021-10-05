@@ -37,4 +37,10 @@ favoritesRouter.put(
   favoritesController.update
 );
 
+favoritesRouter.get(
+  '/',
+  ensureAuthenticated,
+  favoritesController.index
+)
+
 export default favoritesRouter;

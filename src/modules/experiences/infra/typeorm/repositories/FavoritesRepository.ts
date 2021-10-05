@@ -41,6 +41,19 @@ class FavoritesRepository implements IFavoritesRepository {
     return favorite;
   }
 
+  public async findByUserId(user_id: number): Promise<Favorite[]> {
+    const favorites = await this.ormRepository.find({
+      relations: ['user', 'experience'],
+      where: {
+        user: {
+          id: user_id
+        }
+      }
+    });
+
+    return favorites;
+  }
+
   public async update(favorite: Favorite): Promise<Favorite> {
     return this.ormRepository.save(favorite);
   }
