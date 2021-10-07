@@ -37,8 +37,9 @@
 
 <!-- ABOUT THE PROJECT -->
 ## Sobre O Projeto
-
-[![Product Name Screen Shot][product-screenshot]
+[![Hexperience][product-screenshot]
+<br />
+<br />
 Hexperience é um app com o objetivo de fornecer experiências, estas “experiências” são atividades orientadas por um host (anfitrião), que abrange diversas áreas: 
  - Artes
  - Pontos Turísticos
