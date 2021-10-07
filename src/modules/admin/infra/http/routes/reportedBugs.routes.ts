@@ -21,4 +21,9 @@ reportedBugsRouter.patch(
   appBugsController.update
 );
 
+reportedBugsRouter.get(
+  '/:bug_id',
+  appBugsController.show
+);
+
 export default reportedBugsRouter;
