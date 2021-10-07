@@ -24,6 +24,12 @@ class AppBugsRepository implements IAppBugsRepository {
 
     return appBug;
   }
+
+  public async findAll(): Promise<AppBugType[]> {
+    const appBugs = await this.model.find({});
+
+    return appBugs;
+  }
 }
 
 export default AppBugsRepository;

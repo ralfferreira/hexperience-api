@@ -9,6 +9,7 @@ import ensureAdminAuthenticated from "../middlewares/ensureAdminAuthenticated";
 import hostRequestsRouter from "./hostRequests.routes";
 import reportedHostsRouter from "./reportedHosts.routes";
 import reportedExperiencesRouter from "./reportedExperiences.routes";
+import reportedBugsRouter from "./reportedBugs.routes";
 
 const adminRouter = Router();
 const resolveReportsController = new ResolveReportsController();
@@ -40,5 +41,6 @@ adminRouter.put(
 adminRouter.use('/host-requests', hostRequestsRouter);
 adminRouter.use('/reports/hosts', reportedHostsRouter);
 adminRouter.use('/reports/experiences', reportedExperiencesRouter);
+adminRouter.use('/bugs', reportedBugsRouter);
 
 export default adminRouter;
