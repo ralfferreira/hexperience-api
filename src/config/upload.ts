@@ -17,7 +17,7 @@ interface IUploadConfig {
 }
 
 export default {
-  driver: 'disk',
+  driver: global.env.STORAGE_DRIVER,
   tmpFolder: tmpFolder,
   uploadsFolder: path.resolve(tmpFolder, 'uploads'),
   multer: {

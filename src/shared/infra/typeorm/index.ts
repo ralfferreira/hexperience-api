@@ -1,3 +1,7 @@
-import { createConnection } from 'typeorm';
+import { Connection, createConnection } from 'typeorm';
 
-createConnection();
+createConnection().then((value: Connection) => {
+  console.log('Entities database is connected');
+}).catch(() => {
+  throw new Error('Unable to connect to entities database');
+});

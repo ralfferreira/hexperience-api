@@ -6,6 +6,10 @@ import cors from 'cors';
 import { errors } from 'celebrate';
 import 'express-async-errors';
 
+import envConfig from "@config/env";
+
+global.env = envConfig;
+
 import uploadConfig from '@config/upload';
 import AppError from "../../errors/AppError";
 import routes from './routes';

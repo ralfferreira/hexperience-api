@@ -1,7 +1,3 @@
-import dotenv from 'dotenv';
-
-dotenv.config()
-
 interface IMongoConfig {
   uri: string,
   options: {
@@ -10,7 +6,7 @@ interface IMongoConfig {
 }
 
 export default {
-  uri: process.env.DEV_MONGODB_URI!,
+  uri: global.env.MONGODB_URI,
   options: {
     useUnifiedTopology: true,
     useNewUrlParser: true,
