@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import AppError from "@shared/errors/AppError";
 
-import { HostRequests as HostRequestType } from "@modules/users/infra/mongoose/schemas/HostRequests";
+import { HostRequestType } from "@modules/users/infra/mongoose/schemas/HostRequests";
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
 
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";

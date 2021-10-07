@@ -1,8 +1,10 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type UserTokens = Document & {
+export type UserTokenType = Document & {
   token: string;
   user_id: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const UserTokensSchema = new Schema(
@@ -23,7 +25,7 @@ const UserTokensSchema = new Schema(
   }
 );
 
-export default mongoose.model<UserTokens>(
+export default mongoose.model<UserTokenType>(
   'User_token',
   UserTokensSchema
 );

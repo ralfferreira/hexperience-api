@@ -1,9 +1,9 @@
 import ICreateNotificationDTO from '../dtos/ICreateNotificationDTO';
 import {
-  Notifications as NotificationsType
+  NotificationType
 } from '../infra/mongoose/schemas/Notifications';
 
 export default interface INotificationsRepository {
-  create(data: ICreateNotificationDTO): Promise<NotificationsType>;
-  findAllByReceiverId(receiver_id: number): Promise<NotificationsType[]>;
+  create(data: ICreateNotificationDTO): Promise<NotificationType>;
+  findAllByReceiverId(receiver_id: number): Promise<NotificationType[]>;
 }

@@ -5,14 +5,17 @@ import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuth
 
 import ExperienceReportsController from '../controllers/ExperienceReportsController';
 import HostReportsController from '../controllers/HostReportsController';
+import AppBugsReportsController from '../controllers/AppBugsReportsController';
 
 const reportsRouter = Router();
 const experienceReportsController = new ExperienceReportsController();
 const hostReportsController = new HostReportsController();
+const appBugReportsController = new AppBugsReportsController();
+
+reportsRouter.use(ensureAuthenticated);
 
 reportsRouter.post(
   '/experiences/',
-  ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
       comment: Joi.string().required(),
@@ -25,7 +28,6 @@ reportsRouter.post(
 
 reportsRouter.post(
   '/hosts/',
-  ensureAuthenticated,
   celebrate({
     [Segments.BODY]: {
       comment: Joi.string().required(),
@@ -34,6 +36,18 @@ reportsRouter.post(
     }
   }),
   hostReportsController.create
+);
+
+reportsRouter.post(
+  '/bugs/',
+  celebrate({
+    [Segments.BODY]: {
+      what: Joi.string().required(),
+      where: Joi.string().required(),
+      description: Joi.string().required(),
+    }
+  }),
+  appBugReportsController.create
 );
 
 export default reportsRouter;

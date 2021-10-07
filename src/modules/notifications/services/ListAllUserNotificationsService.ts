@@ -3,8 +3,9 @@ import { inject, injectable } from "tsyringe";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 
-import { Notifications as NotificationType } from '@modules/notifications/infra/mongoose/schemas/Notifications';
+import { NotificationType } from '@modules/notifications/infra/mongoose/schemas/Notifications';
 import AppError from "@shared/errors/AppError";
+import { isBefore } from "date-fns";
 
 @injectable()
 class ListAllUserNotificationsService {
@@ -24,6 +25,14 @@ class ListAllUserNotificationsService {
     }
 
     const notifications = await this.notificationsRepository.findAllByReceiverId(user.id);
+
+    notifications.sort((a, b) => {
+      if (isBefore(a.createdAt, b.createdAt)) {
+        return 1;
+      }
+
+      return -1;
+    });
 
     return notifications;
   }

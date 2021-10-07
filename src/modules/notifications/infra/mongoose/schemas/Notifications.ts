@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type Notifications = Document & {
+export type NotificationType = Document & {
   title: string;
   message: string;
   receiver_id: number;
@@ -8,6 +8,8 @@ export type Notifications = Document & {
   host_id?: number;
   schedule_id?: number;
   appointment_id?: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 const NotificationsSchema = new Schema(
@@ -25,7 +27,7 @@ const NotificationsSchema = new Schema(
   }
 );
 
-export default mongoose.model<Notifications>(
+export default mongoose.model<NotificationType>(
   'Notification',
   NotificationsSchema
 );

@@ -1,11 +1,11 @@
 import ICreateUserDTO from "../dtos/ICreateUserDTO";
 import {
-  AccountVerifications as AccountVerificationsType
+  AccountVerificationType
 } from "../infra/mongoose/schemas/AccountVerifications";
 
 export default interface IAccountVerificationsRepository {
-  create(data: ICreateUserDTO): Promise<AccountVerificationsType>;
-  findByEmail(email: string): Promise<AccountVerificationsType | null>;
-  findByToken(token: string): Promise<AccountVerificationsType | null>;
+  create(data: ICreateUserDTO): Promise<AccountVerificationType>;
+  findByEmail(email: string): Promise<AccountVerificationType | null>;
+  findByToken(token: string): Promise<AccountVerificationType | null>;
   delete(token: string): Promise<void>;
 }

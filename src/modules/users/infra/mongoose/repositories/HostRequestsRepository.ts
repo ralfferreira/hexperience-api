@@ -1,12 +1,12 @@
 import { Model } from 'mongoose';
 
-import HostRequests, { HostRequests as HostRequestsType } from '../schemas/HostRequests';
+import HostRequests, { HostRequestType } from '../schemas/HostRequests';
 
 import IHostRequestsRepository from '@modules/users/repositories/IHostRequestsRepository';
 import ICreateHostRequestDTO from '@modules/users/dtos/ICreateHostRequestDTO';
 
 class HostRequestsRepository implements IHostRequestsRepository {
-  private model: Model<HostRequestsType>;
+  private model: Model<HostRequestType>;
 
   constructor () {
     this.model = HostRequests;
@@ -17,7 +17,7 @@ class HostRequestsRepository implements IHostRequestsRepository {
     cnpj,
     user_id,
     nickname
-  }: ICreateHostRequestDTO): Promise<HostRequestsType> {
+  }: ICreateHostRequestDTO): Promise<HostRequestType> {
     const hostRequest = new this.model({
       cpf: cpf,
       cnpj: cnpj,
@@ -30,13 +30,13 @@ class HostRequestsRepository implements IHostRequestsRepository {
     return hostRequest;
   }
 
-  public async findAll(): Promise<HostRequestsType[]> {
+  public async findAll(): Promise<HostRequestType[]> {
     const hostRequests = await this.model.find({});
 
     return hostRequests;
   }
 
-  public async findByUserId(user_id: number): Promise<HostRequestsType | null> {
+  public async findByUserId(user_id: number): Promise<HostRequestType | null> {
     const hostRequest = await this.model.findOne({
       user_id: user_id
     }).exec();
@@ -44,7 +44,7 @@ class HostRequestsRepository implements IHostRequestsRepository {
     return hostRequest;
   }
 
-  public async findByNickname(nickname: string): Promise<HostRequestsType | null> {
+  public async findByNickname(nickname: string): Promise<HostRequestType | null> {
     const hostRequest = await this.model.findOne({
       nickname: nickname
     }).exec();

@@ -3,7 +3,7 @@ import { getRepository, Repository } from "typeorm";
 import IAdminConfigureRepository from "@modules/admin/repositories/IAdminConfigureRepository";
 
 import AdminConfigure from "../entities/AdminConfigure";
-import ICreateAdminConfigure from "@modules/admin/dtos/ICreateAdminConfigure";
+import ICreateAdminConfigureDTO from "@modules/admin/dtos/ICreateAdminConfigureDTO";
 
 class AdminConfigureRepository implements IAdminConfigureRepository {
   private ormRepository: Repository<AdminConfigure>;
@@ -15,7 +15,7 @@ class AdminConfigureRepository implements IAdminConfigureRepository {
   public async create({
     days_blocked,
     reports_to_block
-  }: ICreateAdminConfigure): Promise<AdminConfigure> {
+  }: ICreateAdminConfigureDTO): Promise<AdminConfigure> {
     const adminConfigure = await this.ormRepository.create({
       days_blocked,
       reports_to_block

@@ -1,7 +1,7 @@
 import { Model } from 'mongoose';
 
 import Notifications, {
-  Notifications as NotificationsType
+  NotificationType
 } from '../schemas/Notifications';
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
@@ -9,13 +9,13 @@ import INotificationsRepository from '@modules/notifications/repositories/INotif
 import ICreateNotificationDTO from '@modules/notifications/dtos/ICreateNotificationDTO';
 
 class NotificationsRepository implements INotificationsRepository {
-  private model: Model<NotificationsType>;
+  private model: Model<NotificationType>;
 
   constructor () {
     this.model = Notifications;
   }
 
-  public async create(data: ICreateNotificationDTO): Promise<NotificationsType> {
+  public async create(data: ICreateNotificationDTO): Promise<NotificationType> {
     const notification = new this.model({
       title: data.title,
       message: data.message,
@@ -31,7 +31,7 @@ class NotificationsRepository implements INotificationsRepository {
     return notification;
   }
 
-  public async findAllByReceiverId(receiver_id: number): Promise<NotificationsType[]> {
+  public async findAllByReceiverId(receiver_id: number): Promise<NotificationType[]> {
     const notifications = await this.model.find({
       receiver_id: receiver_id
     }).exec();

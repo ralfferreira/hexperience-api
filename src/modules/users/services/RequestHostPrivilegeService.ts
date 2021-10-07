@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import { HostRequests as HostRequestsType } from '../infra/mongoose/schemas/HostRequests';
+import { HostRequestType } from '../infra/mongoose/schemas/HostRequests';
 
 import { statusEnum, typeEnum } from '../infra/typeorm/entities/User';
 
@@ -28,7 +28,7 @@ class RequestHostPrivilegeService {
     private notificationsRepository: INotificationsRepository
   ) {}
 
-  public async execute(data: ICreateHostRequestDTO): Promise<HostRequestsType> {
+  public async execute(data: ICreateHostRequestDTO): Promise<HostRequestType> {
     const checkIfAlreadyRequested = await this.hostRequestsRepository.findByUserId(data.user_id);
 
     if (checkIfAlreadyRequested) {

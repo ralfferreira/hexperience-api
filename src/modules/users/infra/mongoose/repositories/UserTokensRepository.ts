@@ -1,17 +1,17 @@
 import { Model } from 'mongoose';
 
-import UserTokens, { UserTokens as UserTokensType } from "../schemas/UserTokens";
+import UserTokens, { UserTokenType } from "../schemas/UserTokens";
 
 import IUserTokensRepository from "@modules/users/repositories/IUserTokensRepository";
 
 class UserTokensRepository implements IUserTokensRepository {
-  private model: Model<UserTokensType>;
+  private model: Model<UserTokenType>;
 
   constructor () {
     this.model = UserTokens;
   }
 
-  public async create(token: string, id: number): Promise<UserTokensType> {
+  public async create(token: string, id: number): Promise<UserTokenType> {
     const userToken = new this.model({
       token: token,
       user_id: id,
@@ -22,7 +22,7 @@ class UserTokensRepository implements IUserTokensRepository {
     return userToken;
   }
 
-  public async findByToken(token: string): Promise<UserTokensType | null> {
+  public async findByToken(token: string): Promise<UserTokenType | null> {
     const userToken = await this.model.findOne({
       token: token
     }).exec();

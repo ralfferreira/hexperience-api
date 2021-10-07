@@ -1,10 +1,12 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export type AccountVerifications = Document & {
-  name: string,
-  email: string,
-  password: string,
-  token: string
+export type AccountVerificationType = Document & {
+  name: string;
+  email: string;
+  password: string;
+  token: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 const AccountVerificationsSchema = new Schema(
@@ -33,7 +35,7 @@ const AccountVerificationsSchema = new Schema(
   }
 );
 
-export default mongoose.model<AccountVerifications>(
+export default mongoose.model<AccountVerificationType>(
   'Account_verfication',
   AccountVerificationsSchema
 );
