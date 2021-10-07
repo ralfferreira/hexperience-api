@@ -1,4 +1,4 @@
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 
 import IAppBugsRepository from "@modules/admin/repositories/IAppBugsRepository";
 
@@ -29,6 +29,18 @@ class AppBugsRepository implements IAppBugsRepository {
     const appBugs = await this.model.find({});
 
     return appBugs;
+  }
+
+  public async findById(id: string): Promise<AppBugType | null> {
+    const objId = mongoose.Types.ObjectId(id);
+
+    const appBug = await this.model.findById(objId);
+
+    return appBug;
+  }
+
+  public async update(bug: AppBugType): Promise<AppBugType> {
+    return bug.save();
   }
 }
 
