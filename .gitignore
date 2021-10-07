@@ -103,6 +103,14 @@ dist
 # TernJS port file
 .tern-port
 
-#TypeORM configuration and Database Migration
+# TypeORM configuration and Database Migration
 ormconfig.json
 src/shared/infra/typeorm/migrations
+
+# Debbuger configuration
+.vscode/
+
+# Temporary and Uploaded files
+tmp/*
+!tmp/**/
+tmp/uploads/*

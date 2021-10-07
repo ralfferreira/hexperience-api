@@ -3,14 +3,25 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+
+import Host from './Host';
+import Favorite from '../../../../experiences/infra/typeorm/entities/Favorite';
 
 export enum typeEnum {
   user = 'user',
   host = 'host',
   admin = 'admin'
+}
+
+export enum statusEnum {
+  ok = 'ok',
+  analyzing = 'analyzing',
+  blocked = 'blocked'
 }
 
 @Entity('User')
@@ -37,8 +48,12 @@ class User {
   @Column()
   bio: string;
 
-  @Column({ type: 'boolean' })
-  is_blocked: boolean;
+  @Column({
+    type: 'enum',
+    enum: statusEnum,
+    default: statusEnum.ok
+  })
+  status: statusEnum;
 
   @Column({
     type: 'enum',
@@ -52,6 +67,12 @@ class User {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToOne(type => Host, host => host.user)
+  host: Host;
+
+  @OneToMany(() => Favorite, favorite => favorite.user)
+  favorites: Favorite[];
 }
 
 export default User;

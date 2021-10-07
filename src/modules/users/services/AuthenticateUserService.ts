@@ -4,9 +4,11 @@ import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
-import User from '../infra/typeorm/entities/User';
+import User, { statusEnum, typeEnum } from '../infra/typeorm/entities/User';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
+import IAdminConfigureRepository from '@modules/admin/repositories/IAdminConfigureRepository';
+import { differenceInDays } from 'date-fns';
 
 interface IRequest {
   email: string;
@@ -25,7 +27,10 @@ class AuthenticateUserService {
     private usersRepository: IUsersRepository,
 
     @inject('HashProvider')
-    private hashProvider: IHashProvider
+    private hashProvider: IHashProvider,
+
+    @inject('AdminConfigureRepository')
+    private adminConfigureRepository: IAdminConfigureRepository
   ) {}
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -41,7 +46,34 @@ class AuthenticateUserService {
       throw new AppError('Incorrect email/password combination.', 401);
     }
 
-    const token = sign({}, authConfig.jwt.secret, {
+    if (user.status === statusEnum.blocked) {
+      const adminConfigure = await this.adminConfigureRepository.findLatest();
+
+      if (!adminConfigure) {
+        throw new AppError('AdminConfigure was not found');
+      }
+
+      if (differenceInDays(user.updated_at, new Date()) < adminConfigure.days_blocked) {
+        throw new AppError('User is blocked, so it can not authenticate');
+      }
+
+      user.status = statusEnum.ok;
+
+      await this.usersRepository.update(user);
+    }
+
+    let hostId = 0;
+
+    if (user.type === typeEnum.host) {
+      hostId = user.host.id
+    }
+
+    const secret = authConfig.jwt.secret;
+
+    const token = sign({
+      hostId,
+      type: user.type
+    }, secret, {
       subject: `${user.id}`,
       expiresIn: '1d'
     })

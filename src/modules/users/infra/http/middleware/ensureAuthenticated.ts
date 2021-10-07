@@ -9,6 +9,8 @@ interface ITokenPayload {
   iat: number,
   exp: number,
   sub: string,
+  hostId: number,
+  type: string
 }
 
 export default function ensureAuthenticated(
@@ -28,10 +30,12 @@ export default function ensureAuthenticated(
   try {
     const decoded = verify(token, authConfig.jwt.secret);
 
-    const { sub } = decoded as ITokenPayload
+    const { sub, type, hostId } = decoded as ITokenPayload
 
     request.user = {
       id: Number(sub),
+      type,
+      hostId,
     }
 
     return next();

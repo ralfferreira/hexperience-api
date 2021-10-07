@@ -11,7 +11,7 @@ const profileController = new ProfileController();
 profileRouter.use(ensureAuthenticated);
 
 profileRouter.put(
-  '/',
+  '/me',
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
@@ -26,6 +26,6 @@ profileRouter.put(
   profileController.update
 );
 
-profileRouter.get('/', profileController.show);
+profileRouter.get('/me', profileController.show);
 
 export default profileRouter;

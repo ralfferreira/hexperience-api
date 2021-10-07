@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import AppError from "@shared/errors/AppError";
 
-import User from "../infra/typeorm/entities/User";
+import User, { statusEnum } from "../infra/typeorm/entities/User";
 import IHashProvider from "../providers/HashProvider/models/IHashProvider";
 import IUsersRepository from "../repositories/IUsersRepository";
 
@@ -39,6 +39,10 @@ class UpdateProfileService {
 
     if (!user) {
       throw new AppError('User does not exists!');
+    }
+
+    if (user.status === statusEnum.blocked) {
+      throw new AppError('User is blocked');
     }
 
     const userWithUpdatedEmail = await this.usersRepository.findByEmail(email);
