@@ -10,7 +10,7 @@ import envConfig from "@config/env";
 
 global.env = envConfig;
 
-import uploadConfig from '@config/upload';
+import storageConfig from '@config/storage';
 import AppError from "../../errors/AppError";
 import routes from './routes';
 
@@ -22,7 +22,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.uploadsFolder));
+app.use('/files', express.static(storageConfig.uploadsFolder));
 app.use(routes);
 
 app.use(errors());

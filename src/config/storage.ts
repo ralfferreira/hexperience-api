@@ -4,15 +4,18 @@ import multer, { StorageEngine } from 'multer';
 
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
 
-interface IUploadConfig {
-  driver: 'disk',
+interface IStorageConfig {
+  driver: 'disk' | 's3',
   tmpFolder: string;
   uploadsFolder: string,
   multer: {
     storage: StorageEngine,
   },
   config: {
-    disk: {}
+    disk: {},
+    s3: {
+      bucket: string;
+    }
   }
 }
 
@@ -32,6 +35,9 @@ export default {
     })
   },
   config: {
-    disk: {}
+    disk: {},
+    s3: {
+      bucket: 'bucket'
+    }
   }
-} as IUploadConfig;
+} as IStorageConfig;

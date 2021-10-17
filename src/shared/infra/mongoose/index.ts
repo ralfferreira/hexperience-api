@@ -1,5 +1,6 @@
-import mongoConfig from '@config/mongo';
 import mongoose from 'mongoose';
+
+import mongoConfig from '@config/mongo';
 
 async function run(): Promise<void> {
   await mongoose.connect(mongoConfig.uri, mongoConfig.options).catch(() => {

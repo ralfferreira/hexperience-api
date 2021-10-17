@@ -53,7 +53,7 @@ export default class SendForgotPasswordMailService {
         file: forgotPasswordTemplate,
         variables: {
           name: user.name,
-          link: `http://localhost:3000/account-confirmation?token=${userToken.token}`
+          token: userToken.token,
         }
       }
     });

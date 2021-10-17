@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import uploadConfig from '@config/upload';
+import storageConfig from '@config/storage';
 
 import ensureAuthenticated from '../middleware/ensureAuthenticated';
 
@@ -13,7 +13,7 @@ const usersRouter = Router();
 const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
 
-const upload = multer(uploadConfig.multer);
+const upload = multer(storageConfig.multer);
 
 usersRouter.post(
   '/signUp',

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 import multer from "multer";
 
-import uploadConfig from "@config/upload";
+import storageConfig from "@config/storage";
 
 import ensureHostPrivilege from '../middlewares/ensureHostPrivilege';
 import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuthenticated';
@@ -24,7 +24,7 @@ const expPhotosController = new ExpPhotosController();
 const nearExperiencesController = new NearExperiencesController();
 const expCoverController = new ExpCoverController();
 
-const upload = multer(uploadConfig.multer);
+const upload = multer(storageConfig.multer);
 
 experiencesRouter.post(
   '/',

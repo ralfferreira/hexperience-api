@@ -67,7 +67,7 @@ class SendAccountVerificationMailService {
         file: accountConfirmationTemplate,
         variables: {
           name: data.name,
-          link: `http://localhost:3000/account-confirmation?token=${accountVerification.token}`
+          token: accountVerification.token,
         }
       }
     });
