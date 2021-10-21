@@ -4,7 +4,6 @@ import sharp from 'sharp';
 import storageConfig from '@config/storage';
 
 import IImageProcessingProvider from "../models/IImageProcessingProvider";
-import mime from 'mime';
 
 class SharpImageProcessingProvider implements IImageProcessingProvider {
   public async compress(filePath: string): Promise<string> {

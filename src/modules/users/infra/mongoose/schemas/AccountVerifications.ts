@@ -35,6 +35,8 @@ const AccountVerificationsSchema = new Schema(
   }
 );
 
+AccountVerificationsSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7200 });
+
 export default mongoose.model<AccountVerificationType>(
   'Account_verfication',
   AccountVerificationsSchema

@@ -82,6 +82,7 @@
   "exclude": [
     "./jest.config.js",
     "./prettier.config.js",
-    "./coverage/**/*"
+    "./coverage/**/*",
+    "./dist/**/*"
   ]
 }

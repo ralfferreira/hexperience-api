@@ -25,6 +25,8 @@ const UserTokensSchema = new Schema(
   }
 );
 
+UserTokensSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7200 });
+
 export default mongoose.model<UserTokenType>(
   'User_token',
   UserTokensSchema

@@ -6,9 +6,7 @@ import cors from 'cors';
 import { errors } from 'celebrate';
 import 'express-async-errors';
 
-import envConfig from "@config/env";
-
-global.env = envConfig;
+import "@config/env";
 
 import storageConfig from '@config/storage';
 import AppError from "../../errors/AppError";
