@@ -10,7 +10,7 @@ class ReportsRepository implements IReportsRepository {
   private ormRepository: Repository<Report>
 
   constructor () {
-    this.ormRepository = getRepository(Report);
+    this.ormRepository = getRepository(Report, global.env.RDB_CONNECTION);
   }
 
   public async create({

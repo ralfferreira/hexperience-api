@@ -10,7 +10,7 @@ class ExperiencesRepository implements IExperiencesRepository {
   private ormRepository: Repository<Experience>;
 
   constructor() {
-    this.ormRepository = getRepository(Experience);
+    this.ormRepository = getRepository(Experience, global.env.RDB_CONNECTION);
   }
 
   public async create({

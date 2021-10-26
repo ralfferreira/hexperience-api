@@ -11,7 +11,7 @@ class HostsRepository implements IHostsRepository {
   private ormRepository: Repository<Host>;
 
   constructor () {
-    this.ormRepository = getRepository(Host);
+    this.ormRepository = getRepository(Host, global.env.RDB_CONNECTION);
   }
 
   public async create({ cpf, cnpj, user, nickname }: ICreateHostDTO): Promise<Host> {

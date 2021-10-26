@@ -9,7 +9,7 @@ class ExpPhotosRepository implements IExpPhotosRepository {
   private ormRepository: Repository<ExpPhoto>;
 
   constructor () {
-    this.ormRepository = getRepository(ExpPhoto);
+    this.ormRepository = getRepository(ExpPhoto, global.env.RDB_CONNECTION);
   }
 
   public async create({ photo, experience }: ICreateExpPhotoDTO): Promise<ExpPhoto> {

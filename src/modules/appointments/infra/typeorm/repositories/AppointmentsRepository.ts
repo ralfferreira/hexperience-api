@@ -9,7 +9,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
   private ormRepository: Repository<Appointment>;
 
   constructor () {
-    this.ormRepository = getRepository(Appointment);
+    this.ormRepository = getRepository(Appointment, global.env.RDB_CONNECTION);
   }
 
   public async create({

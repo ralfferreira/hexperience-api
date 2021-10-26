@@ -9,7 +9,7 @@ class ReviewsRepository implements IReviewsRepository {
   private ormRepository: Repository<Review>;
 
   constructor () {
-    this.ormRepository = getRepository(Review);
+    this.ormRepository = getRepository(Review, global.env.RDB_CONNECTION);
   }
 
   public async create({

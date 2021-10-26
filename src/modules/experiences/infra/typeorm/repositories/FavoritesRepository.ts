@@ -10,7 +10,7 @@ class FavoritesRepository implements IFavoritesRepository {
   private ormRepository: Repository<Favorite>;
 
   constructor () {
-    this.ormRepository = getRepository(Favorite);
+    this.ormRepository = getRepository(Favorite, global.env.RDB_CONNECTION);
   }
 
   public async create({ folder, user, experience }: ICreateFavoriteDTO): Promise<Favorite> {

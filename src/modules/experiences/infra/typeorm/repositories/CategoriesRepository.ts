@@ -8,7 +8,7 @@ class CategoriesRepository implements ICategoriesRepository {
   private ormRepository: Repository<Category>
 
   constructor () {
-    this.ormRepository = getRepository(Category);
+    this.ormRepository = getRepository(Category, global.env.RDB_CONNECTION);
   }
 
   public async findById(id: number): Promise<Category | undefined> {
