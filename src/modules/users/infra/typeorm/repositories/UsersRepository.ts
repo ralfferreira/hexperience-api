@@ -9,7 +9,7 @@ class UsersRepository implements IUsersRepository {
   private ormRepository: Repository<User>;
 
   constructor() {
-    this.ormRepository = getRepository(User);
+    this.ormRepository = getRepository(User, global.env.RDB_CONNECTION);
   }
 
   public async findById(id: number): Promise<User | undefined> {

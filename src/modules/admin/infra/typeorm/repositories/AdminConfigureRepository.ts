@@ -9,7 +9,7 @@ class AdminConfigureRepository implements IAdminConfigureRepository {
   private ormRepository: Repository<AdminConfigure>;
 
   constructor () {
-    this.ormRepository = getRepository(AdminConfigure);
+    this.ormRepository = getRepository(AdminConfigure, global.env.RDB_CONNECTION);
   }
 
   public async create({

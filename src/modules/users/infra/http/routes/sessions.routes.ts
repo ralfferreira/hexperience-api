@@ -17,4 +17,15 @@ sessionsRouter.post(
   sessionsController.create
 );
 
+sessionsRouter.put(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      user_id: Joi.number().required().integer(),
+      token: Joi.string().required()
+    }
+  }),
+  sessionsController.update
+);
+
 export default sessionsRouter;
