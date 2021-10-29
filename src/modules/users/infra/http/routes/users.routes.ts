@@ -16,7 +16,7 @@ const userAvatarController = new UserAvatarController();
 const upload = multer(storageConfig.multer);
 
 usersRouter.post(
-  '/signUp',
+  '/sign-up',
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
