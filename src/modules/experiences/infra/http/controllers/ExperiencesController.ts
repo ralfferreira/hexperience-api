@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateExperienceService from '@modules/experiences/services/CreateExperienceService';
 import ShowExperienceService from '@modules/experiences/services/ShowExperienceService';
@@ -52,7 +53,7 @@ export default class ExperiencesController {
 
     const experience = await showExperience.execute(Number(exp_id));
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

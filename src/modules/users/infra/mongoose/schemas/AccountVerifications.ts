@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export type AccountVerificationType = Document & {
   name: string;
   email: string;
+  phone_number?: string;
   password: string;
   token: string;
   createdAt: Date;
@@ -19,6 +20,10 @@ const AccountVerificationsSchema = new Schema(
       type: String,
       unique: true,
       required: true,
+    },
+    phone_number: {
+      type: String,
+      required: false,
     },
     password: {
       type: String,

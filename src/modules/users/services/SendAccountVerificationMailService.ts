@@ -46,6 +46,7 @@ class SendAccountVerificationMailService {
     const accountVerification = await this.accountVerificationsRepository.create({
       email: data.email,
       name: data.name,
+      phone_number: data.phone_number,
       password: hashedPassword,
       token
     });

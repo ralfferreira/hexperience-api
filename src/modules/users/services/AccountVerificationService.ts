@@ -27,6 +27,7 @@ class AccountVerificationService {
     const user = await this.usersRepository.create({
       name: userData.name,
       email: userData.email,
+      phone_number: userData.phone_number,
       password: userData.password
     });
 

@@ -8,23 +8,23 @@ import AccountVerificationService from '@modules/users/services/AccountVerificat
 
 export default class UsersController {
   public async signUp(request: Request, response: Response): Promise<Response> {
-    const { name, email, password } = request.body;
+    const { name, email, password, phone_number } = request.body;
 
     const createUser = container.resolve(CreateUserService);
 
-    const user = await createUser.execute({ name, email, password });
+    const user = await createUser.execute({ name, email, password, phone_number });
 
     return response.json(classToClass(user));
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, email, password } = request.body;
+    const { name, email, password, phone_number } = request.body;
 
     const sendAccountVerificationMail = container.resolve(SendAccountVerificationMailService);
 
-    await sendAccountVerificationMail.execute({ name, email, password });
+    await sendAccountVerificationMail.execute({ name, email, password, phone_number });
 
-    return response.status(204).json({});    
+    return response.status(204).json({});
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

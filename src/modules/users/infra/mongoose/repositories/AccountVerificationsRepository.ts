@@ -19,6 +19,7 @@ class AccountVerificationsRepository implements IAccountVerificationsRepository 
     const accountVerification = new this.model({
       name: data.name,
       email: data.email,
+      phone_number: data.phone_number,
       password: data.password,
       token: data.token
     });
