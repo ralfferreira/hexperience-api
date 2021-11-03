@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import UnblockExperienceService from '@modules/admin/services/UnblockExperienceService';
 import ListAllReportedExperiencesService from '@modules/admin/services/ListAllReportedExperiencesService';
@@ -12,7 +13,7 @@ export default class ReportedExperiencesController {
 
     const experience = await unblockExperience.execute(exp_id);
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
@@ -22,6 +23,6 @@ export default class ReportedExperiencesController {
 
     const reportedExperiences = await listAllReportedExperience.execute(userId);
 
-    return response.json(reportedExperiences);
+    return response.json(classToClass(reportedExperiences));
   }
 }

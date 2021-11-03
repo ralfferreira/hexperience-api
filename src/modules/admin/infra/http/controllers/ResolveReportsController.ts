@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import ResolveReportService from '@modules/admin/services/ResolveReportService';
 import ShowReportService from '@modules/reviews/services/ShowReportService';
@@ -12,7 +13,7 @@ export default class ResolveReportsController {
 
     const resolvedReport = await resolveReport.execute(Number(report_id));
 
-    return response.json(resolvedReport);
+    return response.json(classToClass(resolvedReport));
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
@@ -26,6 +27,6 @@ export default class ResolveReportsController {
       user_id: userId
     });
 
-    return response.json(report);
+    return response.json(classToClass(report));
   }
 }

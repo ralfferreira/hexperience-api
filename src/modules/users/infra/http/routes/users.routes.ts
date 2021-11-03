@@ -15,6 +15,8 @@ const userAvatarController = new UserAvatarController();
 
 const upload = multer(storageConfig.multer);
 
+// /^\+[0-9]+\)\s\d\d\d\d\d-\d\d\d\d$/i => REGEX FOR PHONE NUMBER
+
 usersRouter.post(
   '/sign-up',
   celebrate({

@@ -43,7 +43,7 @@ export default class ExperiencesController {
       category_id
     });
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
@@ -94,7 +94,7 @@ export default class ExperiencesController {
       hidden
     });
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {

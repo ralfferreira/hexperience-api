@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { Expose } from 'class-transformer';
 
+import storageConfig from '@config/storage';
+
 import Host from '../../../../users/infra/typeorm/entities/Host';
 import Review from '../../../../reviews/infra/typeorm/entities/Review';
 import Report from '../../../../reviews/infra/typeorm/entities/Report';
@@ -28,6 +30,22 @@ class Experience {
 
   @Column()
   cover: string;
+
+  @Expose({ name: 'cover_url' })
+  getCoverUrl(): string | null {
+    if (!this.cover) {
+      return null;
+    }
+
+    switch (global.env.driver) {
+      case 'disk':
+        return `${global.env.APP_API_URL}/files/${this.cover}`
+      case 's3':
+        return `https://${storageConfig.config.s3.bucket}.s3.amazonaws.com/${this.cover}`;
+      default:
+        return null;
+    }
+  }
 
   @Column()
   duration: number;

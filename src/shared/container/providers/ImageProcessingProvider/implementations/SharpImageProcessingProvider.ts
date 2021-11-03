@@ -10,11 +10,11 @@ class SharpImageProcessingProvider implements IImageProcessingProvider {
     const fileContent = await fs.promises.readFile(filePath);
     const fileName = path.basename(filePath);
 
-    const newFileName = `${fileName}.webp`;
+    const newFileName = `${fileName}.jpeg`;
 
     const newPath = path.resolve(storageConfig.uploadsFolder, newFileName);
 
-    await sharp(fileContent).webp({ quality: 40 }).toFile(newPath);
+    await sharp(fileContent).jpeg({ quality: 40 }).toFile(newPath);
 
     return newFileName;
   }

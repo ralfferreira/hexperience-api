@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import ReportExperienceService from '@modules/reviews/services/ReportExperienceService';
 import ManageExperienceReportsService from '@modules/reviews/services/ManageExperienceReportsService';
@@ -26,6 +27,6 @@ export default class ExperienceReportsController {
 
     await manageHostReports.execute(report.host.id);
 
-    return response.json(report);
+    return response.json(classToClass(report));
   }
 }

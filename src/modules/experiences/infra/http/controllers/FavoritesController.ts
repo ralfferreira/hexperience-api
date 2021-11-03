@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import AddExperienceToFavoritesService from "@modules/experiences/services/AddExperienceToFavoritesService";
 import RemoveExperienceFromFavorites from "@modules/experiences/services/RemoveExperienceFromFavorites";
@@ -19,7 +20,7 @@ export default class FavoritesController {
       user_id: userId
     });
 
-    return response.json(favorite);
+    return response.json(classToClass(favorite));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
@@ -49,7 +50,7 @@ export default class FavoritesController {
       user_id: userId
     });
 
-    return response.json(favorite);
+    return response.json(classToClass(favorite));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
@@ -59,6 +60,6 @@ export default class FavoritesController {
 
     const favorite = await listUserFavoriteExperiences.execute(userId);
 
-    return response.json(favorite);
+    return response.json(classToClass(favorite));
   }
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import SearchForHostsService from '@modules/users/services/SearchForHostsService';
 
@@ -15,6 +16,6 @@ export default class SearchForHostsController {
       nickname
     });
 
-    return response.json(hosts);
+    return response.json(classToClass(hosts));
   }
 }

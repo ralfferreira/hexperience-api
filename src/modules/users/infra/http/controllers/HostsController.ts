@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import UpdateHostService from '@modules/users/services/UpdateHostService';
 import ListAllAvailableHostsService from '@modules/users/services/ListAllAvailableHostsService';
@@ -13,7 +14,7 @@ export default class HostsController {
 
     const host = await updateHost.execute({ nickname, host_id: hostId });
 
-    return response.json(host);
+    return response.json(classToClass(host));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
@@ -25,6 +26,6 @@ export default class HostsController {
       user_id: userId
     });
 
-    return response.json(hosts);
+    return response.json(classToClass(hosts));
   }
 }

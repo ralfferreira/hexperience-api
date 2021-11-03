@@ -35,7 +35,13 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async findByExperienceId(exp_id: number): Promise<Appointment[]> {
     const appointments = await this.ormRepository.find({
-      relations: ['user', 'schedule', 'schedule.experience'],
+      relations: [
+        'user',
+        'schedule',
+        'schedule.experience',
+        'schedule.experience.host',
+        'schedule.experience.reviews'
+      ],
       where: {
         schedule: {
           experience: {
@@ -50,7 +56,13 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async findById(id: number): Promise<Appointment | undefined> {
     const appointment = await this.ormRepository.findOne({
-      relations: ['user', 'schedule', 'schedule.experience'],
+      relations: [
+        'user',
+        'schedule',
+        'schedule.experience',
+        'schedule.experience.host',
+        'schedule.experience.reviews'
+      ],
       where: {
         id: id
       }
@@ -61,7 +73,13 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async findByUserId(user_id: number): Promise<Appointment[]> {
     const appointments = await this.ormRepository.find({
-      relations: ['user', 'schedule', 'schedule.experience'],
+      relations: [
+        'user',
+        'schedule',
+        'schedule.experience',
+        'schedule.experience.host',
+        'schedule.experience.reviews'
+      ],
       where: {
         user: {
           id: user_id
@@ -74,7 +92,13 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async findByScheduleId(schedule_id: number): Promise<Appointment[]> {
     const appointments = await this.ormRepository.find({
-      relations: ['user', 'schedule', 'schedule.experience'],
+      relations: [
+        'user',
+        'schedule',
+        'schedule.experience',
+        'schedule.experience.host',
+        'schedule.experience.reviews'
+      ],
       where: {
         schedule: {
           id: schedule_id
@@ -87,7 +111,13 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async findByHostId(host_id: number): Promise<Appointment[]> {
     const appointments = await this.ormRepository.find({
-      relations: ['user', 'schedule', 'schedule.experience', 'schedule.experience.host'],
+      relations: [
+        'user',
+        'schedule',
+        'schedule.experience',
+        'schedule.experience.host',
+        'schedule.experience.reviews'
+      ],
       where: {
         schedule: {
           experience: {

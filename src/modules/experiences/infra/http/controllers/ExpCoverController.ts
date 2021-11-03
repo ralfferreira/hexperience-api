@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import UpdateExperienceCoverService from "@modules/experiences/services/UpdateExperienceCoverService";
 
@@ -18,6 +19,6 @@ export default class ExpCoverController {
       user_id: userId
     })
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 }

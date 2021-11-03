@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import AddExperiencePhotoService from "@modules/experiences/services/AddExperiencePhotoService";
 import UpdateExperiencePhotoService from "@modules/experiences/services/UpdateExperiencePhotoService";
@@ -20,7 +21,7 @@ export default class ExpPhotosController {
       experience_id: Number(exp_id)
     });
 
-    return response.json(expPhoto);
+    return response.json(classToClass(expPhoto));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -38,7 +39,7 @@ export default class ExpPhotosController {
       photo_id: Number(photo_id)
     });
 
-    return response.json(updatedPhoto);
+    return response.json(classToClass(updatedPhoto));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {

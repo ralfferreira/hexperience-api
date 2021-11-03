@@ -26,7 +26,7 @@ class ExpPhotosRepository implements IExpPhotosRepository {
 
   public async findAllByExpId(id: number): Promise<ExpPhoto[]> {
     const photos = await this.ormRepository.find({
-      relations: ['experience'],
+      relations: ['experience', 'experience.reviews'],
       where: {
         experience: {
           id: id
@@ -43,7 +43,7 @@ class ExpPhotosRepository implements IExpPhotosRepository {
 
   public async findById(id: number): Promise<ExpPhoto | undefined> {
     const photo = await this.ormRepository.findOne({
-      relations: ['experience'],
+      relations: ['experience', 'experience.reviews'],
       where: {
         id: id
       }

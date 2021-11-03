@@ -37,7 +37,7 @@ class ReportsRepository implements IReportsRepository {
 
   public async findById(id: number): Promise<Report | undefined> {
     const report = await this.ormRepository.findOne({
-      relations: ['experience', 'host'],
+      relations: ['experience', 'experience.reviews', 'host', 'host.user'],
       where: {
         id: id
       }
@@ -48,7 +48,7 @@ class ReportsRepository implements IReportsRepository {
 
   public async findAllByHostId(host_id: number): Promise<Report[]> {
     const reports = await this.ormRepository.find({
-      relations: ['experience', 'host'],
+      relations: ['experience', 'experience.reviews', 'host', 'host.user'],
       where: {
         host: {
           id: host_id
@@ -61,7 +61,7 @@ class ReportsRepository implements IReportsRepository {
 
   public async findAllByExperienceId(exp_id: number): Promise<Report[]> {
     const reports = await this.ormRepository.find({
-      relations: ['experience', 'host'],
+      relations: ['experience', 'experience.reviews', 'host', 'host.user'],
       where: {
         experience: {
           id: exp_id

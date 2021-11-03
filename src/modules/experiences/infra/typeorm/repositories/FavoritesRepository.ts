@@ -27,7 +27,7 @@ class FavoritesRepository implements IFavoritesRepository {
 
   public async findOne(user_id: number, exp_id: number): Promise<Favorite | undefined> {
     const favorite = await this.ormRepository.findOne({
-      relations: ['user', 'experience'],
+      relations: ['user', 'experience', 'experience.reviews'],
       where: {
         experience: {
           id: exp_id
@@ -43,7 +43,7 @@ class FavoritesRepository implements IFavoritesRepository {
 
   public async findByUserId(user_id: number): Promise<Favorite[]> {
     const favorites = await this.ormRepository.find({
-      relations: ['user', 'experience'],
+      relations: ['user', 'experience', 'experience.reviews'],
       where: {
         user: {
           id: user_id

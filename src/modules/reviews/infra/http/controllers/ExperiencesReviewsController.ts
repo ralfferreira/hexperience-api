@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import ListAllExperienceReviewsService from "@modules/reviews/services/ListAllExperienceReviewsService";
 
@@ -11,6 +12,6 @@ export default class ExperiencesReviewsController {
 
     const reviews = await listAllExperienceReviews.execute(Number(exp_id));
 
-    return response.json(reviews);
+    return response.json(classToClass(reviews));
   }
 }
