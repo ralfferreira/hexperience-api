@@ -117,6 +117,10 @@ class Experience {
     let score = 0;
     let rating = 0;
 
+    if (!this.reviews) {
+      return rating;
+    }
+
     if (this.reviews.length) {
       let nReviews = 0;
 

@@ -25,7 +25,8 @@ class ExperiencesRepository implements IExperiencesRepository {
     name,
     parental_rating,
     price,
-    requirements
+    requirements,
+    category
   }: ICreateExperienceDTO): Promise<Experience> {
     const experience = await this.ormRepository.create({
       address,
@@ -43,6 +44,7 @@ class ExperiencesRepository implements IExperiencesRepository {
     });
 
     experience.host = host;
+    experience.category = category;
 
     await this.ormRepository.save(experience);
 
