@@ -71,7 +71,8 @@ experiencesRouter.put(
       longitude: Joi.number(),
       is_online: Joi.boolean(),
       hidden: Joi.boolean(),
-      experience_id: Joi.number().integer().required()
+      experience_id: Joi.number().integer().required(),
+      category_id: Joi.number().integer().required().min(1)
     }
   }),
   experiencesController.update

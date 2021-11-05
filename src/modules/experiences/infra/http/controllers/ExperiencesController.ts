@@ -72,7 +72,8 @@ export default class ExperiencesController {
       requirements,
       experience_id,
       max_guests,
-      hidden
+      hidden,
+      category_id
     } = request.body
 
     const updateExperience = container.resolve(UpdateExperienceService);
@@ -91,7 +92,8 @@ export default class ExperiencesController {
       price,
       requirements,
       max_guests,
-      hidden
+      hidden,
+      category_id
     });
 
     return response.json(classToClass(experience));

@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import isAfter from "date-fns/isAfter";
 
 import AppError from "@shared/errors/AppError";
 
@@ -7,7 +8,7 @@ import Experience from "../infra/typeorm/entities/Experience";
 import IExperiencesRepository from "../repositories/IExperiencesRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
-import isAfter from "date-fns/isAfter";
+import ICategoriesRepository from "../repositories/ICategoriesRepository";
 
 interface IRequest {
   id: number;
@@ -23,6 +24,7 @@ interface IRequest {
   longitude: number;
   is_online: boolean;
   hidden: boolean;
+  category_id: number;
   host_id: number;
 }
 
@@ -36,7 +38,10 @@ class UpdateExperienceService {
     private notificationsRepository: INotificationsRepository,
 
     @inject('AppointmentsRepository')
-    private appointmentsRepository: IAppointmentsRepository
+    private appointmentsRepository: IAppointmentsRepository,
+
+    @inject('CategoriesRepository')
+    private categoriesRepository: ICategoriesRepository
   ) {}
 
   public async execute({
@@ -53,7 +58,8 @@ class UpdateExperienceService {
     parental_rating,
     price,
     requirements,
-    hidden
+    hidden,
+    category_id
   }: IRequest): Promise<Experience> {
     const experience = await this.experiencesRepository.findById(id);
 
@@ -71,6 +77,12 @@ class UpdateExperienceService {
 
     if (duration > 360) {
       throw new AppError('Experience can not last more than 6 hours');
+    }
+
+    const category = await this.categoriesRepository.findById(category_id);
+
+    if (!category) {
+      throw new AppError('Category does not exists');
     }
 
     const appointments = await this.appointmentsRepository.findByExperienceId(experience.id);
@@ -107,6 +119,7 @@ class UpdateExperienceService {
     experience.is_online = is_online;
     experience.max_guests = max_guests;
     experience.hidden = hidden;
+    experience.category = category;
 
     const updatedExperience = await this.experiencesRepository.update(experience);
 
