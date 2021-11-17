@@ -7,6 +7,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 import ISchedulesRepository from "@modules/experiences/repositories/ISchedulesRepository";
+import { statusEnum } from "../infra/typeorm/entities/Appointment";
 
 interface IRequest {
   appointment_id: number;
@@ -68,19 +69,37 @@ class CancelAppointmentService {
       throw new AppError('Host does not exists');
     }
 
-    await this.appointmentsRepository.delete(appointment.id);
+    if (appointment.status === statusEnum.paid) {
+      appointment.status = statusEnum.refund;
 
-    await this.notificationsRepository.create({
-      title: 'Agendamento cancelado',
-      message:
-        `Um agendamento na sua experiência "${appointment.schedule.experience.name}", ` +
-        `no dia ${formattedDate}, foi cancelado.`,
-      receiver_id: receiver.id,
-      appointment_id: appointment.id,
-      exp_id: schedule.experience.id,
-      host_id: schedule.experience.host.id,
-      schedule_id: schedule.id
-    });
+      await this.appointmentsRepository.cancel(appointment);
+
+      await this.notificationsRepository.create({
+        title: 'Agendamento cancelado',
+        message:
+          `Seu agendamento na experiência "${appointment.schedule.experience.name}", ` +
+          `no dia ${formattedDate}, foi cancelado e em breve será reembolsado.`,
+        receiver_id: receiver.id,
+        appointment_id: appointment.id,
+        exp_id: schedule.experience.id,
+        host_id: schedule.experience.host.id,
+        schedule_id: schedule.id
+      });
+    } else {
+      await this.appointmentsRepository.delete(appointment.id);
+
+      await this.notificationsRepository.create({
+        title: 'Agendamento cancelado',
+        message:
+          `Seu agendamento na experiência "${appointment.schedule.experience.name}", ` +
+          `no dia ${formattedDate}, foi cancelado.`,
+        receiver_id: receiver.id,
+        appointment_id: appointment.id,
+        exp_id: schedule.experience.id,
+        host_id: schedule.experience.host.id,
+        schedule_id: schedule.id
+      });
+    }
   }
 }
 

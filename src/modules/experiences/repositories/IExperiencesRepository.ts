@@ -9,4 +9,5 @@ export default interface IExperiencesRepository {
   findByHostId(host_id: number): Promise<Experience[]>
   update(experience: Experience): Promise<Experience>;
   findAllReported(): Promise<Experience[]>;
+  delete(id: number): Promise<void>;
 }

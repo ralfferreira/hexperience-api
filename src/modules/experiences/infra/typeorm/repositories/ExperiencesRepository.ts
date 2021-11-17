@@ -164,6 +164,10 @@ class ExperiencesRepository implements IExperiencesRepository {
 
     return experiences;
   }
+
+  public async delete(id: number): Promise<void> {
+    await this.ormRepository.delete({ id: id });
+  }
 }
 
 export default ExperiencesRepository;

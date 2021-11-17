@@ -6,6 +6,7 @@ import CreateExperienceService from '@modules/experiences/services/CreateExperie
 import ShowExperienceService from '@modules/experiences/services/ShowExperienceService';
 import UpdateExperienceService from '@modules/experiences/services/UpdateExperienceService';
 import ListAllAvailableExperiencesService from '@modules/experiences/services/ListAllAvailableExperiencesService';
+import DeleteExperienceService from '@modules/experiences/services/DeleteExperienceService';
 
 export default class ExperiencesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -109,5 +110,19 @@ export default class ExperiencesController {
     });
 
     return response.json(result);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const hostId = request.user.hostId;
+    const { exp_id } = request.params;
+
+    const deleteExperience = container.resolve(DeleteExperienceService);
+
+    await deleteExperience.execute({
+      host_id: hostId,
+      exp_id: Number(exp_id)
+    });
+
+    return response.status(204).json({});
   }
 }

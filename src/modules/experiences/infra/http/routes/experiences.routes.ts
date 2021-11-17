@@ -142,7 +142,13 @@ experiencesRouter.patch(
   ensureHostPrivilege,
   upload.single('photo'),
   expCoverController.update
-)
+);
+
+experiencesRouter.delete(
+  '/:exp_id',
+  ensureHostPrivilege,
+  experiencesController.delete
+);
 
 experiencesRouter.use('/schedules', schedulesRouter)
 experiencesRouter.use('/favorites', favoritesRouter)

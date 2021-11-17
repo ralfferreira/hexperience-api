@@ -10,13 +10,13 @@ import CancelAppointmentService from '@modules/appointments/services/CancelAppoi
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
-    const { guests, paid, schedule_id } = request.body;
+    const { guests, status, schedule_id } = request.body;
 
     const createAppointment = container.resolve(CreateAppointmentService);
 
     const appointment = await createAppointment.execute({
       guests,
-      paid,
+      status,
       schedule_id,
       user_id: userId
     });

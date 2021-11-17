@@ -10,11 +10,13 @@ import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IHostsRepository from "@modules/users/repositories/IHostsRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
-import { statusEnum } from "@modules/users/infra/typeorm/entities/User";
+
+import { statusEnum as userStatusEnum } from "@modules/users/infra/typeorm/entities/User";
+import { statusEnum as appointmentStatusEnum } from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
   guests: number;
-  paid: boolean;
+  status: string;
   user_id: number;
   schedule_id: number;
 }
@@ -40,7 +42,7 @@ class CreateAppointmentService {
 
   public async execute({
     guests,
-    paid,
+    status,
     schedule_id,
     user_id
   }: IRequest): Promise<Appointment> {
@@ -64,7 +66,7 @@ class CreateAppointmentService {
       throw new AppError('User does not exists');
     }
 
-    if (user.status === statusEnum.blocked) {
+    if (user.status === userStatusEnum.blocked) {
       throw new AppError('Blocked users can not make appointments');
     }
 
@@ -88,10 +90,12 @@ class CreateAppointmentService {
 
     const finalPrice = guests * schedule.experience.price;
 
+    const paymentStatus = status as appointmentStatusEnum;
+
     const appointment = await this.appointmentsRepository.create({
       final_price: finalPrice,
       guests,
-      paid,
+      status: paymentStatus,
       schedule: updatedSchedule,
       user: user
     });

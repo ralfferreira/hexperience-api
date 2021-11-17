@@ -7,6 +7,7 @@ import ISchedulesRepository from '@modules/experiences/repositories/ISchedulesRe
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import isBefore from "date-fns/isBefore";
+import { statusEnum } from "@modules/appointments/infra/typeorm/entities/Appointment";
 
 interface IRequest {
   schedule_id: number;
@@ -67,7 +68,13 @@ class CancelScheduleService {
           schedule_id: schedule.id
         });
 
-        await this.appointmentsRespository.delete(appointment.id);
+        if (appointment.status === statusEnum.paid) {
+          appointment.status = statusEnum.refund;
+
+          await this.appointmentsRespository.cancel(appointment);
+        } else {
+          await this.appointmentsRespository.delete(appointment.id);
+        }
       }
     }
 

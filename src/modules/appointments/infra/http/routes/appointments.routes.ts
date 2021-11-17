@@ -19,7 +19,7 @@ appointmentsRouter.post(
   celebrate({
     [Segments.BODY]: {
       guests: Joi.number().positive().required(),
-      paid: Joi.boolean().required().default(false),
+      status: Joi.string().required(),
       schedule_id: Joi.number().integer().required()
     }
   }),

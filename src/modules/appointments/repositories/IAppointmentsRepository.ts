@@ -8,5 +8,6 @@ export default interface IAppointmentsRepository {
   findByUserId(user_id: number): Promise<Appointment[]>;
   findByScheduleId(schedule_id: number): Promise<Appointment[]>;
   findByHostId(host_id: number): Promise<Appointment[]>;
+  cancel(appointment: Appointment): Promise<void>;
   delete(id: number): Promise<void>;
 }

@@ -5,6 +5,8 @@ import Appointment from "../entities/Appointment";
 import IAppointmentsRepository from "@modules/appointments/repositories/IAppointmentsRepository";
 import ICreateAppointmentDTO from "@modules/appointments/dtos/ICreateAppointmentDTO";
 
+import { statusEnum } from '../entities/Appointment';
+
 class AppointmentsRepository implements IAppointmentsRepository {
   private ormRepository: Repository<Appointment>;
 
@@ -15,14 +17,14 @@ class AppointmentsRepository implements IAppointmentsRepository {
   public async create({
     final_price,
     guests,
-    paid,
+    status,
     schedule,
     user
   }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = await this.ormRepository.create({
       final_price,
       guests,
-      paid,
+      status
     });
 
     appointment.user = user;
@@ -130,6 +132,12 @@ class AppointmentsRepository implements IAppointmentsRepository {
     });
 
     return appointments;
+  }
+
+  public async cancel(appointment: Appointment): Promise<void> {
+    await this.ormRepository.save(appointment);
+
+    await this.ormRepository.softDelete({ id: appointment.id });
   }
 
   public async delete(id: number): Promise<void> {
