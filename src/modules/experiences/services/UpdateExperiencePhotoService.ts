@@ -2,14 +2,13 @@ import { inject, injectable } from "tsyringe";
 
 import AppError from "@shared/errors/AppError";
 
-import ExpPhoto from "../infra/typeorm/entities/ExpPhoto";
-
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IExperiencesRepository from "../repositories/IExperiencesRepository";
 import IExpPhotosRepository from "../repositories/IExpPhotosRepository";
 import IStorageProvider from "@shared/container/providers/StorageProvider/models/IStorageProvider";
 
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
+import Experience from "../infra/typeorm/entities/Experience";
 
 interface IRequest {
   photo: string;
@@ -34,7 +33,7 @@ class UpdateExperiencePhotoService {
     private storageProvider: IStorageProvider
   ) {}
 
-  public async execute({ photo, user_id, exp_id, photo_id }: IRequest): Promise<ExpPhoto> {
+  public async execute({ photo, user_id, exp_id, photo_id }: IRequest): Promise<Experience> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -73,7 +72,13 @@ class UpdateExperiencePhotoService {
 
     const updatedPhoto = await this.expPhotosRepository.update(expPhoto);
 
-    return updatedPhoto;
+    const updatedExperience = await this.experiencesRepository.findById(updatedPhoto.experience.id);
+
+    if (!updatedExperience) {
+      throw new AppError('Experience does not exists');
+    }
+
+    return updatedExperience;
   }
 }
 

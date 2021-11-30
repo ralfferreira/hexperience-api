@@ -32,14 +32,14 @@ export default class ExpPhotosController {
 
     const updateExperiencePhoto = container.resolve(UpdateExperiencePhotoService);
 
-    const updatedPhoto = await updateExperiencePhoto.execute({
+    const result = await updateExperiencePhoto.execute({
       photo: photo,
       user_id: userId,
       exp_id: Number(exp_id),
       photo_id: Number(photo_id)
     });
 
-    return response.json(classToClass(updatedPhoto));
+    return response.json(classToClass(result));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
@@ -48,12 +48,12 @@ export default class ExpPhotosController {
 
     const deleteExperiencePhoto = container.resolve(DeleteExperiencePhotoService);
 
-    await deleteExperiencePhoto.execute({
+    const updatedExperience = await deleteExperiencePhoto.execute({
       user_id: userId,
       exp_id: Number(exp_id),
       photo_id: Number(photo_id)
     });
 
-    return response.status(204).json({});
+    return response.json(classToClass(updatedExperience));
   }
 }

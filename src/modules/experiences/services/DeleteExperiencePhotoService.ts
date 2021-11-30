@@ -9,6 +9,7 @@ import IExpPhotosRepository from "../repositories/IExpPhotosRepository";
 import IStorageProvider from "@shared/container/providers/StorageProvider/models/IStorageProvider";
 
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
+import Experience from "../infra/typeorm/entities/Experience";
 
 interface IRequest {
   user_id: number;
@@ -32,7 +33,7 @@ class DeleteExperiencePhotoService {
     private storageProvider: IStorageProvider
   ) {}
 
-  public async execute({ user_id, exp_id, photo_id }: IRequest): Promise<void> {
+  public async execute({ user_id, exp_id, photo_id }: IRequest): Promise<Experience> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -70,6 +71,14 @@ class DeleteExperiencePhotoService {
     await this.storageProvider.deleteFile(photo.photo);
 
     await this.expPhotosRepository.delete(photo);
+
+    const updatedExperience = await this.experiencesRepository.findById(experience.id);
+
+    if (!updatedExperience) {
+      throw new AppError('Experience does not exists');
+    }
+
+    return updatedExperience;
   }
 }
 

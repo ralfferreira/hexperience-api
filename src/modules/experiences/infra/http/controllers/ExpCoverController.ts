@@ -9,12 +9,12 @@ export default class ExpCoverController {
     const userId = request.user.id;
 
     const { exp_id } = request.params;
-    const photo = request.file.filename;
+    const cover = request.file.filename;
 
     const updateExperienceCover = container.resolve(UpdateExperienceCoverService);
 
     const experience = await updateExperienceCover.execute({
-      photo,
+      photo: cover,
       experience_id: Number(exp_id),
       user_id: userId
     })
