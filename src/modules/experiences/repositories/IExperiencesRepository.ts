@@ -10,4 +10,5 @@ export default interface IExperiencesRepository {
   update(experience: Experience): Promise<Experience>;
   findAllReported(): Promise<Experience[]>;
   delete(id: number): Promise<void>;
+  findAllBlocked(): Promise<Experience[]>;
 }

@@ -8,4 +8,5 @@ export default interface IUsersRepository {
   findByHostId(host_id: number): Promise<User | undefined>;
   update(user: User): Promise<User>;
   findAllAdmins(): Promise<User[]>;
+  findAllNotOkUsers(): Promise<User[]>;
 }

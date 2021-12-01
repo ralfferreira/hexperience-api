@@ -35,7 +35,7 @@ class Report {
   @JoinColumn({ name: 'host_id' })
   host: Host;
 
-  @ManyToOne(() => Experience)
+  @ManyToOne(() => Experience, { nullable: true })
   @JoinColumn({ name: 'exp_id' })
   experience: Experience;
 }

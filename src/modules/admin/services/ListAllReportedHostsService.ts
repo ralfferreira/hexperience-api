@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import AppError from "@shared/errors/AppError";
 
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
-import IHostsRepository from "@modules/users/repositories/IHostsRepository";
+import IReportsRepository from "@modules/reviews/repositories/IReportsRepository";
 
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
 import Host from "@modules/users/infra/typeorm/entities/Host";
@@ -14,8 +14,8 @@ class ListAllReportedHostsService {
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
 
-    @inject('HostsRepository')
-    private hostsRepository: IHostsRepository
+    @inject('ReportsRepository')
+    private reportsRepository: IReportsRepository
   ) {}
 
   public async execute(user_id: number): Promise<Host[]> {
@@ -29,7 +29,9 @@ class ListAllReportedHostsService {
       throw new AppError('Only admins can do this');
     }
 
-    const reportedHosts = await this.hostsRepository.findAllReported();
+    const reports = await this.reportsRepository.findAll();
+
+    const reportedHosts = reports.map(report => report.host);
 
     return reportedHosts;
   }

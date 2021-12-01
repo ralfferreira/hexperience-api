@@ -168,6 +168,17 @@ class ExperiencesRepository implements IExperiencesRepository {
   public async delete(id: number): Promise<void> {
     await this.ormRepository.delete({ id: id });
   }
+
+  public async findAllBlocked(): Promise<Experience[]> {
+    const experiences = await this.ormRepository.find({
+      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
+      where: {
+        is_blocked: true
+      }
+    });
+
+    return experiences;
+  }
 }
 
 export default ExperiencesRepository;
