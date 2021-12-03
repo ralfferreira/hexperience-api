@@ -7,6 +7,7 @@ import IReportsRepository from "@modules/reviews/repositories/IReportsRepository
 
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
 import Host from "@modules/users/infra/typeorm/entities/Host";
+import { classToClass, plainToClass } from "class-transformer";
 
 @injectable()
 class ListAllReportedHostsService {
@@ -31,7 +32,9 @@ class ListAllReportedHostsService {
 
     const reports = await this.reportsRepository.findAll();
 
-    const reportedHosts = reports.map(report => report.host);
+    const stringReportedHosts = [...new Set(reports.map(report => JSON.stringify(classToClass(report.host))))];
+
+    const reportedHosts = stringReportedHosts.map(entry => JSON.parse(entry));
 
     return reportedHosts;
   }

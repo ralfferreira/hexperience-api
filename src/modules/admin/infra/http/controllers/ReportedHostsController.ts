@@ -30,6 +30,6 @@ export default class ReportedHostsController {
 
     const reportedHosts = await listAllReportedHosts.execute(userId);
 
-    return response.json(classToClass(reportedHosts));
+    return response.json(reportedHosts);
   }
 }

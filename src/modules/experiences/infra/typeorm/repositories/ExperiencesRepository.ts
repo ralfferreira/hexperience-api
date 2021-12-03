@@ -140,7 +140,16 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findByHostId(host_id: number): Promise<Experience[]> {
     const experience = await this.ormRepository.find({
-      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
+      relations: [
+        'host',
+        'host.user',
+        'schedules',
+        'reviews',
+        'reviews.user',
+        'reports',
+        'category',
+        'photos'
+      ],
       where: {
         host: {
           id: host_id
@@ -171,7 +180,16 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findAllBlocked(): Promise<Experience[]> {
     const experiences = await this.ormRepository.find({
-      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
+      relations: [
+        'host',
+        'host.user',
+        'schedules',
+        'reviews',
+        'reviews.user',
+        'reports',
+        'category',
+        'photos'
+      ],
       where: {
         is_blocked: true
       }
