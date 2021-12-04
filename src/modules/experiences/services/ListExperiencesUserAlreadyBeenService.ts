@@ -21,7 +21,7 @@ class ListExperiencesUserAlreadyBeenService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const appointments = await this.appointmentsRepository.findByUserId(user.id);

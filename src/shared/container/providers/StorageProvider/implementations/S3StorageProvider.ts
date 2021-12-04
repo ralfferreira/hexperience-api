@@ -5,9 +5,12 @@ import aws, { S3 } from 'aws-sdk';
 import storageConfig from "@config/storage";
 import { inject, injectable } from 'tsyringe';
 
+import AppError from '@shared/errors/AppError';
+
 import IStorageProvider from "../models/IStorageProvider";
 import IImageProcessingProvider from '../../ImageProcessingProvider/models/IImageProcessingProvider';
 
+@injectable()
 class S3StorageProvider implements IStorageProvider {
   private client: S3;
 
@@ -28,7 +31,7 @@ class S3StorageProvider implements IStorageProvider {
     const contentType = mime.lookup(newPath);
 
     if (!contentType) {
-      throw new Error('ContentType does not exists');
+      throw new AppError('ContentType does not exists');
     }
 
     const fileContent = await fs.promises.readFile(newPath);

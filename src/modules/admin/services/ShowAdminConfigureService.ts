@@ -22,17 +22,17 @@ class ShowAdminConfigureService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.admin) {
-      throw new AppError('User is not an admin');
+      throw new AppError('Usuário não é administrador');
     }
 
     const adminConfigure = await this.adminConfigureRepository.findLatest();
 
     if (!adminConfigure) {
-      throw new AppError('AdminConfigure does not exists');
+      throw new AppError('Configurações administrativas não foram encontradas');
     }
 
     return adminConfigure;

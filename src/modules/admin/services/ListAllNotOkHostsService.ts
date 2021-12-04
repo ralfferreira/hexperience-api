@@ -16,11 +16,11 @@ class ListAllNotOkHostsService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.admin) {
-      throw new AppError('User is not an admin');
+      throw new AppError('Usuário não é administrador');
     }
 
     const notOkUsers = await this.usersRepository.findAllNotOkUsers();

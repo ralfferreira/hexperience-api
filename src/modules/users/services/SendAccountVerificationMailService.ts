@@ -30,13 +30,13 @@ class SendAccountVerificationMailService {
     const checkUserExists = await this.usersRepository.findByEmail(data.email);
 
     if (checkUserExists) {
-      throw new AppError('Email is already been used!');
+      throw new AppError('Endereço de email já está em uso');
     }
 
     const checkAccounts = await this.accountVerificationsRepository.findByEmail(data.email);
 
     if (checkAccounts) {
-      throw new AppError('Email is already been used!');
+      throw new AppError('Endereço de email já está em uso');
     }
 
     const hashedPassword = await this.hashProvider.generateHash(data.password)

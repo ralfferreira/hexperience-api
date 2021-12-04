@@ -60,17 +60,17 @@ class CreateExperienceService {
     }
 
     if (host.user.status !== statusEnum.ok) {
-      throw new AppError('Only hosts that are not under analysis or blocked can do this action');
+      throw new AppError('Anfitrião não pode realizar essa ação por estar em análise ou bloqueado');
     }
 
     const category = await this.categoriesRepository.findById(category_id);
 
     if (!category) {
-      throw new AppError('Category does not exists');
+      throw new AppError('Categoria não existe');
     }
 
     if (duration > 360) {
-      throw new AppError('Experience can not last more than 6 hours');
+      throw new AppError('Uma experiência não pode durar mais que 6 horas');
     }
 
     const experience = await this.experiencesRepository.create({

@@ -64,25 +64,25 @@ class UpdateExperienceService {
     const experience = await this.experiencesRepository.findById(id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.host.id !== host_id) {
-      throw new AppError('Host does not own this experience');
+      throw new AppError('Esse anfitrião não controla essa experiência');
     }
 
     if (experience.is_blocked) {
-      throw new AppError('You can not update a blocked experience');
+      throw new AppError('Experiências bloqueadas não podem ser atualizadas');
     }
 
     if (duration > 360) {
-      throw new AppError('Experience can not last more than 6 hours');
+      throw new AppError('Uma experiência não pode durar mais que 6 horas');
     }
 
     const category = await this.categoriesRepository.findById(category_id);
 
     if (!category) {
-      throw new AppError('Category does not exists');
+      throw new AppError('Categoria não existe');
     }
 
     const appointments = await this.appointmentsRepository.findByExperienceId(experience.id);

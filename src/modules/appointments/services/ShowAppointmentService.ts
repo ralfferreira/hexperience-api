@@ -27,20 +27,20 @@ class ShowAppointmentService {
     const appointment = await this.appointmentsRepository.findById(appointment_id);
 
     if (!appointment) {
-      throw new AppError('Appointment does not exists');
+      throw new AppError('Agendamento não existe');
     }
 
     const experience = await this.experiencesRepository.findById(appointment.schedule.experience.id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (
       experience.host.id !== host_id
       && appointment.user.id !== user_id
     ) {
-      throw new AppError('You have no relationship with this appointment');
+      throw new AppError('Usuário não possui nenhuma conexão com esse agendamento');
     }
 
     return appointment;

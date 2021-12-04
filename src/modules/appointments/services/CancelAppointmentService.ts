@@ -34,27 +34,27 @@ class CancelAppointmentService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const appointment = await this.appointmentsRepository.findById(appointment_id);
 
     if (!appointment) {
-      throw new AppError('Appointment does not exists');
+      throw new AppError('Agendamento não existe');
     }
 
     if (appointment.user.id !== user.id) {
-      throw new AppError('You can not cancel an appointment that is not yours');
+      throw new AppError('Usuário não pode cancelar agendamento que não foi marcado por ele mesmo');
     }
 
     const schedule = await this.schedulesRepository.findById(appointment.schedule.id);
 
     if (!schedule) {
-      throw new AppError('Schedule does not exists');
+      throw new AppError('Horário para agendamento não existe');
     }
 
     if (isBefore(schedule.date, new Date())) {
-      throw new AppError('You can not cancel an appointment that already happened');
+      throw new AppError('Usuário não pode cancelar um agendamento que já aconteceu');
     }
 
     const formattedDate = format(schedule.date, "dd/MM/yyyy 'às' HH:mm'h'");
@@ -66,7 +66,7 @@ class CancelAppointmentService {
     const receiver = await this.usersRepository.findByHostId(schedule.experience.host.id);
 
     if (!receiver) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     if (appointment.status === statusEnum.paid) {

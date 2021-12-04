@@ -21,7 +21,7 @@ class AccountVerificationService {
     const userData = await this.accountVerificationsRepository.findByToken(token);
 
     if (!userData) {
-      throw new AppError('Token does not exists or is expired')
+      throw new AppError('Token não existe ou expirou')
     }
 
     const user = await this.usersRepository.create({

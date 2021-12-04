@@ -22,7 +22,7 @@ class ResolveAppBugService {
     const appBug = await this.appBugsRepository.findById(id);
 
     if (!appBug) {
-      throw new AppError('AppBug does not exists');
+      throw new AppError('AppBug não existe');
     }
 
     appBug.resolved = resolved;

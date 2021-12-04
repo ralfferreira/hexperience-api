@@ -37,24 +37,24 @@ class AuthenticateUserService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('Incorrect email/password combination.', 401);
+      throw new AppError('Email/Senha incorretos', 401);
     }
 
     const passwordMatched = await this.hashProvider.compareHash(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError('Incorrect email/password combination.', 401);
+      throw new AppError('Email/Senha incorretos', 401);
     }
 
     if (user.status === statusEnum.blocked) {
       const adminConfigure = await this.adminConfigureRepository.findLatest();
 
       if (!adminConfigure) {
-        throw new AppError('AdminConfigure was not found');
+        throw new AppError('Configurações administrativas não foram encontradas');
       }
 
       if (differenceInDays(user.updated_at, new Date()) < adminConfigure.days_blocked) {
-        throw new AppError('User is blocked, so it can not authenticate');
+        throw new AppError('Usuário bloqueado não pode acessar o sistema');
       }
 
       user.status = statusEnum.ok;

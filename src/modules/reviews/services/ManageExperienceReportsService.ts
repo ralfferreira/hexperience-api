@@ -32,7 +32,7 @@ class ManageExperienceReportsService {
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.is_blocked) {
@@ -48,13 +48,13 @@ class ManageExperienceReportsService {
     const host = await this.usersRepository.findByHostId(experience.host.id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     const adminConfigure = await this.adminConfigureRepository.findLatest();
 
     if (!adminConfigure) {
-      throw new AppError('AdminConfigure does not exists!');
+      throw new AppError('Configurações administrativas não foram encontradas!');
     }
 
     if (unresolvedReports.length < adminConfigure.reports_to_block) {

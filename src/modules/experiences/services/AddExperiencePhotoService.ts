@@ -10,6 +10,7 @@ import IExperiencesRepository from "../repositories/IExperiencesRepository";
 import IStorageProvider from "@shared/container/providers/StorageProvider/models/IStorageProvider";
 
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
+import Experience from "../infra/typeorm/entities/Experience";
 
 interface IRequest {
   photo: string;
@@ -33,33 +34,33 @@ class AddExperiencePhotoService {
     private expPhotosRepository: IExpPhotosRepository
   ) {}
 
-  public async execute({ photo, user_id, experience_id }: IRequest): Promise<ExpPhoto> {
+  public async execute({ photo, user_id, experience_id }: IRequest): Promise<Experience> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.host) {
-      throw new AppError('User is not authorized to do this action');
+      throw new AppError('Usuário não é anfitrião');
     }
 
     const experience = await this.experiencesRepository.findById(experience_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.is_blocked) {
-      throw new AppError('Experience is blocked')
+      throw new AppError('Experiência está bloqueada')
     }
 
     if (experience.host.id !== user.host.id) {
-      throw new AppError('Host does not own this experience');
+      throw new AppError('Esse anfitrião não controla essa experiência');
     }
 
     if (experience.photos.length >= 4) {
-      throw new AppError('Max of photos has been reached. Chage one of the photos');
+      throw new AppError('Limite de fotos foi atingido, altere ou delete uma das fotos');
     }
 
     const filename = await this.storageProvider.saveFile(photo);
@@ -69,7 +70,13 @@ class AddExperiencePhotoService {
       experience: experience
     });
 
-    return expPhoto;
+    const updatedExperience = await this.experiencesRepository.findById(expPhoto.experience.id);
+
+    if (!updatedExperience) {
+      throw new AppError('Experiência não existe');
+    }
+
+    return updatedExperience;
   }
 }
 

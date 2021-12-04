@@ -29,7 +29,7 @@ class ManageBlockedUserService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.status !== statusEnum.blocked) {
@@ -48,7 +48,7 @@ class ManageBlockedUserService {
       const experience = await this.experiencesRepository.findById(userAppointment.schedule.experience.id);
 
       if (!experience) {
-        throw new AppError('Experience does not exists');
+        throw new AppError('Experiência não existe');
       }
 
       const formattedDate = format(userAppointment.schedule.date, "dd/MM/yyyy 'às' HH:mm'h'");

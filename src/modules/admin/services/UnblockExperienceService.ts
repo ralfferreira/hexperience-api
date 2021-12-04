@@ -30,7 +30,7 @@ class UnblockExperienceService {
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (!experience.is_blocked) {
@@ -65,7 +65,7 @@ class UnblockExperienceService {
     const host = await this.hostsRepository.findById(experience.host.id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     await this.notificationsRepository.create({

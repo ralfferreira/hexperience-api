@@ -34,21 +34,21 @@ class DeleteExperienceService {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.host.id !== host.id) {
-      throw new AppError('Only the owner of the experience can delete it');
+      throw new AppError('Somente o criador de uma experiência pode deletar ela');
     }
 
     if (experience.is_blocked) {
-      throw new AppError('Blocked Experiences can not be deleted');
+      throw new AppError('Experiências bloqueadas não podem ser deletadas');
     }
 
     const appointments = await this.appointmentsRepository.findByExperienceId(experience.id);

@@ -36,17 +36,17 @@ class ReportHostService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     if (user.id === host.user.id) {
-      throw new AppError('You can not report yourself');
+      throw new AppError('Usuário não pode reportar a si mesmo');
     }
 
     const report = await this.reportsRepository.create({

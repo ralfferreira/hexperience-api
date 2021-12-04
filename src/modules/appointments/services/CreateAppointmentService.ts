@@ -49,39 +49,39 @@ class CreateAppointmentService {
     const schedule = await this.schedulesRepository.findById(schedule_id);
 
     if (!schedule) {
-      throw new AppError('Schedule does not exists');
+      throw new AppError('Horário para agendamento não existe');
     }
 
     if (schedule.experience.is_blocked) {
-      throw new AppError('Blocked experiences can not receive new appointments')
+      throw new AppError('Experiências bloqueadas não podem receber novos agendamentos')
     }
 
     if (isBefore(schedule.date, new Date())) {
-      throw new AppError('You can not make an appointment in past date');
+      throw new AppError('Agendamento não pode ser feito num horário que já passou');
     }
 
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.status === userStatusEnum.blocked) {
-      throw new AppError('Blocked users can not make appointments');
+      throw new AppError('Usuários bloqueados não podem fazer agendamentos');
     }
 
     const host = await this.hotstsRepository.findById(schedule.experience.host.id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     if (user.id === host.user.id) {
-      throw new AppError('You can not make an appointment in your own experience');
+      throw new AppError('Usuário não pode agendar um horário em uma experiência oferecida por ele mesmo');
     }
 
     if (guests > schedule.availability) {
-      throw new AppError('Schedule does not have availability for this number of guests')
+      throw new AppError('Horário para agendamento não possui disponibilidade para esse número de pessoas')
     }
 
     schedule.availability -= guests;

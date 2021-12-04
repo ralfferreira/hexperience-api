@@ -33,13 +33,13 @@ class DenyHostRequestService {
     const hostRequest = await this.hostRequestsRepository.findByUserId(user_id);
 
     if (!hostRequest) {
-      throw new AppError('Request was not found');
+      throw new AppError('Solicitação não foi encontrada');
     }
 
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const denyHostTemplate = path.resolve(

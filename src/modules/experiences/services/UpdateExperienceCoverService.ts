@@ -31,25 +31,25 @@ class UpdateExperienceCoverService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.host) {
-      throw new AppError('User is not authorized to do this action');
+      throw new AppError('Usuário não é anfitrião');
     }
 
     const experience = await this.experiencesRepository.findById(experience_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.is_blocked) {
-      throw new AppError('Experience is blocked')
+      throw new AppError('Experiência está bloqueada')
     }
 
     if (experience.host.id !== user.host.id) {
-      throw new AppError('Host does not own this experience');
+      throw new AppError('Esse anfitrião não controla essa experiência');
     }
 
     if (experience.cover) {

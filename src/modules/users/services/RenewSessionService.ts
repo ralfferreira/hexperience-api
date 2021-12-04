@@ -41,7 +41,7 @@ class RenewSessionService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const decoded = decode(token, { json: true });
@@ -49,22 +49,22 @@ class RenewSessionService {
     const { sub, type } = decoded as ITokenPayload;
 
     if (Number(sub) !== user.id) {
-      throw new AppError('Unable to renew session');
+      throw new AppError('Não foi possível renovar a sessão');
     }
 
     if (type === 'admin') {
-      throw new AppError('Can not renew session');
+      throw new AppError('Admins não podem renovar sessão');
     }
 
     if (user.status === statusEnum.blocked) {
       const adminConfigure = await this.adminConfigureRepository.findLatest();
 
       if (!adminConfigure) {
-        throw new AppError('AdminConfigure was not found');
+        throw new AppError('Configurações administrativas não foram encontradas');
       }
 
       if (differenceInDays(user.updated_at, new Date()) < adminConfigure.days_blocked) {
-        throw new AppError('User is blocked, so it can not authenticate');
+        throw new AppError('Usuário bloqueado não pode acessar o sistema');
       }
 
       user.status = statusEnum.ok;

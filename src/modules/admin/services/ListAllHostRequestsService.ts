@@ -28,11 +28,11 @@ class ListAllHostRequestsService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.admin) {
-      throw new AppError('Only admins can do this');
+      throw new AppError('Usuário não é administrador');
     }
 
     const hostRequests = await this.hostRequestsRepository.findAll();

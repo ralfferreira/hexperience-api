@@ -37,31 +37,31 @@ class UpdateExperiencePhotoService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.host) {
-      throw new AppError('User is not a host');
+      throw new AppError('Usuário não é um anfitrião');
     }
 
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.host.id !== user.host.id) {
-      throw new AppError('Host does not own this experience');
+      throw new AppError('Esse anfitrião não controla essa experiência');
     }
 
     const expPhoto = await this.expPhotosRepository.findById(photo_id);
 
     if (!expPhoto) {
-      throw new AppError('Photo does not exists');
+      throw new AppError('Foto da experiência não existe');
     }
 
     if (expPhoto.experience.id !== experience.id) {
-      throw new AppError('Photo does not belong to this experience');
+      throw new AppError('Foto não pertence a experiência');
     }
 
     await this.storageProvider.deleteFile(expPhoto.photo);
@@ -75,7 +75,7 @@ class UpdateExperiencePhotoService {
     const updatedExperience = await this.experiencesRepository.findById(updatedPhoto.experience.id);
 
     if (!updatedExperience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     return updatedExperience;

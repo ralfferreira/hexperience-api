@@ -15,13 +15,13 @@ export default class ExpPhotosController {
 
     const addExperiencePhoto = container.resolve(AddExperiencePhotoService);
 
-    const expPhoto = await addExperiencePhoto.execute({
+    const result = await addExperiencePhoto.execute({
       photo: photo,
       user_id: userId,
       experience_id: Number(exp_id)
     });
 
-    return response.json(classToClass(expPhoto));
+    return response.json(classToClass(result));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

@@ -38,17 +38,17 @@ class UpdateProfileService {
     const user = await this.usersRepository.findById(id);
 
     if (!user) {
-      throw new AppError('User does not exists!');
+      throw new AppError('Usuário não existe!');
     }
 
     if (user.status === statusEnum.blocked) {
-      throw new AppError('User is blocked');
+      throw new AppError('Usuário está bloqueado');
     }
 
     const userWithUpdatedEmail = await this.usersRepository.findByEmail(email);
 
     if (userWithUpdatedEmail && userWithUpdatedEmail.id !== id) {
-      throw new AppError('Email already been used!');
+      throw new AppError('Endereço de email já está sendo utilizado');
     }
 
     user.name = name;
@@ -57,7 +57,7 @@ class UpdateProfileService {
     user.bio = bio;
 
     if (password && !old_password) {
-      throw new AppError('You have to inform the old password to set a new password');
+      throw new AppError('É necessário informar a senha atual para mudar de senha');
     }
 
     if (password && old_password) {
@@ -67,7 +67,7 @@ class UpdateProfileService {
       );
 
       if (!checkOldPassword) {
-        throw new AppError('Old Password does not match');
+        throw new AppError('Senha atual está incorreta');
       }
 
       user.password = await this.hashProvider.generateHash(password);

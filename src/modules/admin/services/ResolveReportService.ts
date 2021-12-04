@@ -17,11 +17,11 @@ class ResolveReportService {
     const report = await this.reportsRepository.findById(id);
 
     if (!report) {
-      throw new AppError('Report does not exists');
+      throw new AppError('Denúncia não existe');
     }
 
     if (report.is_resolved) {
-      throw new AppError('Report is already resolved');
+      throw new AppError('Denúncia já foi resolvida');
     }
 
     report.is_resolved = true;

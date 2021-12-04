@@ -35,21 +35,21 @@ class CancelScheduleService {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     const schedule = await this.schedulesRepository.findById(schedule_id);
 
     if (!schedule) {
-      throw new AppError('Schedule does not exists');
+      throw new AppError('Horário para agendamento não existe');
     }
 
     if (isBefore(schedule.date, new Date())) {
-      throw new AppError('You can not cancel a schedule that already happened');
+      throw new AppError('Não é possivel cancelar um horário para agendamento que já ocorreu');
     }
 
     if (schedule.experience.host.id !== host.id) {
-      throw new AppError('You can not cancel a schedule that is not yours');
+      throw new AppError('Anfitrião não controla esse horário');
     }
 
     const scheduleAppointments = await this.appointmentsRespository.findByScheduleId(schedule.id);
