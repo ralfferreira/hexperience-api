@@ -22,15 +22,14 @@ export default class SchedulesController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const hostId = request.user.hostId;
-    const { schedule_id, reason } = request.body;
+    // const hostId = request.user.hostId;
+    const { schedule_id, host_id } = request.body;
 
     const cancelSchedule = container.resolve(CancelScheduleService);
 
     await cancelSchedule.execute({
-      host_id: hostId,
+      host_id: host_id,
       schedule_id,
-      reason
     });
 
     return response.status(204).json({});

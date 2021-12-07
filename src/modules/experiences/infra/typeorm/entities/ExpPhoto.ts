@@ -19,7 +19,7 @@ class ExpPhoto {
       return null;
     }
 
-    switch (global.env.driver) {
+    switch (global.env.STORAGE_DRIVER) {
       case 'disk':
         return `${global.env.APP_API_URL}/files/${this.photo}`
       case 's3':

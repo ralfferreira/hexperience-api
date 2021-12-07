@@ -11,7 +11,6 @@ import { statusEnum } from "@modules/appointments/infra/typeorm/entities/Appoint
 
 interface IRequest {
   schedule_id: number;
-  reason: string;
   host_id: number;
 }
 
@@ -31,7 +30,7 @@ class CancelScheduleService {
     private appointmentsRespository: IAppointmentsRepository
   ) {}
 
-  public async execute({ host_id, schedule_id, reason }: IRequest): Promise<void> {
+  public async execute({ host_id, schedule_id }: IRequest): Promise<void> {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
@@ -59,8 +58,8 @@ class CancelScheduleService {
         await this.notificationsRepository.create({
           title: 'Agendamento cancelado',
           message:
-            `Segundo o anfitrião, seu agendamento na experiência "${schedule.experience.name}", ` +
-            `foi cancelado por: "${reason}"`,
+            `Seu agendamento na experiência "${schedule.experience.name}", ` +
+            `foi cancelado pelo seu anfitrião.`,
           receiver_id: appointment.user.id,
           appointment_id: appointment.id,
           exp_id: schedule.experience.id,

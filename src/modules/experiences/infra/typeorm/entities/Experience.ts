@@ -33,11 +33,11 @@ class Experience {
 
   @Expose({ name: 'cover_url' })
   getCoverUrl(): string | null {
-    if (!this.cover) {
+    if (this.cover === null) {
       return null;
     }
 
-    switch (global.env.driver) {
+    switch (global.env.STORAGE_DRIVER) {
       case 'disk':
         return `${global.env.APP_API_URL}/files/${this.cover}`
       case 's3':
@@ -57,7 +57,7 @@ class Experience {
   price: number;
 
   @Column()
-  requirements: string;
+  requirements?: string;
 
   @Column()
   parental_rating: number;
