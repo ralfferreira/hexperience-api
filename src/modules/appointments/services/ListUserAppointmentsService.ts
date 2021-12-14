@@ -8,6 +8,7 @@ import Appointment from "../infra/typeorm/entities/Appointment";
 import IUsersRepository from "@modules/users/repositories/IUsersRepository";
 import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
+import { classToClass } from "class-transformer";
 
 interface IResponse {
   isHost: boolean;
@@ -28,7 +29,7 @@ class ListUserAppointmentsService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     let appointments = await this.appointmentsRepository.findByUserId(user.id);
@@ -56,7 +57,7 @@ class ListUserAppointmentsService {
 
       return {
         isHost,
-        appointment
+        appointment: classToClass(appointment)
       }
     });
 

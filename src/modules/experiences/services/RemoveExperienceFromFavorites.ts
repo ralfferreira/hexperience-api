@@ -28,19 +28,19 @@ class RemoveExperienceFromFavorites {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     const favorite = await this.favoritesRepository.findOne(user.id, experience.id);
 
     if (!favorite) {
-      throw new AppError('Experience is not a favorite')
+      throw new AppError('Experience não é favorita')
     }
 
     await this.favoritesRepository.delete(favorite);

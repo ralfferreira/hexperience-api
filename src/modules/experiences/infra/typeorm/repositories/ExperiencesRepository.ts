@@ -10,7 +10,7 @@ class ExperiencesRepository implements IExperiencesRepository {
   private ormRepository: Repository<Experience>;
 
   constructor() {
-    this.ormRepository = getRepository(Experience);
+    this.ormRepository = getRepository(Experience, global.env.RDB_CONNECTION);
   }
 
   public async create({
@@ -25,7 +25,8 @@ class ExperiencesRepository implements IExperiencesRepository {
     name,
     parental_rating,
     price,
-    requirements
+    requirements,
+    category
   }: ICreateExperienceDTO): Promise<Experience> {
     const experience = await this.ormRepository.create({
       address,
@@ -43,6 +44,7 @@ class ExperiencesRepository implements IExperiencesRepository {
     });
 
     experience.host = host;
+    experience.category = category;
 
     await this.ormRepository.save(experience);
 
@@ -51,7 +53,16 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findById(id: number): Promise<Experience | undefined> {
     const experience = await this.ormRepository.findOne({
-      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
+      relations: [
+        'host',
+        'host.user',
+        'schedules',
+        'reviews',
+        'reviews.user',
+        'reports',
+        'category',
+        'photos'
+      ],
       where: {
         id: id
       }
@@ -129,7 +140,16 @@ class ExperiencesRepository implements IExperiencesRepository {
 
   public async findByHostId(host_id: number): Promise<Experience[]> {
     const experience = await this.ormRepository.find({
-      relations: ['host', 'schedules', 'reviews', 'reports', 'category', 'photos'],
+      relations: [
+        'host',
+        'host.user',
+        'schedules',
+        'reviews',
+        'reviews.user',
+        'reports',
+        'category',
+        'photos'
+      ],
       where: {
         host: {
           id: host_id
@@ -150,6 +170,30 @@ class ExperiencesRepository implements IExperiencesRepository {
       .leftJoinAndSelect('e.photos', 'p')
 
     const experiences = await query.getMany();
+
+    return experiences;
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.ormRepository.delete({ id: id });
+  }
+
+  public async findAllBlocked(): Promise<Experience[]> {
+    const experiences = await this.ormRepository.find({
+      relations: [
+        'host',
+        'host.user',
+        'schedules',
+        'reviews',
+        'reviews.user',
+        'reports',
+        'category',
+        'photos'
+      ],
+      where: {
+        is_blocked: true
+      }
+    });
 
     return experiences;
   }

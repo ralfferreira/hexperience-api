@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import AddExperiencePhotoService from "@modules/experiences/services/AddExperiencePhotoService";
 import UpdateExperiencePhotoService from "@modules/experiences/services/UpdateExperiencePhotoService";
@@ -14,13 +15,13 @@ export default class ExpPhotosController {
 
     const addExperiencePhoto = container.resolve(AddExperiencePhotoService);
 
-    const expPhoto = await addExperiencePhoto.execute({
+    const result = await addExperiencePhoto.execute({
       photo: photo,
       user_id: userId,
       experience_id: Number(exp_id)
     });
 
-    return response.json(expPhoto);
+    return response.json(classToClass(result));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -31,14 +32,14 @@ export default class ExpPhotosController {
 
     const updateExperiencePhoto = container.resolve(UpdateExperiencePhotoService);
 
-    const updatedPhoto = await updateExperiencePhoto.execute({
+    const result = await updateExperiencePhoto.execute({
       photo: photo,
       user_id: userId,
       exp_id: Number(exp_id),
       photo_id: Number(photo_id)
     });
 
-    return response.json(updatedPhoto);
+    return response.json(classToClass(result));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
@@ -47,12 +48,12 @@ export default class ExpPhotosController {
 
     const deleteExperiencePhoto = container.resolve(DeleteExperiencePhotoService);
 
-    await deleteExperiencePhoto.execute({
+    const updatedExperience = await deleteExperiencePhoto.execute({
       user_id: userId,
       exp_id: Number(exp_id),
       photo_id: Number(photo_id)
     });
 
-    return response.status(204).json({});
+    return response.json(classToClass(updatedExperience));
   }
 }

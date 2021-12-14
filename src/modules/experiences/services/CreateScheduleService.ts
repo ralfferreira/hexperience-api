@@ -33,23 +33,23 @@ class CreateScheduleService {
     const experience = await this.experiencesRepository.findById(experience_id);
 
     if (!experience){
-      throw new AppError('Experience does not exist', 400);
+      throw new AppError('Experiência não existe', 400);
     }
 
     if (experience.host.id !== host_id){
-      throw new AppError('Host does not own this experience');
+      throw new AppError('Esse anfitrião não controla essa experiência');
     }
 
     if (experience.is_blocked) {
-      throw new AppError('You can not create schedules for blocked experiences');
+      throw new AppError('Não é possível criar novos horários para agendamento para experiências bloqueadas');
     }
 
     if (isBefore(date, new Date())) {
-      throw new AppError('Schedule can not be created in a past date');
+      throw new AppError('Horário para agendamento não pode ocorrer numa data que já passou');
     }
 
     if (getHours(date) < 5 && getHours(date) > 0) {
-      throw new AppError('Schedules can not be created between 12:00 AM and 5:00 AM');
+      throw new AppError('Horários para agendamento não podem ser ocorrer entre às 00h00 e 05h00');
     }
 
     const checkIfDateIsAvailable = experience.schedules.filter(scheduledDate => {
@@ -65,7 +65,7 @@ class CreateScheduleService {
     });
 
     if (checkIfDateIsAvailable.length) {
-      throw new AppError('Schedules can not be created between the same time interval');
+      throw new AppError('Horários para agendamento não podem ocorrer no mesmo intervalo de tempo');
     }
 
     const schedule = await this.schedulesRepository.create({

@@ -10,6 +10,8 @@ import {
 } from 'typeorm';
 import { Expose } from 'class-transformer';
 
+import storageConfig from '@config/storage';
+
 import Host from '../../../../users/infra/typeorm/entities/Host';
 import Review from '../../../../reviews/infra/typeorm/entities/Review';
 import Report from '../../../../reviews/infra/typeorm/entities/Report';
@@ -29,6 +31,22 @@ class Experience {
   @Column()
   cover: string;
 
+  @Expose({ name: 'cover_url' })
+  getCoverUrl(): string | null {
+    if (this.cover === null) {
+      return null;
+    }
+
+    switch (global.env.STORAGE_DRIVER) {
+      case 'disk':
+        return `${global.env.APP_API_URL}/files/${this.cover}`
+      case 's3':
+        return `https://${storageConfig.config.s3.bucket}.s3.amazonaws.com/${this.cover}`;
+      default:
+        return null;
+    }
+  }
+
   @Column()
   duration: number;
 
@@ -39,7 +57,7 @@ class Experience {
   price: number;
 
   @Column()
-  requirements: string;
+  requirements?: string;
 
   @Column()
   parental_rating: number;
@@ -98,6 +116,10 @@ class Experience {
   getRating(): number {
     let score = 0;
     let rating = 0;
+
+    if (!this.reviews) {
+      return rating;
+    }
 
     if (this.reviews.length) {
       let nReviews = 0;

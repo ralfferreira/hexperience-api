@@ -26,7 +26,7 @@ schedulesRouter.delete(
   celebrate({
     [Segments.BODY]: {
       schedule_id: Joi.number().integer().required(),
-      reason: Joi.string().required()
+      host_id: Joi.number().integer().required()
     }
   }),
   schedulesController.delete

@@ -21,7 +21,7 @@ class ListAllHostReviewsService {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     const reviews = await this.reviewsRepository.findByHostId(host.id);

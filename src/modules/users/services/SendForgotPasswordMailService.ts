@@ -29,7 +29,7 @@ export default class SendForgotPasswordMailService {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const token = uuidv4();
@@ -53,7 +53,7 @@ export default class SendForgotPasswordMailService {
         file: forgotPasswordTemplate,
         variables: {
           name: user.name,
-          link: `http://localhost:3000/account-confirmation?token=${userToken.token}`
+          token: userToken.token,
         }
       }
     });

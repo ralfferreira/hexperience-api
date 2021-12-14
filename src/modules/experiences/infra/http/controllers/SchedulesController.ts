@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateScheduleService from '@modules/experiences/services/CreateScheduleService';
 import CancelScheduleService from '@modules/experiences/services/CancelScheduleService';
@@ -17,19 +18,18 @@ export default class SchedulesController {
       host_id: hostId
     })
 
-    return response.json(schedule);
+    return response.json(classToClass(schedule));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const hostId = request.user.hostId;
-    const { schedule_id, reason } = request.body;
+    // const hostId = request.user.hostId;
+    const { schedule_id, host_id } = request.body;
 
     const cancelSchedule = container.resolve(CancelScheduleService);
 
     await cancelSchedule.execute({
-      host_id: hostId,
+      host_id: host_id,
       schedule_id,
-      reason
     });
 
     return response.status(204).json({});

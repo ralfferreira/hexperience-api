@@ -22,7 +22,7 @@ class ListOnlyHostAppointmentsService {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     const appointments = await this.appointmentsRepository.findByHostId(host.id);

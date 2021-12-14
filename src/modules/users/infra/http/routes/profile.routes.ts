@@ -19,7 +19,7 @@ profileRouter.put(
       old_password: Joi.string(),
       password: Joi.string(),
       password_confirmation: Joi.string().valid(Joi.ref('password')),
-      phone_number: Joi.string().max(17),
+      phone_number: Joi.string().max(19),
       bio: Joi.string().max(350)
     }
   }),

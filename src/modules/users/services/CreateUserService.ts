@@ -21,22 +21,22 @@ class CreateUserService {
     private hashProvider: IHashProvider,
   ) {}
 
-  public async execute({ name, email, password }: ICreateUserDTO): Promise<User>{
+  public async execute({ name, email, password, phone_number }: ICreateUserDTO): Promise<User>{
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
     if (checkUserExists) {
-      throw new AppError('Email address already used!');
+      throw new AppError('Endereço de email já está sendo utilizado');
     }
 
     const checkAccounts = await this.accountVerificationsRepository.findByEmail(email);
 
     if (checkAccounts) {
-      throw new AppError('Email is already been used!');
+      throw new AppError('Endereço de email já está sendo utilizado');
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password)
 
-    const user = await this.usersRepository.create({ name, email, password: hashedPassword });
+    const user = await this.usersRepository.create({ name, email, password: hashedPassword, phone_number });
 
     return user;
   }

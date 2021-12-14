@@ -27,17 +27,17 @@ class UpdateReviewService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const review = await this.reviewsRepository.findById(review_id);
 
     if (!review) {
-      throw new AppError('Review does not exists');
+      throw new AppError('Avalição não existe');
     }
 
     if (review.user.id !== user.id) {
-      throw new AppError('User can not update an review that he did not make');
+      throw new AppError('Usuário não pode atualizar uma avaliação que ele não fez');
     }
 
     review.comment = comment;

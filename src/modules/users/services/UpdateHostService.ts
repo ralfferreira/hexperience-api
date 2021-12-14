@@ -26,7 +26,7 @@ class UpdateHostService {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     if (host.user.status === statusEnum.blocked) {
@@ -36,13 +36,13 @@ class UpdateHostService {
     const checkIfNicknameIsBeingUsed = await this.hostsRepository.findByNickname(nickname);
 
     if (checkIfNicknameIsBeingUsed) {
-      throw new AppError('Nickname is already being used');
+      throw new AppError('Apelido já está sendo utilizado');
     }
 
     const checkIfNicknameIsRequested = await this.hostRequestsRepository.findByNickname(nickname);
 
     if (checkIfNicknameIsRequested) {
-      throw new AppError('Nickname is already being used');
+      throw new AppError('Apelido já está sendo utilizado');
     }
 
     host.nickname = nickname;

@@ -7,10 +7,10 @@ import ISchedulesRepository from '@modules/experiences/repositories/ISchedulesRe
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import isBefore from "date-fns/isBefore";
+import { statusEnum } from "@modules/appointments/infra/typeorm/entities/Appointment";
 
 interface IRequest {
   schedule_id: number;
-  reason: string;
   host_id: number;
 }
 
@@ -30,25 +30,25 @@ class CancelScheduleService {
     private appointmentsRespository: IAppointmentsRepository
   ) {}
 
-  public async execute({ host_id, schedule_id, reason }: IRequest): Promise<void> {
+  public async execute({ host_id, schedule_id }: IRequest): Promise<void> {
     const host = await this.hostsRepository.findById(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     const schedule = await this.schedulesRepository.findById(schedule_id);
 
     if (!schedule) {
-      throw new AppError('Schedule does not exists');
+      throw new AppError('Horário para agendamento não existe');
     }
 
     if (isBefore(schedule.date, new Date())) {
-      throw new AppError('You can not cancel a schedule that already happened');
+      throw new AppError('Não é possivel cancelar um horário para agendamento que já ocorreu');
     }
 
     if (schedule.experience.host.id !== host.id) {
-      throw new AppError('You can not cancel a schedule that is not yours');
+      throw new AppError('Anfitrião não controla esse horário');
     }
 
     const scheduleAppointments = await this.appointmentsRespository.findByScheduleId(schedule.id);
@@ -58,8 +58,8 @@ class CancelScheduleService {
         await this.notificationsRepository.create({
           title: 'Agendamento cancelado',
           message:
-            `Segundo o anfitrião, seu agendamento na experiência "${schedule.experience.name}", ` +
-            `foi cancelado por: "${reason}"`,
+            `Seu agendamento na experiência "${schedule.experience.name}", ` +
+            `foi cancelado pelo seu anfitrião.`,
           receiver_id: appointment.user.id,
           appointment_id: appointment.id,
           exp_id: schedule.experience.id,
@@ -67,7 +67,13 @@ class CancelScheduleService {
           schedule_id: schedule.id
         });
 
-        await this.appointmentsRespository.delete(appointment.id);
+        if (appointment.status === statusEnum.paid) {
+          appointment.status = statusEnum.refund;
+
+          await this.appointmentsRespository.cancel(appointment);
+        } else {
+          await this.appointmentsRespository.delete(appointment.id);
+        }
       }
     }
 

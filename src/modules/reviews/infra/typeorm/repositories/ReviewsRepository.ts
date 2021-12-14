@@ -9,7 +9,7 @@ class ReviewsRepository implements IReviewsRepository {
   private ormRepository: Repository<Review>;
 
   constructor () {
-    this.ormRepository = getRepository(Review);
+    this.ormRepository = getRepository(Review, global.env.RDB_CONNECTION);
   }
 
   public async create({
@@ -35,7 +35,7 @@ class ReviewsRepository implements IReviewsRepository {
 
   public async findById(id: number): Promise<Review | undefined> {
     const review = await this.ormRepository.findOne({
-      relations: ['user', 'experience', 'host'],
+      relations: ['user', 'experience', 'experience.reviews', 'host', 'host.user'],
       where: {
         id: id
       }
@@ -50,7 +50,7 @@ class ReviewsRepository implements IReviewsRepository {
 
   public async findByHostId(host_id: number): Promise<Review[]> {
     const reviews = await this.ormRepository.find({
-      relations: ['user', 'experience', 'host'],
+      relations: ['user', 'experience', 'experience.reviews', 'host', 'host.user'],
       where: {
         host: {
           id: host_id
@@ -63,7 +63,7 @@ class ReviewsRepository implements IReviewsRepository {
 
   public async findByExpId(exp_id: number): Promise<Review[]> {
     const reviews = await this.ormRepository.find({
-      relations: ['user', 'experience', 'host'],
+      relations: ['user', 'experience', 'experience.reviews', 'host', 'host.user'],
       where: {
         experience: {
           id: exp_id

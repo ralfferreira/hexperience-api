@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateExperienceService from '@modules/experiences/services/CreateExperienceService';
 import ShowExperienceService from '@modules/experiences/services/ShowExperienceService';
 import UpdateExperienceService from '@modules/experiences/services/UpdateExperienceService';
 import ListAllAvailableExperiencesService from '@modules/experiences/services/ListAllAvailableExperiencesService';
+import DeleteExperienceService from '@modules/experiences/services/DeleteExperienceService';
 
 export default class ExperiencesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -42,7 +44,7 @@ export default class ExperiencesController {
       category_id
     });
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
@@ -52,7 +54,7 @@ export default class ExperiencesController {
 
     const experience = await showExperience.execute(Number(exp_id));
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -71,7 +73,8 @@ export default class ExperiencesController {
       requirements,
       experience_id,
       max_guests,
-      hidden
+      hidden,
+      category_id
     } = request.body
 
     const updateExperience = container.resolve(UpdateExperienceService);
@@ -90,10 +93,11 @@ export default class ExperiencesController {
       price,
       requirements,
       max_guests,
-      hidden
+      hidden,
+      category_id
     });
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
@@ -106,5 +110,19 @@ export default class ExperiencesController {
     });
 
     return response.json(result);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const hostId = request.user.hostId;
+    const { exp_id } = request.params;
+
+    const deleteExperience = container.resolve(DeleteExperienceService);
+
+    await deleteExperience.execute({
+      host_id: hostId,
+      exp_id: Number(exp_id)
+    });
+
+    return response.status(204).json({});
   }
 }

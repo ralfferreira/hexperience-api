@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import ReviewExperienceService from '@modules/reviews/services/ReviewExperienceService';
 import UpdateReviewService from '@modules/reviews/services/UpdateReviewService';
@@ -18,7 +19,7 @@ export default class ReviewsController {
       exp_id: exp_id
     });
 
-    return response.json(review);
+    return response.json(classToClass(review));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -34,6 +35,6 @@ export default class ReviewsController {
       user_id: userId
     });
 
-    return response.json(updatedReview);
+    return response.json(classToClass(updatedReview));
   }
 }

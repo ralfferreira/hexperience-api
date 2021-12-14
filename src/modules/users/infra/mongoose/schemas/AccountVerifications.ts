@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export type AccountVerificationType = Document & {
   name: string;
   email: string;
+  phone_number?: string;
   password: string;
   token: string;
   createdAt: Date;
@@ -20,6 +21,10 @@ const AccountVerificationsSchema = new Schema(
       unique: true,
       required: true,
     },
+    phone_number: {
+      type: String,
+      required: false,
+    },
     password: {
       type: String,
       required: true,
@@ -34,6 +39,8 @@ const AccountVerificationsSchema = new Schema(
     timestamps: true,
   }
 );
+
+AccountVerificationsSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7200 });
 
 export default mongoose.model<AccountVerificationType>(
   'Account_verfication',

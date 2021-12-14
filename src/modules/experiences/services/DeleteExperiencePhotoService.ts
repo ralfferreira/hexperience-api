@@ -9,6 +9,7 @@ import IExpPhotosRepository from "../repositories/IExpPhotosRepository";
 import IStorageProvider from "@shared/container/providers/StorageProvider/models/IStorageProvider";
 
 import { typeEnum } from "@modules/users/infra/typeorm/entities/User";
+import Experience from "../infra/typeorm/entities/Experience";
 
 interface IRequest {
   user_id: number;
@@ -32,44 +33,48 @@ class DeleteExperiencePhotoService {
     private storageProvider: IStorageProvider
   ) {}
 
-  public async execute({ user_id, exp_id, photo_id }: IRequest): Promise<void> {
+  public async execute({ user_id, exp_id, photo_id }: IRequest): Promise<Experience> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.host) {
-      throw new AppError('User is not a host');
+      throw new AppError('Usuário não é um anfitrião');
     }
 
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (experience.host.id !== user.host.id) {
-      throw new AppError('Host does not own this experience');
-    }
-
-    if (experience.photos.length <= 1) {
-      throw new AppError('Experience need to have at least one photo');
+      throw new AppError('Esse anfitrião não controla essa experiência');
     }
 
     const photo = await this.expPhotosRepository.findById(photo_id);
 
     if (!photo) {
-      throw new AppError('Photo does not exists');
+      throw new AppError('Foto da experiência não existe');
     }
 
     if (photo.experience.id !== experience.id) {
-      throw new AppError('Photo does not belongs to this experience');
+      throw new AppError('Foto não pertence a experiência');
     }
 
     await this.storageProvider.deleteFile(photo.photo);
 
     await this.expPhotosRepository.delete(photo);
+
+    const updatedExperience = await this.experiencesRepository.findById(experience.id);
+
+    if (!updatedExperience) {
+      throw new AppError('Experiência não existe');
+    }
+
+    return updatedExperience;
   }
 }
 

@@ -35,6 +35,8 @@ const HostRequestsSchema = new Schema(
   }
 );
 
+HostRequestsSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7200 });
+
 export default mongoose.model<HostRequestType>(
   'Host_request',
   HostRequestsSchema

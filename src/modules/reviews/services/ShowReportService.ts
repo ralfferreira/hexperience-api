@@ -27,17 +27,17 @@ class ShowReportService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type !== typeEnum.admin) {
-      throw new AppError('Only admins can do this');
+      throw new AppError('Usuário não é administrador');
     }
 
     const report = await this.reportsRepository.findById(report_id);
 
     if (!report) {
-      throw new AppError('Report does not exists');
+      throw new AppError('Denúncia não existe');
     }
 
     return report;

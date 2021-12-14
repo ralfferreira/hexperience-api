@@ -41,7 +41,7 @@ class UpdateUserStatusService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const newStatus = status as statusEnum;
@@ -108,7 +108,7 @@ class UpdateUserStatusService {
         const adminConfigure = await this.adminConfigureRepository.findLatest();
 
         if (!adminConfigure) {
-          throw new AppError('AdminConfigure does not exists');
+          throw new AppError('Configurações administrativas não foram encontradas');
         }
 
         let templateName = 'blocked_host_warning.hbs';

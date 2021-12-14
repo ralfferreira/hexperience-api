@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { celebrate, Segments, Joi } from 'celebrate';
 import multer from "multer";
 
-import uploadConfig from "@config/upload";
+import storageConfig from "@config/storage";
 
 import ensureHostPrivilege from '../middlewares/ensureHostPrivilege';
 import ensureAuthenticated from '@modules/users/infra/http/middleware/ensureAuthenticated';
@@ -16,6 +16,8 @@ import ExpCoverController from '../controllers/ExpCoverController';
 import schedulesRouter from './schedules.routes';
 import favoritesRouter from './favorites.routes';
 import categoriesRouter from './categories.routes';
+import HostExperiencesController from '../controllers/HostExperiencesController';
+import UserExperiencesController from '../controllers/UserExperiencesController';
 
 const experiencesRouter = Router();
 const experiencesController = new ExperiencesController();
@@ -23,8 +25,10 @@ const searchForExperiencesController = new SearchForExperiencesController();
 const expPhotosController = new ExpPhotosController();
 const nearExperiencesController = new NearExperiencesController();
 const expCoverController = new ExpCoverController();
+const hostExperiencesController = new HostExperiencesController();
+const userExperiencesController = new UserExperiencesController();
 
-const upload = multer(uploadConfig.multer);
+const upload = multer(storageConfig.multer);
 
 experiencesRouter.post(
   '/',
@@ -71,7 +75,8 @@ experiencesRouter.put(
       longitude: Joi.number(),
       is_online: Joi.boolean(),
       hidden: Joi.boolean(),
-      experience_id: Joi.number().integer().required()
+      experience_id: Joi.number().integer().required(),
+      category_id: Joi.number().integer().required().min(1)
     }
   }),
   experiencesController.update
@@ -139,9 +144,27 @@ experiencesRouter.delete(
 experiencesRouter.patch(
   '/:exp_id/cover',
   ensureHostPrivilege,
-  upload.single('photo'),
+  upload.single('cover'),
   expCoverController.update
-)
+);
+
+experiencesRouter.delete(
+  '/:exp_id',
+  ensureHostPrivilege,
+  experiencesController.delete
+);
+
+experiencesRouter.get(
+  '/host/:host_id',
+  ensureAuthenticated,
+  hostExperiencesController.index
+);
+
+experiencesRouter.get(
+  '/user/:user_id',
+  ensureAuthenticated,
+  userExperiencesController.index
+);
 
 experiencesRouter.use('/schedules', schedulesRouter)
 experiencesRouter.use('/favorites', favoritesRouter)

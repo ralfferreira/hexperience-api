@@ -16,7 +16,7 @@ class ShowExperienceService {
     const experience = await this.experiencesRepository.findById(id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     return experience;

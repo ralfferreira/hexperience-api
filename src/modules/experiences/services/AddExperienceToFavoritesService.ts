@@ -33,18 +33,18 @@ class AddExperienceToFavoritesService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     if (user.type === typeEnum.host) {
       if (experience.host.id === user.host.id) {
-        throw new AppError('You can not favorite your own experience');
+        throw new AppError('Usuário não pode favoritar uma experiência oferecida por ele mesmo');
       }
     }
 
@@ -54,7 +54,7 @@ class AddExperienceToFavoritesService {
     );
 
     if (checkIfAlreadyIsFavorite) {
-      throw new AppError('Experience already is a favorite');
+      throw new AppError('Experiência já é favorita');
     }
 
     const favorite = await this.favoritesRepository.create({

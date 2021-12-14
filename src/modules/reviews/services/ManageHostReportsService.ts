@@ -33,7 +33,7 @@ class ManageHostReportsService {
     const host = await this.usersRepository.findByHostId(host_id);
 
     if (!host) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
     if (host.status !== statusEnum.ok) {
@@ -53,7 +53,7 @@ class ManageHostReportsService {
     const adminConfigure = await this.adminConfigureRepository.findLatest();
 
     if (!adminConfigure) {
-      throw new AppError('AdminConfigure does not exists!');
+      throw new AppError('Configurações administrativas não foram encontradas!');
     }
 
     if (unresolvedReports.length < adminConfigure.reports_to_block) {

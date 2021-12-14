@@ -37,19 +37,19 @@ class ReviewExperienceService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const experience = await this.experiencesRepository.findById(exp_id);
 
     if (!experience) {
-      throw new AppError('Experience does not exists');
+      throw new AppError('Experiência não existe');
     }
 
     const userAppointments = await this.appointmentsRepository.findByUserId(user_id);
 
     if (!userAppointments.length) {
-      throw new AppError('User can not review an experience that he never scheduled');
+      throw new AppError('Usuário não pode avaliar uma experiência que ele nunca participou');
     }
 
     const filteredUserAppointments = userAppointments.filter(appointment => {
@@ -62,7 +62,7 @@ class ReviewExperienceService {
     });
 
     if (!filteredUserAppointments.length) {
-      throw new AppError('User can not review an experience that he never scheduled');
+      throw new AppError('Usuário não pode avaliar uma experiência que ele nunca participou');
     }
 
     const review = await this.reviewsRepository.create({

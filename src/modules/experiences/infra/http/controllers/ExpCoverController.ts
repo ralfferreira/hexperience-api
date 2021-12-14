@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import UpdateExperienceCoverService from "@modules/experiences/services/UpdateExperienceCoverService";
 
@@ -8,16 +9,16 @@ export default class ExpCoverController {
     const userId = request.user.id;
 
     const { exp_id } = request.params;
-    const photo = request.file.filename;
+    const cover = request.file.filename;
 
     const updateExperienceCover = container.resolve(UpdateExperienceCoverService);
 
     const experience = await updateExperienceCover.execute({
-      photo,
+      photo: cover,
       experience_id: Number(exp_id),
       user_id: userId
     })
 
-    return response.json(experience);
+    return response.json(classToClass(experience));
   }
 }

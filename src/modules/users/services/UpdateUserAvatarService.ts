@@ -26,11 +26,11 @@ class UpdateUserAvatarService {
     const user = await this.usersRepository.findById(userId);
 
     if (!user) {
-      throw new AppError('Only authenticated users can change avatars.', 401);
+      throw new AppError('Somente usuários autenticados podem mudar seu avatar', 401);
     }
 
     if (user.status === statusEnum.blocked) {
-      throw new AppError('User is blocked');
+      throw new AppError('Usuário está bloqueado');
     }
 
     if (user.avatar) {

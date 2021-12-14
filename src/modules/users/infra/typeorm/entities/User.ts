@@ -7,10 +7,11 @@ import {
   OneToOne,
   OneToMany,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 import Host from './Host';
 import Favorite from '../../../../experiences/infra/typeorm/entities/Favorite';
+import storageConfig from '@config/storage';
 
 export enum typeEnum {
   user = 'user',
@@ -41,6 +42,22 @@ class User {
 
   @Column()
   avatar: string;
+
+  @Expose({ name: 'avatar_url' })
+  getAvatarUrl(): string | null {
+    if (!this.avatar) {
+      return null;
+    }
+
+    switch (storageConfig.driver) {
+      case 'disk':
+        return `${global.env.APP_API_URL}/files/${this.avatar}`
+      case 's3':
+        return `https://${storageConfig.config.s3.bucket}.s3.amazonaws.com/${this.avatar}`;
+      default:
+        return null;
+    }
+  }
 
   @Column()
   phone_number: string;

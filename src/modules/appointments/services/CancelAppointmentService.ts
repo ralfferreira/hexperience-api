@@ -7,6 +7,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IAppointmentsRepository from "../repositories/IAppointmentsRepository";
 import INotificationsRepository from "@modules/notifications/repositories/INotificationsRepository";
 import ISchedulesRepository from "@modules/experiences/repositories/ISchedulesRepository";
+import { statusEnum } from "../infra/typeorm/entities/Appointment";
 
 interface IRequest {
   appointment_id: number;
@@ -33,27 +34,27 @@ class CancelAppointmentService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const appointment = await this.appointmentsRepository.findById(appointment_id);
 
     if (!appointment) {
-      throw new AppError('Appointment does not exists');
+      throw new AppError('Agendamento não existe');
     }
 
     if (appointment.user.id !== user.id) {
-      throw new AppError('You can not cancel an appointment that is not yours');
+      throw new AppError('Usuário não pode cancelar agendamento que não foi marcado por ele mesmo');
     }
 
     const schedule = await this.schedulesRepository.findById(appointment.schedule.id);
 
     if (!schedule) {
-      throw new AppError('Schedule does not exists');
+      throw new AppError('Horário para agendamento não existe');
     }
 
     if (isBefore(schedule.date, new Date())) {
-      throw new AppError('You can not cancel an appointment that already happened');
+      throw new AppError('Usuário não pode cancelar um agendamento que já aconteceu');
     }
 
     const formattedDate = format(schedule.date, "dd/MM/yyyy 'às' HH:mm'h'");
@@ -65,22 +66,40 @@ class CancelAppointmentService {
     const receiver = await this.usersRepository.findByHostId(schedule.experience.host.id);
 
     if (!receiver) {
-      throw new AppError('Host does not exists');
+      throw new AppError('Anfitrião não existe');
     }
 
-    await this.appointmentsRepository.delete(appointment.id);
+    if (appointment.status === statusEnum.paid) {
+      appointment.status = statusEnum.refund;
 
-    await this.notificationsRepository.create({
-      title: 'Agendamento cancelado',
-      message:
-        `Um agendamento na sua experiência "${appointment.schedule.experience.name}", ` +
-        `no dia ${formattedDate}, foi cancelado.`,
-      receiver_id: receiver.id,
-      appointment_id: appointment.id,
-      exp_id: schedule.experience.id,
-      host_id: schedule.experience.host.id,
-      schedule_id: schedule.id
-    });
+      await this.appointmentsRepository.cancel(appointment);
+
+      await this.notificationsRepository.create({
+        title: 'Agendamento cancelado',
+        message:
+          `Seu agendamento na experiência "${appointment.schedule.experience.name}", ` +
+          `no dia ${formattedDate}, foi cancelado e em breve será reembolsado.`,
+        receiver_id: receiver.id,
+        appointment_id: appointment.id,
+        exp_id: schedule.experience.id,
+        host_id: schedule.experience.host.id,
+        schedule_id: schedule.id
+      });
+    } else {
+      await this.appointmentsRepository.delete(appointment.id);
+
+      await this.notificationsRepository.create({
+        title: 'Agendamento cancelado',
+        message:
+          `Seu agendamento na experiência "${appointment.schedule.experience.name}", ` +
+          `no dia ${formattedDate}, foi cancelado.`,
+        receiver_id: receiver.id,
+        appointment_id: appointment.id,
+        exp_id: schedule.experience.id,
+        host_id: schedule.experience.host.id,
+        schedule_id: schedule.id
+      });
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import UpdateUserStatusService from '@modules/admin/services/UpdateUserStatusService';
 import ManageBlockedUserService from '@modules/admin/services/ManageBlockedUserService';
@@ -19,7 +20,7 @@ export default class ReportedHostsController {
 
     await manageBlockedUser.execute(user.id);
 
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {

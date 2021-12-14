@@ -21,7 +21,7 @@ class ListAllUserNotificationsService {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     const notifications = await this.notificationsRepository.findAllByReceiverId(user.id);

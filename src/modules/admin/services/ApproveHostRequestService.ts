@@ -31,17 +31,17 @@ class ApproveHostRequestService {
     const hostRequest = await this.hostRequestsRepository.findByUserId(user_id);
 
     if (!hostRequest) {
-      throw new AppError('Request was not found');
+      throw new AppError('Solicitação não foi encontrada');
     }
 
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
-      throw new AppError('User does not exists');
+      throw new AppError('Usuário não existe');
     }
 
     if (user.type === typeEnum.host) {
-      throw new AppError('User is already a Host');
+      throw new AppError('Usuário já é um anfitrião');
     }
 
     user.type = typeEnum.host;

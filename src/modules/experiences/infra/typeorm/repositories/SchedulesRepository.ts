@@ -9,7 +9,7 @@ class SchedulesRepository implements ISchedulesRepository {
   private ormRepository: Repository<Schedule>;
 
   constructor() {
-    this.ormRepository = getRepository(Schedule);
+    this.ormRepository = getRepository(Schedule, global.env.RDB_CONNECTION);
   }
 
   public async create({ date, availability, experience }: ICreateScheduleDTO): Promise<Schedule> {

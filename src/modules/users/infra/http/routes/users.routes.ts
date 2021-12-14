@@ -2,7 +2,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import { celebrate, Segments, Joi } from 'celebrate';
 
-import uploadConfig from '@config/upload';
+import storageConfig from '@config/storage';
 
 import ensureAuthenticated from '../middleware/ensureAuthenticated';
 
@@ -13,14 +13,17 @@ const usersRouter = Router();
 const usersController = new UsersController();
 const userAvatarController = new UserAvatarController();
 
-const upload = multer(uploadConfig.multer);
+const upload = multer(storageConfig.multer);
+
+// /^\+[0-9]+\)\s\d\d\d\d\d-\d\d\d\d$/i => REGEX FOR PHONE NUMBER
 
 usersRouter.post(
-  '/signUp',
+  '/sign-up',
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
+      phone_number: Joi.string().optional(),
       password: Joi.string().required().min(8)
     }
   }),
@@ -33,6 +36,7 @@ usersRouter.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       email: Joi.string().email().required(),
+      phone_number: Joi.string().optional(),
       password: Joi.string().required().min(8)
     }
   }),

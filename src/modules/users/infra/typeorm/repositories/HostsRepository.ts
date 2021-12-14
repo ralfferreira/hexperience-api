@@ -11,7 +11,7 @@ class HostsRepository implements IHostsRepository {
   private ormRepository: Repository<Host>;
 
   constructor () {
-    this.ormRepository = getRepository(Host);
+    this.ormRepository = getRepository(Host, global.env.RDB_CONNECTION);
   }
 
   public async create({ cpf, cnpj, user, nickname }: ICreateHostDTO): Promise<Host> {
@@ -79,16 +79,6 @@ class HostsRepository implements IHostsRepository {
     if (user_id) {
       await query.andWhere('u.id != :userId', { userId: user_id })
     }
-
-    const hosts = await query.printSql().getMany();
-
-    return hosts;
-  }
-
-  public async findAllReported(): Promise<Host[]> {
-    const query = await this.ormRepository.createQueryBuilder('h')
-      .leftJoinAndSelect('h.user', 'u')
-      .innerJoinAndSelect('Report', 'r', 'r.host_id = h.id');
 
     const hosts = await query.printSql().getMany();
 

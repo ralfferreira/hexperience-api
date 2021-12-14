@@ -30,13 +30,13 @@ class SendAccountVerificationMailService {
     const checkUserExists = await this.usersRepository.findByEmail(data.email);
 
     if (checkUserExists) {
-      throw new AppError('Email is already been used!');
+      throw new AppError('Endereço de email já está em uso');
     }
 
     const checkAccounts = await this.accountVerificationsRepository.findByEmail(data.email);
 
     if (checkAccounts) {
-      throw new AppError('Email is already been used!');
+      throw new AppError('Endereço de email já está em uso');
     }
 
     const hashedPassword = await this.hashProvider.generateHash(data.password)
@@ -46,6 +46,7 @@ class SendAccountVerificationMailService {
     const accountVerification = await this.accountVerificationsRepository.create({
       email: data.email,
       name: data.name,
+      phone_number: data.phone_number,
       password: hashedPassword,
       token
     });
@@ -67,7 +68,7 @@ class SendAccountVerificationMailService {
         file: accountConfirmationTemplate,
         variables: {
           name: data.name,
-          link: `http://localhost:3000/account-confirmation?token=${accountVerification.token}`
+          token: accountVerification.token,
         }
       }
     });

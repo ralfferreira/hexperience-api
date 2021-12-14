@@ -32,33 +32,33 @@ class RequestHostPrivilegeService {
     const checkIfAlreadyRequested = await this.hostRequestsRepository.findByUserId(data.user_id);
 
     if (checkIfAlreadyRequested) {
-      throw new AppError('User had already requested Host privilege');
+      throw new AppError('Usuário já solicitou privilégio de anfitrião');
     }
 
     const checkIfAlreadyIsHost = await this.usersRepository.findById(data.user_id);
 
     if (checkIfAlreadyIsHost?.type === typeEnum.host) {
-      throw new AppError('User is already a Host');
+      throw new AppError('Usuário já é um anfitrião');
     }
 
     if (checkIfAlreadyIsHost?.status !== statusEnum.ok) {
-      throw new AppError('Only users that are not under analysis or blocked can request host privilege');
+      throw new AppError('Usuários em análise ou bloqueados não podem solicitar privilégio de anfitrião');
     }
 
     const checkNickname = await this.hostRequestsRepository.findByNickname(data.nickname);
 
     if (checkNickname) {
-      throw new AppError('Nickname already been used!');
+      throw new AppError('Apelido já está em uso');
     }
 
     const checkIfNickname = await this.hostsRepository.findByNickname(data.nickname);
 
     if (checkIfNickname) {
-      throw new AppError('User is already a Host');
+      throw new AppError('Usuário já é um anfitrião');
     }
 
     if (!data.cpf && !data.cnpj) {
-      throw new AppError('CPF and CNPJ were not informed. At least, one of them is required')
+      throw new AppError('CPF e CNPJ não foram informados. Pelo menos um deles deve ser informado')
     }
 
     const hostRequest = await this.hostRequestsRepository.create(data);

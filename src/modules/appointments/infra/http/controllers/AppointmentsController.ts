@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 import ShowAppointmentService from '@modules/appointments/services/ShowAppointmentService';
@@ -9,27 +10,27 @@ import CancelAppointmentService from '@modules/appointments/services/CancelAppoi
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const userId = request.user.id;
-    const { guests, paid, schedule_id } = request.body;
+    const { guests, status, schedule_id } = request.body;
 
     const createAppointment = container.resolve(CreateAppointmentService);
 
     const appointment = await createAppointment.execute({
       guests,
-      paid,
+      status,
       schedule_id,
       user_id: userId
     });
 
-    return response.json(appointment);
+    return response.json(classToClass(appointment));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
     const { user_id } = request.params;
-    // const userId = request.user.id;
+    const userId = request.user.id;
 
     const listUserAppointments = container.resolve(ListUserAppointmentsService);
 
-    const appointments = await listUserAppointments.execute(Number(user_id));
+    const appointments = await listUserAppointments.execute(Number(userId));
 
     return response.json(appointments);
   }
@@ -48,7 +49,7 @@ export default class AppointmentsController {
       appointment_id: Number(appointment_id)
     });
 
-    return response.json(appointment);
+    return response.json(classToClass(appointment));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {

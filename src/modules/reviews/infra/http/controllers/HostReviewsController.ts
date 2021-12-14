@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { classToClass } from "class-transformer";
 
 import ListAllHostReviewsService from "@modules/reviews/services/ListAllHostReviewsService";
 
@@ -11,6 +12,6 @@ export default class HostReviewsController {
 
     const reviews = await listAllHostReviews.execute(Number(host_id));
 
-    return response.json(reviews);
+    return response.json(classToClass(reviews));
   }
 }
